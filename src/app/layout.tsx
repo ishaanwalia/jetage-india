@@ -9,12 +9,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Jet Age Computer Traders | Premium HP Printers Since 1989",
-  description: "Authorized HP printer dealer in India. Laser, Color Laser, and InkJet printers for home & business. WhatsApp ordering available. Established 1989.",
-  keywords: "HP printers, laser printers, color laser printers, inkjet printers, India, Jet Age, computer traders",
+  title: "Jetage Computer Traders | Premium HP Printers Since 1989",
+  description: "Authorized HP printer dealer in India since 1989. Visit our showroom at SCO-12, 1st Floor, Sector-17-E, Chandigarh. Laser, Color Laser, and InkJet printers with WhatsApp ordering.",
+  keywords: "HP printers, laser printers, color laser printers, inkjet printers, India, Jetage, Chandigarh, Sector 17",
   openGraph: {
-    title: "Jet Age Computer Traders | Premium HP Printers",
-    description: "Authorized HP dealer since 1989. Best prices on HP Laser, Color Laser & InkJet printers.",
+    title: "Jetage Computer Traders | Premium HP Printers Since 1989",
+    description: "Authorized HP dealer since 1989. Visit our showroom at SCO-12, Sector-17-E, Chandigarh. Best prices on HP printers.",
     type: "website",
   },
 };

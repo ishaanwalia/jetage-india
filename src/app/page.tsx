@@ -22,6 +22,7 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ProductCard } from "@/components/ProductCard";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { ShowroomSection } from "@/components/ShowroomSection";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,41 +74,56 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-jet-cream">
       <Navbar />
-      
-      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-gradient-hero">
+
+      <section 
+        ref={heroRef}
+        className="relative min-h-screen flex items-center overflow-hidden bg-gradient-hero pt-24 lg:pt-0"
+      >
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-jet-primary/5 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-jet-primary/8 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }} />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-jet-primary/8 rounded-full blur-3xl animate-float-delayed" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-jet-primary/3 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-0">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-0">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-jet-primary/10 text-jet-primary text-sm font-medium">
                 <Award className="w-4 h-4" />
                 Trusted Since 1989
               </div>
+
               <h1 className="hero-title text-5xl lg:text-7xl font-bold text-jet-navy leading-tight">
                 Premium HP
                 <span className="block text-gradient">Printers</span>
                 Delivered
               </h1>
+
               <p className="hero-subtitle text-lg lg:text-xl text-jet-gray max-w-lg leading-relaxed">
                 Authorized HP dealer with 35+ years of expertise. From home offices to enterprises, 
                 find the perfect printer with best prices and instant WhatsApp support.
               </p>
+
               <div className="hero-cta flex flex-wrap gap-4">
-                <Link href="#products" className="inline-flex items-center gap-2 px-8 py-4 bg-jet-primary text-white rounded-full font-semibold hover:bg-jet-primary-dark transition-all duration-300 shadow-premium hover:shadow-premium-hover">
+                <Link 
+                  href="#products"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-jet-primary text-white rounded-full font-semibold hover:bg-jet-primary-dark transition-all duration-300 shadow-premium hover:shadow-premium-hover"
+                >
                   Explore Printers
                   <ChevronRight className="w-5 h-5" />
                 </Link>
-                <a href="https://wa.me/919814958295?text=Hi%20Jet%20Age%2C%20I%20want%20to%20inquire%20about%20HP%20printers" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 bg-jet-whatsapp text-white rounded-full font-semibold hover:bg-[#128C7E] transition-all duration-300">
+                <a 
+                  href="https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20want%20to%20inquire%20about%20HP%20printers"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-jet-whatsapp text-white rounded-full font-semibold hover:bg-[#128C7E] transition-all duration-300"
+                >
                   <MessageCircle className="w-5 h-5" />
                   WhatsApp Order
                 </a>
               </div>
-              <div className="hero-cta flex items-center gap-6 pt-4">
+
+              <div className="hero-cta flex items-center gap-6 pt-4 flex-wrap">
                 <div className="flex items-center gap-2 text-sm text-jet-gray">
                   <Shield className="w-5 h-5 text-jet-success" />
                   <span>Authorized Dealer</span>
@@ -116,12 +132,17 @@ export default function Home() {
                   <Truck className="w-5 h-5 text-jet-primary" />
                   <span>All India Delivery</span>
                 </div>
+                <div className="flex items-center gap-2 text-sm text-jet-gray">
+                  <MapPin className="w-5 h-5 text-jet-accent" />
+                  <span>Sector-17-E, Chandigarh</span>
+                </div>
               </div>
             </div>
 
             <div className="hero-image relative hidden lg:block">
               <div className="relative w-full aspect-square max-w-lg mx-auto">
                 <div className="absolute inset-0 bg-gradient-to-br from-jet-primary/20 to-transparent rounded-3xl blur-2xl" />
+
                 <div className="relative bg-white rounded-3xl shadow-premium p-8 transform rotate-3 hover:rotate-0 transition-transform duration-700">
                   <div className="aspect-[4/3] bg-gradient-to-br from-jet-light to-white rounded-2xl flex items-center justify-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(0,150,214,0.1),transparent_50%)]" />
@@ -129,6 +150,7 @@ export default function Home() {
                     <div className="absolute top-4 right-4 bg-jet-success/10 text-jet-success px-3 py-1 rounded-full text-xs font-semibold">In Stock</div>
                     <div className="absolute bottom-4 left-4 bg-jet-primary/10 text-jet-primary px-3 py-1 rounded-full text-xs font-semibold">Best Price</div>
                   </div>
+
                   <div className="mt-6 space-y-3">
                     <div className="h-3 bg-jet-border rounded-full w-3/4" />
                     <div className="h-3 bg-jet-border rounded-full w-1/2" />
@@ -138,6 +160,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
+
                 <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-premium p-4 animate-float">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-jet-whatsapp/10 rounded-full flex items-center justify-center">
@@ -149,14 +172,15 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-premium p-4 animate-float" style={{ animationDelay: "1s" }}>
+
+                <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-premium p-4 animate-float-delayed">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-jet-primary/10 rounded-full flex items-center justify-center">
                       <Star className="w-5 h-5 text-jet-primary" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-jet-navy">4.9/5 Rating</p>
-                      <p className="text-xs text-jet-gray">500+ Reviews</p>
+                      <p className="text-sm font-semibold text-jet-navy">4.5/5 Rating</p>
+                      <p className="text-xs text-jet-gray">232+ Reviews</p>
                     </div>
                   </div>
                 </div>
@@ -180,7 +204,7 @@ export default function Home() {
               { icon: Clock, value: "35+", label: "Years Experience", suffix: "yrs" },
               { icon: Printer, value: "10,000+", label: "Printers Sold", suffix: "" },
               { icon: MapPin, value: "25+", label: "Cities Served", suffix: "" },
-              { icon: Star, value: "4.9", label: "Customer Rating", suffix: "/5" },
+              { icon: Star, value: "4.5", label: "Customer Rating", suffix: "/5" },
             ].map((stat, i) => (
               <div key={i} className="stat-item text-center space-y-3">
                 <div className="w-14 h-14 mx-auto bg-jet-primary/10 rounded-2xl flex items-center justify-center">
@@ -207,13 +231,20 @@ export default function Home() {
             </h2>
             <p className="text-jet-gray max-w-2xl mx-auto text-lg">
               Handpicked selection of HP's best-selling laser, color laser, and inkjet printers 
-              with exclusive Jet Age pricing.
+              with exclusive Jetage pricing.
             </p>
           </div>
 
           <div className="flex justify-center gap-4 mb-12 flex-wrap">
             {["All", "Laser", "Color Laser", "InkJet"].map((cat, i) => (
-              <button key={cat} className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${i === 0 ? "bg-jet-primary text-white shadow-premium" : "bg-white text-jet-slate hover:bg-jet-primary/10 hover:text-jet-primary"}`}>
+              <button
+                key={cat}
+                className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
+                  i === 0 
+                    ? "bg-jet-primary text-white shadow-premium" 
+                    : "bg-white text-jet-slate hover:bg-jet-primary/10 hover:text-jet-primary"
+                }`}
+              >
                 {cat}
               </button>
             ))}
@@ -226,7 +257,10 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-12">
-            <Link href="/products" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-jet-primary border-2 border-jet-primary rounded-full font-semibold hover:bg-jet-primary hover:text-white transition-all duration-300">
+            <Link 
+              href="/products/"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-white text-jet-primary border-2 border-jet-primary rounded-full font-semibold hover:bg-jet-primary hover:text-white transition-all duration-300"
+            >
               View All Products
               <ChevronRight className="w-5 h-5" />
             </Link>
@@ -246,7 +280,10 @@ export default function Home() {
                 Crisp black & white printing for documents, reports, and everyday business needs.
               </p>
             </div>
-            <Link href="/category/laser" className="inline-flex items-center gap-2 text-jet-primary font-semibold hover:gap-3 transition-all">
+            <Link 
+              href="/category/laser/"
+              className="inline-flex items-center gap-2 text-jet-primary font-semibold hover:gap-3 transition-all"
+            >
               View All Laser <ChevronRight className="w-5 h-5" />
             </Link>
           </div>
@@ -270,7 +307,10 @@ export default function Home() {
                 Professional color output for marketing materials, presentations, and creative work.
               </p>
             </div>
-            <Link href="/category/color-laser" className="inline-flex items-center gap-2 text-jet-accent font-semibold hover:gap-3 transition-all">
+            <Link 
+              href="/category/color-laser/"
+              className="inline-flex items-center gap-2 text-jet-accent font-semibold hover:gap-3 transition-all"
+            >
               View All Color <ChevronRight className="w-5 h-5" />
             </Link>
           </div>
@@ -282,26 +322,56 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={whyRef} className="py-24 bg-white">
+      <ShowroomSection />
+
+      <section ref={whyRef} id="about" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16 space-y-4">
             <span className="inline-block px-4 py-1.5 bg-jet-primary/10 text-jet-primary text-sm font-semibold rounded-full">
-              Why Jet Age
+              Why Jetage
             </span>
             <h2 className="text-4xl lg:text-5xl font-bold text-jet-navy">
-              The Jet Age <span className="text-gradient">Advantage</span>
+              The Jetage <span className="text-gradient">Advantage</span>
             </h2>
           </div>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: Award, title: "Authorized HP Dealer", description: "Genuine HP products with full manufacturer warranty and official support. No grey market risks." },
-              { icon: Phone, title: "WhatsApp Ordering", description: "Order instantly via WhatsApp. Get quotes, place orders, and track delivery — all on your phone." },
-              { icon: Zap, title: "Best Price Guarantee", description: "We match and beat competitor prices. Exclusive deals you won't find on Amazon or Flipkart." },
-              { icon: Shield, title: "Expert Consultation", description: "35+ years of printer expertise. We help you choose the right printer for your exact needs." },
-              { icon: Truck, title: "All India Delivery", description: "Fast, insured shipping across India. Special handling for fragile printer components." },
-              { icon: Clock, title: "After-Sales Support", description: "Dedicated support for installation, driver setup, and troubleshooting. We're just a message away." }
+              {
+                icon: Award,
+                title: "Authorized HP Dealer",
+                description: "Genuine HP products with full manufacturer warranty and official support. No grey market risks."
+              },
+              {
+                icon: Phone,
+                title: "WhatsApp Ordering",
+                description: "Order instantly via WhatsApp. Get quotes, place orders, and track delivery — all on your phone."
+              },
+              {
+                icon: Zap,
+                title: "Best Price Guarantee",
+                description: "We match and beat competitor prices. Exclusive deals you won't find on Amazon or Flipkart."
+              },
+              {
+                icon: Shield,
+                title: "Expert Consultation",
+                description: "35+ years of printer expertise. We help you choose the right printer for your exact needs."
+              },
+              {
+                icon: Truck,
+                title: "All India Delivery",
+                description: "Fast, insured shipping across India. Special handling for fragile printer components."
+              },
+              {
+                icon: Clock,
+                title: "After-Sales Support",
+                description: "Dedicated support for installation, driver setup, and troubleshooting. We're just a message away."
+              }
             ].map((item, i) => (
-              <div key={i} className="why-card group p-8 rounded-3xl bg-jet-cream hover:bg-white border border-transparent hover:border-jet-primary/20 transition-all duration-500 hover:shadow-premium">
+              <div 
+                key={i} 
+                className="why-card group p-8 rounded-3xl bg-jet-cream hover:bg-white border border-transparent hover:border-jet-primary/20 transition-all duration-500 hover:shadow-premium"
+              >
                 <div className="w-14 h-14 bg-jet-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-jet-primary group-hover:scale-110 transition-all duration-300">
                   <item.icon className="w-7 h-7 text-jet-primary group-hover:text-white transition-colors" />
                 </div>
@@ -318,6 +388,7 @@ export default function Home() {
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-jet-primary/20 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-jet-primary/10 rounded-full blur-3xl" />
         </div>
+
         <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center space-y-8">
           <div className="cta-content space-y-6">
             <h2 className="text-4xl lg:text-6xl font-bold text-white leading-tight">
@@ -328,12 +399,21 @@ export default function Home() {
               Get personalized recommendations, instant quotes, and exclusive pricing via WhatsApp. 
               Our team responds within minutes.
             </p>
+
             <div className="flex flex-wrap justify-center gap-4 pt-4">
-              <a href="https://wa.me/919814958295?text=Hi%20Jet%20Age%2C%20I%20need%20help%20choosing%20an%20HP%20printer" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-8 py-4 bg-jet-whatsapp text-white rounded-full font-semibold hover:bg-[#128C7E] transition-all duration-300 text-lg">
+              <a 
+                href="https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20need%20help%20choosing%20an%20HP%20printer"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-jet-whatsapp text-white rounded-full font-semibold hover:bg-[#128C7E] transition-all duration-300 text-lg"
+              >
                 <MessageCircle className="w-6 h-6" />
                 Chat on WhatsApp
               </a>
-              <a href="tel:+919814958295" className="inline-flex items-center gap-3 px-8 py-4 bg-white/10 text-white border border-white/20 rounded-full font-semibold hover:bg-white/20 transition-all duration-300 text-lg">
+              <a 
+                href="tel:+919814958295"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-white/10 text-white border border-white/20 rounded-full font-semibold hover:bg-white/20 transition-all duration-300 text-lg"
+              >
                 <Phone className="w-6 h-6" />
                 Call Us
               </a>

@@ -1,13 +1,13 @@
 "use client";
 
-import { MessageCircle, X } from "lucide-react";
+import { MessageCircle, X, Printer } from "lucide-react";
 import { useState } from "react";
 
 export function WhatsAppButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   const quickMessages = [
-    "Hi, I want to buy a printer",
+    "Hi Jetage, I want to buy a printer",
     "What's the best printer for home use?",
     "I need a quote for bulk order",
     "Do you deliver to my city?",
@@ -21,10 +21,10 @@ export function WhatsAppButton() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                  <MessageCircle className="w-5 h-5 text-white" />
+                  <Printer className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-white font-semibold">Jet Age Support</p>
+                  <p className="text-white font-semibold">Jetage Support</p>
                   <p className="text-green-100 text-xs">Typically replies in minutes</p>
                 </div>
               </div>
@@ -33,8 +33,9 @@ export function WhatsAppButton() {
               </button>
             </div>
           </div>
+
           <div className="p-5 space-y-3">
-            <p className="text-sm text-jet-gray mb-3">Choose a quick message or type your own:</p>
+            <p className="text-sm text-jet-gray mb-3">Choose a quick message:</p>
             {quickMessages.map((msg, i) => (
               <a key={i} href={`https://wa.me/919814958295?text=${encodeURIComponent(msg)}`} target="_blank" rel="noopener noreferrer" className="block p-3 bg-jet-cream rounded-xl text-sm text-jet-slate hover:bg-jet-primary/10 hover:text-jet-primary transition-all">
                 {msg}
@@ -46,6 +47,7 @@ export function WhatsAppButton() {
           </div>
         </div>
       )}
+
       <button onClick={() => setIsOpen(!isOpen)} className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 ${isOpen ? "bg-jet-slate rotate-90" : "bg-jet-whatsapp"}`}>
         {isOpen ? <X className="w-6 h-6 text-white" /> : <MessageCircle className="w-6 h-6 text-white" />}
       </button>
