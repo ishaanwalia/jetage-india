@@ -16,15 +16,17 @@ export interface Product {
   features: string[];
   image: string;
   badge?: string;
+  specs?: Record<string, string>;
 }
 
 export const products: Product[] = [
+  // === PRINTERS (19) ===
   {
     id: "hp-laser-303d",
     name: "HP Laser 303d",
     shortName: "Laser 303d",
-    category: "laser",
-    subCategory: "single",
+    category: "printer",
+    subCategory: "laser",
     price: 14499,
     mrp: 22500,
     sku: "A58WFA",
@@ -35,15 +37,16 @@ export const products: Product[] = [
     idealFor: "Business",
     description: "High-speed monochrome laser printing with automatic duplex. Perfect for small businesses needing reliable, fast document output.",
     features: ["30 ppm black", "Auto duplex", "USB 2.0", "Compact design"],
-    image: "/images/products/hp-laser-303d.png",
-    badge: "Best Seller"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+    badge: "Best Seller",
+    specs: { "Print Speed": "30 ppm", "Resolution": "600 x 600 dpi", "Paper Capacity": "150 sheets", "Monthly Duty": "30,000 pages" }
   },
   {
     id: "hp-laser-303dw",
     name: "HP Laser 303dw",
     shortName: "Laser 303dw",
-    category: "laser",
-    subCategory: "single",
+    category: "printer",
+    subCategory: "laser",
     price: 15999,
     mrp: 22500,
     sku: "A58WFA",
@@ -54,15 +57,16 @@ export const products: Product[] = [
     idealFor: "Business",
     description: "Wireless monochrome laser with auto duplex and mobile printing. The ultimate productivity tool for modern offices.",
     features: ["30 ppm black", "Auto duplex", "Wi-Fi + USB", "HP Smart App"],
-    image: "/images/products/hp-laser-303dw.png",
-    badge: "Popular"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+    badge: "Popular",
+    specs: { "Print Speed": "30 ppm", "Resolution": "600 x 600 dpi", "Wireless": "Wi-Fi + Wi-Fi Direct", "Monthly Duty": "30,000 pages" }
   },
   {
     id: "hp-laser-mfp-323d",
     name: "HP Laser MFP 323d",
     shortName: "Laser MFP 323d",
-    category: "laser",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "laser",
     price: 18499,
     mrp: 26500,
     sku: "A58WFA",
@@ -73,14 +77,15 @@ export const products: Product[] = [
     idealFor: "Business",
     description: "Print, scan, copy with automatic duplex. All-in-one monochrome laser for demanding business environments.",
     features: ["Print/Scan/Copy", "30 ppm", "Auto duplex", "USB"],
-    image: "/images/products/hp-laser-mfp-323d.png"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+    specs: { "Functions": "Print, Scan, Copy", "Print Speed": "30 ppm", "ADF": "35 sheets", "Monthly Duty": "30,000 pages" }
   },
   {
     id: "hp-laser-mfp-323dnw",
     name: "HP Laser MFP 323dnw",
     shortName: "Laser MFP 323dnw",
-    category: "laser",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "laser",
     price: 19999,
     mrp: 28500,
     sku: "A58WFA",
@@ -91,14 +96,15 @@ export const products: Product[] = [
     idealFor: "Business",
     description: "Network-ready MFP with wireless, ethernet and auto duplex. The complete office solution.",
     features: ["Print/Scan/Copy", "Wi-Fi + Ethernet", "30 ppm", "Auto duplex"],
-    image: "/images/products/hp-laser-mfp-323dnw.png"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+    specs: { "Functions": "Print, Scan, Copy", "Network": "Wi-Fi + Ethernet", "Print Speed": "30 ppm", "Monthly Duty": "30,000 pages" }
   },
   {
     id: "hp-laser-mfp-323sdnw",
     name: "HP Laser MFP 323sdnw",
     shortName: "Laser MFP 323sdnw",
-    category: "laser",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "laser",
     price: 21999,
     mrp: 31000,
     sku: "A58WFA",
@@ -109,15 +115,16 @@ export const products: Product[] = [
     idealFor: "Enterprise",
     description: "Advanced MFP with ADF, wireless, ethernet and auto duplex. Built for high-volume enterprise printing.",
     features: ["ADF", "Wi-Fi + Ethernet", "30 ppm", "Auto duplex"],
-    image: "/images/products/hp-laser-mfp-323sdnw.png",
-    badge: "Enterprise"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+    badge: "Enterprise",
+    specs: { "Functions": "Print, Scan, Copy", "ADF": "50 sheets", "Network": "Wi-Fi + Ethernet", "Monthly Duty": "30,000 pages" }
   },
   {
     id: "hp-laser-1008a",
     name: "HP Laser 1008a",
     shortName: "Laser 1008a",
-    category: "laser",
-    subCategory: "single",
+    category: "printer",
+    subCategory: "laser",
     price: 8999,
     mrp: 12500,
     sku: "714Z8A",
@@ -128,14 +135,15 @@ export const products: Product[] = [
     idealFor: "Home & Small Office",
     description: "Compact, affordable monochrome laser printer. Perfect for home offices and students needing crisp text documents.",
     features: ["21 ppm", "USB 2.0", "Compact 4.2kg", "150-sheet tray"],
-    image: "/images/products/hp-laser-1008a.png"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/714Z8A.png",
+    specs: { "Print Speed": "21 ppm", "Weight": "4.2 kg", "Paper Capacity": "150 sheets", "Monthly Duty": "10,000 pages" }
   },
   {
     id: "hp-laser-1008w",
     name: "HP Laser 1008w",
     shortName: "Laser 1008w",
-    category: "laser",
-    subCategory: "single",
+    category: "printer",
+    subCategory: "laser",
     price: 10499,
     mrp: 14500,
     sku: "714Z9A",
@@ -146,15 +154,16 @@ export const products: Product[] = [
     idealFor: "Home & Small Office",
     description: "Wireless monochrome laser with HP Smart App support. Print from anywhere in your home or office.",
     features: ["21 ppm", "Wi-Fi + USB", "HP Smart App", "Wi-Fi Direct"],
-    image: "/images/products/hp-laser-1008w.png",
-    badge: "Value Pick"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/714Z9A.png",
+    badge: "Value Pick",
+    specs: { "Print Speed": "21 ppm", "Wireless": "Wi-Fi + Wi-Fi Direct", "Weight": "4.2 kg", "Monthly Duty": "10,000 pages" }
   },
   {
     id: "hp-laser-mfp-1188a",
     name: "HP Laser MFP 1188a",
     shortName: "Laser MFP 1188a",
-    category: "laser",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "laser",
     price: 13499,
     mrp: 18500,
     sku: "715A4A",
@@ -165,14 +174,15 @@ export const products: Product[] = [
     idealFor: "Home & Small Office",
     description: "All-in-one monochrome laser with print, scan, copy. The perfect home office companion.",
     features: ["Print/Scan/Copy", "21 ppm", "USB", "Compact"],
-    image: "/images/products/hp-laser-mfp-1188a.png"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A4A.png",
+    specs: { "Functions": "Print, Scan, Copy", "Print Speed": "21 ppm", "Weight": "6.3 kg", "Monthly Duty": "10,000 pages" }
   },
   {
     id: "hp-laser-mfp-1188w",
     name: "HP Laser MFP 1188w",
     shortName: "Laser MFP 1188w",
-    category: "laser",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "laser",
     price: 14999,
     mrp: 20500,
     sku: "715A5A",
@@ -183,14 +193,15 @@ export const products: Product[] = [
     idealFor: "Home & Small Office",
     description: "Wireless all-in-one with mobile printing. Print, scan, copy from your smartphone.",
     features: ["Print/Scan/Copy", "Wi-Fi", "21 ppm", "HP Smart App"],
-    image: "/images/products/hp-laser-mfp-1188w.png"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A5A.png",
+    specs: { "Functions": "Print, Scan, Copy", "Wireless": "Wi-Fi + Wi-Fi Direct", "Print Speed": "21 ppm", "Monthly Duty": "10,000 pages" }
   },
   {
     id: "hp-laser-mfp-1188nw",
     name: "HP Laser MFP 1188nw",
     shortName: "Laser MFP 1188nw",
-    category: "laser",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "laser",
     price: 15999,
     mrp: 22000,
     sku: "715A6A",
@@ -201,14 +212,15 @@ export const products: Product[] = [
     idealFor: "Small Office",
     description: "Network-ready MFP with ethernet and wireless. Ideal for small office sharing.",
     features: ["Print/Scan/Copy", "Wi-Fi + Ethernet", "21 ppm", "Network ready"],
-    image: "/images/products/hp-laser-mfp-1188nw.png"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A6A.png",
+    specs: { "Functions": "Print, Scan, Copy", "Network": "Wi-Fi + Ethernet", "Print Speed": "21 ppm", "Monthly Duty": "10,000 pages" }
   },
   {
     id: "hp-laser-mfp-1188fnw",
     name: "HP Laser MFP 1188fnw",
     shortName: "Laser MFP 1188fnw",
-    category: "laser",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "laser",
     price: 17499,
     mrp: 24500,
     sku: "715A7A",
@@ -219,15 +231,16 @@ export const products: Product[] = [
     idealFor: "Small Office",
     description: "Full-featured MFP with fax, wireless, and ethernet. The complete communication hub.",
     features: ["Print/Scan/Copy/Fax", "Wi-Fi + Ethernet", "21 ppm", "ADF"],
-    image: "/images/products/hp-laser-mfp-1188fnw.png",
-    badge: "Full Feature"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A7A.png",
+    badge: "Full Feature",
+    specs: { "Functions": "Print, Scan, Copy, Fax", "ADF": "35 sheets", "Network": "Wi-Fi + Ethernet", "Monthly Duty": "10,000 pages" }
   },
   {
     id: "hp-laserjet-pro-p1108-plus",
     name: "HP LaserJet Pro P1108 Plus",
     shortName: "LaserJet Pro P1108+",
-    category: "laser",
-    subCategory: "single",
+    category: "printer",
+    subCategory: "laser",
     price: 11999,
     mrp: 16500,
     sku: "A80A3A",
@@ -238,14 +251,15 @@ export const products: Product[] = [
     idealFor: "Home & Small Office",
     description: "Legendary LaserJet reliability in a compact form. The world's most trusted printer series.",
     features: ["19 ppm", "USB 2.0", "Legendary reliability", "Compact"],
-    image: "/images/products/hp-laserjet-pro-p1108-plus.png"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/A/8/A80A3A.png",
+    specs: { "Print Speed": "19 ppm", "Weight": "4.2 kg", "Paper Capacity": "150 sheets", "Monthly Duty": "8,000 pages" }
   },
   {
     id: "hp-laserjet-pro-mfp-m126a",
     name: "HP LaserJet Pro MFP M126a / M126a Plus",
     shortName: "LaserJet Pro M126a",
-    category: "laser",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "laser",
     price: 15499,
     mrp: 21000,
     sku: "CZ174A",
@@ -256,15 +270,16 @@ export const products: Product[] = [
     idealFor: "Small Office",
     description: "India's favorite LaserJet MFP. Print, scan, copy with proven reliability and low running costs.",
     features: ["Print/Scan/Copy", "20 ppm", "USB", "Low cost per page"],
-    image: "/images/products/hp-laserjet-pro-mfp-m126a.png",
-    badge: "India's Favorite"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/C/Z/CZ174A.png",
+    badge: "India's Favorite",
+    specs: { "Functions": "Print, Scan, Copy", "Print Speed": "20 ppm", "Weight": "8.0 kg", "Monthly Duty": "8,000 pages" }
   },
   {
     id: "hp-laserjet-pro-mfp-m126nw",
     name: "HP LaserJet Pro MFP M126nw / M126nw Plus",
     shortName: "LaserJet Pro M126nw",
-    category: "laser",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "laser",
     price: 17499,
     mrp: 24000,
     sku: "CZ175A",
@@ -275,14 +290,15 @@ export const products: Product[] = [
     idealFor: "Small Office",
     description: "Wireless LaserJet MFP with AirPrint and Mopria. India's trusted choice, now with wireless freedom.",
     features: ["Print/Scan/Copy", "Wi-Fi", "20 ppm", "AirPrint & Mopria"],
-    image: "/images/products/hp-laserjet-pro-mfp-m126nw.png"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/C/Z/CZ175A.png",
+    specs: { "Functions": "Print, Scan, Copy", "Wireless": "Wi-Fi + AirPrint", "Print Speed": "20 ppm", "Monthly Duty": "8,000 pages" }
   },
   {
     id: "hp-color-laser-150nw",
     name: "HP Color Laser 150nw",
     shortName: "Color Laser 150nw",
-    category: "color-laser",
-    subCategory: "single",
+    category: "printer",
+    subCategory: "color-laser",
     price: 18499,
     mrp: 26000,
     sku: "4ZB95A",
@@ -293,14 +309,15 @@ export const products: Product[] = [
     idealFor: "Business",
     description: "Affordable color laser with wireless. Bring your documents to life with vibrant color printing.",
     features: ["Color laser", "Wi-Fi", "18 ppm black", "Compact"],
-    image: "/images/products/hp-color-laser-150nw.png"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/Z/4ZB95A.png",
+    specs: { "Print Speed": "18 ppm B&W / 4 ppm Color", "Resolution": "600 x 600 dpi", "Wireless": "Wi-Fi", "Monthly Duty": "20,000 pages" }
   },
   {
     id: "hp-color-laser-mfp-178nw",
     name: "HP Color Laser MFP 178nw",
     shortName: "Color Laser MFP 178nw",
-    category: "color-laser",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "color-laser",
     price: 24999,
     mrp: 35000,
     sku: "4ZB96A",
@@ -311,15 +328,16 @@ export const products: Product[] = [
     idealFor: "Business",
     description: "Wireless color MFP with print, scan, copy. Professional color documents from your desk.",
     features: ["Print/Scan/Copy Color", "Wi-Fi", "18 ppm black", "Compact color"],
-    image: "/images/products/hp-color-laser-mfp-178nw.png",
-    badge: "Color Choice"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/Z/4ZB96A.png",
+    badge: "Color Choice",
+    specs: { "Functions": "Print, Scan, Copy (Color)", "Print Speed": "18 ppm B&W / 4 ppm Color", "Wireless": "Wi-Fi", "Monthly Duty": "20,000 pages" }
   },
   {
     id: "hp-color-laserjet-pro-3203dw",
     name: "HP Color LaserJet Pro 3203dw",
     shortName: "Color LaserJet Pro 3203dw",
-    category: "color-laser",
-    subCategory: "single",
+    category: "printer",
+    subCategory: "color-laser",
     price: 34999,
     mrp: 48000,
     sku: "499M5A",
@@ -330,15 +348,16 @@ export const products: Product[] = [
     idealFor: "Enterprise",
     description: "High-speed duplex color laser with enterprise connectivity. Professional color at blazing speed.",
     features: ["33 ppm color", "Auto duplex", "Wi-Fi + Ethernet", "Enterprise grade"],
-    image: "/images/products/hp-color-laserjet-pro-3203dw.png",
-    badge: "Pro Grade"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/9/499M5A.png",
+    badge: "Pro Grade",
+    specs: { "Print Speed": "33 ppm B&W / 33 ppm Color", "Auto Duplex": "Yes", "Network": "Wi-Fi + Ethernet", "Monthly Duty": "50,000 pages" }
   },
   {
     id: "hp-color-laserjet-pro-mfp-3303sdw",
     name: "HP Color LaserJet Pro MFP 3303sdw",
     shortName: "Color LaserJet Pro MFP 3303sdw",
-    category: "color-laser",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "color-laser",
     price: 44999,
     mrp: 62000,
     sku: "499M6A",
@@ -349,15 +368,16 @@ export const products: Product[] = [
     idealFor: "Enterprise",
     description: "Ultimate color MFP with ADF, duplex, and enterprise networking. The pinnacle of office printing.",
     features: ["Print/Scan/Copy Color", "33 ppm", "ADF + Duplex", "Enterprise"],
-    image: "/images/products/hp-color-laserjet-pro-mfp-3303sdw.png",
-    badge: "Flagship"
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/9/499M6A.png",
+    badge: "Flagship",
+    specs: { "Functions": "Print, Scan, Copy (Color)", "ADF": "50 sheets", "Print Speed": "33 ppm", "Monthly Duty": "50,000 pages" }
   },
   {
     id: "hp-deskjet-ink-advantage-ultra-4929",
     name: "HP DeskJet Ink Advantage Ultra 4929",
     shortName: "DeskJet Ultra 4929",
-    category: "inkjet",
-    subCategory: "mfp",
+    category: "printer",
+    subCategory: "inkjet",
     price: 7499,
     mrp: 10500,
     sku: "60K34B",
@@ -368,10 +388,207 @@ export const products: Product[] = [
     idealFor: "Home",
     description: "Ultra-low-cost color printing with self-reset WiFi. Perfect for home users who print photos and documents.",
     features: ["Print/Scan/Copy", "Ultra-low ink cost", "Self-reset WiFi", "HP Smart App"],
-    image: "/images/products/hp-deskjet-ink-advantage-ultra-4929.png",
-    badge: "Home Essential"
-  }
+    image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/6/0/60K34B.png",
+    badge: "Home Essential",
+    specs: { "Functions": "Print, Scan, Copy", "Print Speed": "20 ppm B&W / 5.5 ppm Color", "Wireless": "Wi-Fi", "Monthly Duty": "1,000 pages" }
+  },
+
+  // === LAPTOPS (3) ===
+  {
+    id: "hp-pavilion-15-eg3000",
+    name: "HP Pavilion 15-eg3000",
+    shortName: "Pavilion 15",
+    category: "laptop",
+    subCategory: "consumer",
+    price: 52699,
+    mrp: 68999,
+    sku: "6K8U9PA",
+    speed: "AMD Ryzen 5 5625U",
+    connectivity: ["Wi-Fi 6", "Bluetooth 5.2", "USB-C", "HDMI"],
+    duplex: false,
+    dutyCycle: "N/A",
+    idealFor: "Students & Home",
+    description: "The perfect everyday laptop. AMD Ryzen 5 power, 16GB RAM, and a stunning 15.6\" FHD display for work, study, and entertainment.",
+    features: ["AMD Ryzen 5 5625U", "16GB DDR4", "512GB SSD", "15.6\" FHD"],
+    image: "https://kimi-web-img.moonshot.cn/img/ict.com.mm/f431dbf197b2900302579432e19b24826774f2bc.webp",
+    badge: "Best Seller",
+    specs: { "Processor": "AMD Ryzen 5 5625U", "RAM": "16GB DDR4", "Storage": "512GB SSD", "Display": "15.6\" FHD IPS", "Weight": "1.75 kg", "Battery": "Up to 8 hours", "OS": "Windows 11 Home" }
+  },
+  {
+    id: "hp-envy-x360-13",
+    name: "HP Envy x360 13-bf0000",
+    shortName: "Envy x360 13",
+    category: "laptop",
+    subCategory: "premium",
+    price: 112999,
+    mrp: 145999,
+    sku: "6M0U9PA",
+    speed: "Intel Core i7-1255U",
+    connectivity: ["Wi-Fi 6E", "Bluetooth 5.3", "Thunderbolt 4", "USB-C"],
+    duplex: false,
+    dutyCycle: "N/A",
+    idealFor: "Creators & Professionals",
+    description: "2-in-1 convertible with OLED touchscreen. All-aluminum build, Intel Evo certified, and 360-degree hinge for ultimate flexibility.",
+    features: ["Intel Core i7 12th Gen", "16GB LPDDR5", "1TB SSD", "13.3\" OLED Touch"],
+    image: "https://kimi-web-img.moonshot.cn/img/ict.com.mm/0b264cd2a5ee1b23b409410923fbc8a209301ad0.jpg",
+    badge: "Premium",
+    specs: { "Processor": "Intel Core i7-1255U", "RAM": "16GB LPDDR5", "Storage": "1TB SSD", "Display": "13.3\" 2.8K OLED Touch", "Weight": "1.34 kg", "Battery": "Up to 11 hours", "OS": "Windows 11 Home" }
+  },
+  {
+    id: "hp-omen-16",
+    name: "HP OMEN 16-k0000",
+    shortName: "OMEN 16",
+    category: "laptop",
+    subCategory: "gaming",
+    price: 129999,
+    mrp: 169999,
+    sku: "6M1U9PA",
+    speed: "Intel Core i9-13900HX",
+    connectivity: ["Wi-Fi 6E", "Bluetooth 5.3", "Thunderbolt 4", "HDMI 2.1"],
+    duplex: false,
+    dutyCycle: "N/A",
+    idealFor: "Gamers & Creators",
+    description: "Raw gaming power with RTX 4060 graphics and 165Hz display. OMEN Tempest cooling keeps performance at peak during intense sessions.",
+    features: ["Intel Core i9 13th Gen", "16GB DDR5", "1TB SSD", "RTX 4060 8GB"],
+    image: "https://kimi-web-img.moonshot.cn/img/ict.com.mm/f431dbf197b2900302579432e19b24826774f2bc.webp",
+    badge: "Gaming Beast",
+    specs: { "Processor": "Intel Core i9-13900HX", "RAM": "16GB DDR5", "Storage": "1TB SSD", "Display": "16.1\" FHD 165Hz", "GPU": "NVIDIA RTX 4060 8GB", "Weight": "2.35 kg", "OS": "Windows 11 Home" }
+  },
+
+  // === DESKTOPS (2) ===
+  {
+    id: "hp-omnidesk-m03",
+    name: "HP OmniDesk AI M03-0000t",
+    shortName: "OmniDesk AI",
+    category: "desktop",
+    subCategory: "consumer",
+    price: 84999,
+    mrp: 109999,
+    sku: "B11B4AV",
+    speed: "Intel Core Ultra 7-155U",
+    connectivity: ["Wi-Fi 6E", "Bluetooth 5.3", "USB-C", "HDMI", "DisplayPort"],
+    duplex: false,
+    dutyCycle: "N/A",
+    idealFor: "Home & Office",
+    description: "AI-powered desktop with Intel Core Ultra processor. Compact tower design with real wood front panel. Built for the future of computing.",
+    features: ["Intel Core Ultra 7", "32GB DDR5", "1TB SSD", "AI NPU"],
+    image: "https://kimi-web-img.moonshot.cn/img/hp.widen.net/bc4619302724891b7801a7dce7e95c31e0da3590.png",
+    badge: "AI Powered",
+    specs: { "Processor": "Intel Core Ultra 7-155U", "RAM": "32GB DDR5-5600", "Storage": "1TB NVMe SSD", "Graphics": "Intel Arc Graphics", "AI NPU": "Intel AI Boost", "OS": "Windows 11 Home", "Form Factor": "Compact Tower" }
+  },
+  {
+    id: "hp-pavilion-desktop",
+    name: "HP Pavilion Desktop TP01-4000",
+    shortName: "Pavilion Desktop",
+    category: "desktop",
+    subCategory: "consumer",
+    price: 45999,
+    mrp: 59999,
+    sku: "6K3U9PA",
+    speed: "AMD Ryzen 5 5600G",
+    connectivity: ["Wi-Fi 5", "Bluetooth 4.2", "USB 3.2", "HDMI"],
+    duplex: false,
+    dutyCycle: "N/A",
+    idealFor: "Home & Students",
+    description: "Reliable everyday desktop with AMD Ryzen 5 and integrated Radeon graphics. Perfect for home office, study, and light creative work.",
+    features: ["AMD Ryzen 5 5600G", "8GB DDR4", "512GB SSD", "Radeon Graphics"],
+    image: "https://kimi-web-img.moonshot.cn/img/www.hp.com/9882da4977054c715ca64d18f12e0276e6464efe.jpg",
+    specs: { "Processor": "AMD Ryzen 5 5600G", "RAM": "8GB DDR4", "Storage": "512GB SSD", "Graphics": "AMD Radeon Graphics", "OS": "Windows 11 Home", "Form Factor": "Micro Tower" }
+  },
+
+  // === MONITORS (2) ===
+  {
+    id: "hp-m27f",
+    name: "HP M27f 27\" FHD Monitor",
+    shortName: "M27f Monitor",
+    category: "monitor",
+    subCategory: "consumer",
+    price: 12999,
+    mrp: 16999,
+    sku: "2H0N5AA",
+    speed: "75 Hz",
+    connectivity: ["HDMI 1.4", "VGA"],
+    duplex: false,
+    dutyCycle: "N/A",
+    idealFor: "Home & Office",
+    description: "Stunning 27-inch IPS display with AMD FreeSync and Eyesafe certified low blue light. Ultra-slim design with micro-edge bezels.",
+    features: ["27\" IPS FHD", "75Hz Refresh", "AMD FreeSync", "Eyesafe Certified"],
+    image: "https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/445c5025ee2d8a0e1245703a5975ef40c112fa55.jpg",
+    badge: "Best Value",
+    specs: { "Display": "27\" IPS FHD (1920x1080)", "Refresh Rate": "75 Hz", "Response Time": "5ms", "Panel": "IPS", "Brightness": "300 nits", "Color": "sRGB 99%", "Features": "AMD FreeSync, Eyesafe" }
+  },
+  {
+    id: "hp-series-5-pro-27",
+    name: "HP Series 5 Pro 27\" QHD Monitor",
+    shortName: "Series 5 Pro 27",
+    category: "monitor",
+    subCategory: "professional",
+    price: 58717,
+    mrp: 65435,
+    sku: "6N6E2AA",
+    speed: "100 Hz",
+    connectivity: ["HDMI 1.4", "VGA", "USB-C"],
+    duplex: false,
+    dutyCycle: "N/A",
+    idealFor: "Professionals",
+    description: "QHD conferencing monitor with AI-powered webcam, integrated speakers, and ambient light sensor. Built for hybrid work.",
+    features: ["27\" QHD IPS", "100Hz Refresh", "AI Webcam", "USB-C"],
+    image: "https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/445c5025ee2d8a0e1245703a5975ef40c112fa55.jpg",
+    badge: "Pro Grade",
+    specs: { "Display": "27\" QHD IPS (2560x1440)", "Refresh Rate": "100 Hz", "Webcam": "5MP AI Camera", "Speakers": "Integrated 2W", "Connectivity": "USB-C, HDMI, VGA", "Features": "Ambient Light Sensor, HP Eye Ease" }
+  },
+
+  // === ACCESSORIES (2) ===
+  {
+    id: "hp-230-wireless-combo",
+    name: "HP 230 Wireless Keyboard & Mouse Combo",
+    shortName: "230 Wireless Combo",
+    category: "accessory",
+    subCategory: "input",
+    price: 2348,
+    mrp: 3599,
+    sku: "3L1F0AA",
+    speed: "1600 DPI",
+    connectivity: ["2.4GHz Wireless", "USB Dongle"],
+    duplex: false,
+    dutyCycle: "N/A",
+    idealFor: "Home & Office",
+    description: "Quiet chiclet-style keyboard with accurate 1600 DPI mouse. One USB receiver connects both. 16-month battery life.",
+    features: ["Chiclet Keyboard", "1600 DPI Mouse", "16-Month Battery", "Single USB Receiver"],
+    image: "https://kimi-web-img.moonshot.cn/img/au-media.apjonlinecdn.com/f5b9c336f38c64265c43f99690b13a1f5a9b51da.png",
+    badge: "Best Seller",
+    specs: { "Keyboard Type": "Chiclet (Full Size)", "Mouse DPI": "1600", "Connection": "2.4GHz Wireless", "Battery Life": "16 months", "Range": "Up to 10m", "Compatibility": "Windows, macOS, ChromeOS" }
+  },
+  {
+    id: "hp-710-rechargeable-mouse",
+    name: "HP 710 Rechargeable Silent Mouse",
+    shortName: "710 Silent Mouse",
+    category: "accessory",
+    subCategory: "input",
+    price: 4999,
+    mrp: 6999,
+    sku: "6N6E3AA",
+    speed: "4000 DPI",
+    connectivity: ["Bluetooth 5.3", "2.4GHz", "USB-C Charging"],
+    duplex: false,
+    dutyCycle: "N/A",
+    idealFor: "Professionals",
+    description: "Premium rechargeable mouse with 6 programmable buttons. Switch between 3 devices seamlessly. 90-day battery on single charge.",
+    features: ["6 Programmable Buttons", "3-Device Switch", "90-Day Battery", "USB-C Charging"],
+    image: "https://kimi-web-img.moonshot.cn/img/au-media.apjonlinecdn.com/f5b9c336f38c64265c43f99690b13a1f5a9b51da.png",
+    badge: "Premium",
+    specs: { "Sensor": "4000 DPI Optical", "Buttons": "6 Programmable", "Connection": "BT 5.3 + 2.4GHz", "Battery": "90 days (rechargeable)", "Charging": "USB-C", "Compatibility": "Windows, macOS, iPadOS" }
+  },
+];
+
+export const categories = [
+  { id: "printer", name: "Printers", icon: "Printer", count: 19, description: "Laser, Color Laser & InkJet" },
+  { id: "laptop", name: "Laptops", icon: "Laptop", count: 3, description: "Consumer, Premium & Gaming" },
+  { id: "desktop", name: "Desktops", icon: "Monitor", count: 2, description: "AI PCs & Tower Systems" },
+  { id: "monitor", name: "Monitors", icon: "MonitorSmartphone", count: 2, description: "FHD, QHD & Professional" },
+  { id: "accessory", name: "Accessories", icon: "Mouse", count: 2, description: "Keyboards, Mice & More" },
 ];
 
 export const getProductById = (id: string): Product | undefined => products.find(p => p.id === id);
 export const getProductsByCategory = (category: string): Product[] => products.filter(p => p.category === category);
+export const getFeaturedProducts = (): Product[] => products.filter(p => p.badge && ["Best Seller", "Popular", "Premium", "AI Powered", "Gaming Beast"].includes(p.badge));

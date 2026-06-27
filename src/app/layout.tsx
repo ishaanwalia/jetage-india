@@ -9,12 +9,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Jetage Computer Traders | Premium HP Printers Since 1989",
-  description: "Authorized HP printer dealer in India since 1989. Visit our showroom at SCO-12, 1st Floor, Sector-17-E, Chandigarh. Laser, Color Laser, and InkJet printers with WhatsApp ordering.",
-  keywords: "HP printers, laser printers, color laser printers, inkjet printers, India, Jetage, Chandigarh, Sector 17",
+  title: "Jetage India | Premium HP Products Since 1989",
+  description: "Authorized HP World Partner since 1989. Laptops, desktops, printers, monitors & accessories. Visit our showroom at SCO-12, Sector-17-E, Chandigarh. All India delivery with WhatsApp ordering.",
+  keywords: "HP laptops, HP desktops, HP printers, HP monitors, HP accessories, HP World, Chandigarh, Sector 17, Jetage, India",
   openGraph: {
-    title: "Jetage Computer Traders | Premium HP Printers Since 1989",
-    description: "Authorized HP dealer since 1989. Visit our showroom at SCO-12, Sector-17-E, Chandigarh. Best prices on HP printers.",
+    title: "Jetage India | Premium HP Products Since 1989",
+    description: "Authorized HP World Partner. Laptops, desktops, printers, monitors & accessories. Visit SCO-12, Sector-17-E, Chandigarh.",
     type: "website",
   },
 };
