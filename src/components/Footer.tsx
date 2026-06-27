@@ -3,11 +3,32 @@
 import { MapPin, Phone, Mail, MessageCircle, Clock, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { ScrambleText } from "./TextScramble";
 
 export function Footer() {
+  const quickLinks = [
+    { label: "All Products", href: "/products/" },
+    { label: "Laptops", href: "/category/laptop/" },
+    { label: "Desktops", href: "/category/desktop/" },
+    { label: "Printers", href: "/category/printer/" },
+    { label: "Monitors", href: "/category/monitor/" },
+    { label: "Accessories", href: "/category/accessory/" },
+  ];
+
+  const supportLinks = [
+    { label: "Warranty Info", href: "https://support.hp.com/in-en/warranty" },
+    { label: "Driver Downloads", href: "https://support.hp.com/in-en/drivers" },
+    { label: "Installation Help", href: "https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20need%20help%20with%20installation" },
+    { label: "Troubleshooting", href: "https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20need%20troubleshooting%20help" },
+    { label: "Bulk Orders", href: "https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20want%20to%20place%20a%20bulk%20order" },
+  ];
+
   return (
-    <footer className="bg-jet-bg-elevated border-t border-jet-border">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+    <footer className="bg-jet-bg-elevated border-t border-jet-border relative overflow-hidden">
+      {/* Subtle glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-jet-primary/5 rounded-full blur-[100px] pointer-events-none" />
+      
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 relative z-10">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="space-y-6">
             <Logo size="md" />
@@ -16,24 +37,30 @@ export function Footer() {
               Sector-17-E, Chandigarh — above the iconic Indian Coffee House.
             </p>
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm text-jet-text-muted">
-                <MapPin className="w-4 h-4 text-jet-primary flex-shrink-0" />
+              <div className="flex items-center gap-2 text-sm text-jet-text-muted group">
+                <MapPin className="w-4 h-4 text-jet-primary group-hover:scale-110 transition-transform" />
                 <span>SCO-12, 1st Floor, Sector-17-E, Chandigarh</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-jet-text-muted">
-                <Clock className="w-4 h-4 text-jet-primary flex-shrink-0" />
+              <div className="flex items-center gap-2 text-sm text-jet-text-muted group">
+                <Clock className="w-4 h-4 text-jet-primary group-hover:scale-110 transition-transform" />
                 <span>Mon-Sat: 10AM - 8PM</span>
               </div>
             </div>
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-6 text-jet-text">Quick Links</h4>
+            <h4 className="font-bold text-lg mb-6 text-jet-text">
+              <ScrambleText text="Quick Links" triggerOnHover />
+            </h4>
             <ul className="space-y-3">
-              {["All Products", "Laptops", "Desktops", "Printers", "Monitors", "Accessories"].map((link) => (
-                <li key={link}>
-                  <Link href="#" className="text-jet-text-dim hover:text-jet-primary transition-colors text-sm">
-                    {link}
+              {quickLinks.map((link) => (
+                <li key={link.label}>
+                  <Link 
+                    href={link.href}
+                    className="text-jet-text-dim hover:text-jet-primary transition-colors text-sm inline-flex items-center gap-1 group"
+                  >
+                    {link.label}
+                    <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Link>
                 </li>
               ))}
@@ -41,23 +68,33 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-6 text-jet-text">Support</h4>
+            <h4 className="font-bold text-lg mb-6 text-jet-text">
+              <ScrambleText text="Support" triggerOnHover />
+            </h4>
             <ul className="space-y-3">
-              {["Warranty Info", "Driver Downloads", "Installation Help", "Troubleshooting", "Bulk Orders"].map((link) => (
-                <li key={link}>
-                  <Link href="#" className="text-jet-text-dim hover:text-jet-primary transition-colors text-sm">
-                    {link}
-                  </Link>
+              {supportLinks.map((link) => (
+                <li key={link.label}>
+                  <a 
+                    href={link.href}
+                    target={link.href.startsWith("http") ? "_blank" : undefined}
+                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className="text-jet-text-dim hover:text-jet-primary transition-colors text-sm inline-flex items-center gap-1 group"
+                  >
+                    {link.label}
+                    <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-6 text-jet-text">Contact Us</h4>
+            <h4 className="font-bold text-lg mb-6 text-jet-text">
+              <ScrambleText text="Contact Us" triggerOnHover />
+            </h4>
             <div className="space-y-4">
-              <a href="tel:+919814958295" className="flex items-center gap-3 text-jet-text-dim hover:text-jet-text transition-colors">
-                <div className="w-10 h-10 bg-jet-bg-card rounded-lg flex items-center justify-center border border-jet-border">
+              <a href="tel:+919814958295" className="flex items-center gap-3 text-jet-text-dim hover:text-jet-text transition-colors group">
+                <div className="w-10 h-10 bg-jet-bg-card rounded-lg flex items-center justify-center border border-jet-border group-hover:border-jet-primary/40 transition-all">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
@@ -66,8 +103,8 @@ export function Footer() {
                 </div>
               </a>
 
-              <a href="https://wa.me/919814958295" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-jet-text-dim hover:text-jet-whatsapp transition-colors">
-                <div className="w-10 h-10 bg-jet-whatsapp/10 rounded-lg flex items-center justify-center border border-jet-whatsapp/20">
+              <a href="https://wa.me/919814958295" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-jet-text-dim hover:text-jet-whatsapp transition-colors group">
+                <div className="w-10 h-10 bg-jet-whatsapp/10 rounded-lg flex items-center justify-center border border-jet-whatsapp/20 group-hover:bg-jet-whatsapp/20 transition-all">
                   <MessageCircle className="w-4 h-4 text-jet-whatsapp" />
                 </div>
                 <div>
@@ -76,15 +113,15 @@ export function Footer() {
                 </div>
               </a>
 
-              <div className="flex items-center gap-3 text-jet-text-dim">
-                <div className="w-10 h-10 bg-jet-bg-card rounded-lg flex items-center justify-center border border-jet-border">
+              <a href="mailto:info@jetageindia.in" className="flex items-center gap-3 text-jet-text-dim hover:text-jet-primary transition-colors group">
+                <div className="w-10 h-10 bg-jet-bg-card rounded-lg flex items-center justify-center border border-jet-border group-hover:border-jet-primary/40 transition-all">
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
                   <p className="text-xs text-jet-text-muted">Email</p>
                   <p className="text-sm text-jet-text">info@jetageindia.in</p>
                 </div>
-              </div>
+              </a>
             </div>
           </div>
         </div>

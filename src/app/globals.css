@@ -113,23 +113,6 @@
     border-color: rgba(201, 168, 76, 0.4);
   }
 
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  .animate-float-delayed {
-    animation: float 6s ease-in-out infinite;
-    animation-delay: 2s;
-  }
-
-  .animate-pulse-slow {
-    animation: pulse-slow 4s ease-in-out infinite;
-  }
-
-  .animate-shimmer {
-    animation: shimmer 3s ease-in-out infinite;
-  }
-
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -168,21 +151,12 @@
     text-shadow: 0 0 40px rgba(201, 168, 76, 0.3), 0 0 80px rgba(201, 168, 76, 0.1);
   }
 
-  .reveal-up {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-
-  .reveal-left {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-
-  .reveal-scale {
-    opacity: 0;
-    transform: scale(0.95);
+  .will-change-transform {
+    will-change: transform;
   }
 }
+
+/* ===== KEYFRAME ANIMATIONS ===== */
 
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -204,17 +178,46 @@
   to { transform: rotate(360deg); }
 }
 
-@keyframes marquee {
+@keyframes marquee-left {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-.animate-marquee {
-  animation: marquee 30s linear infinite;
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
+  background-size: 200% 100%;
 }
 
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
+}
+
+.animate-marquee-left {
+  animation: marquee-left 30s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 30s linear infinite;
 }
 
 .product-image-placeholder {
