@@ -1,6 +1,6 @@
 "use client";
 
-import { Printer, Wifi, Usb, Ethernet, ChevronRight, MessageCircle, Check } from "lucide-react";
+import { Printer, Wifi, Usb, EthernetPort, ChevronRight, MessageCircle, Check } from "lucide-react";
 import Link from "next/link";
 
 export interface Product {
@@ -34,7 +34,7 @@ export function ProductCard({ product, compact = false }: ProductCardProps) {
 
   const getConnectivityIcon = (conn: string) => {
     if (conn === "Wi-Fi") return <Wifi className="w-3.5 h-3.5" />;
-    if (conn === "Ethernet") return <Ethernet className="w-3.5 h-3.5" />;
+    if (conn === "Ethernet") return <EthernetPort className="w-3.5 h-3.5" />;
     if (conn === "USB") return <Usb className="w-3.5 h-3.5" />;
     return null;
   };

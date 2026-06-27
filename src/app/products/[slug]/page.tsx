@@ -2,23 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { 
-  Printer, 
-  Wifi, 
-  Usb, 
-  Ethernet, 
-  Check, 
-  X, 
-  ChevronLeft, 
-  MessageCircle, 
-  Phone,
-  Truck,
-  Shield,
-  Award,
-  Zap,
-  ArrowRight,
-  Star
-} from "lucide-react";
+import { Printer, Wifi, Usb, EthernetPort, Check, X, ChevronLeft, MessageCircle, Phone, Truck, Shield, Award, Zap, ArrowRight, Star } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { products } from "@/lib/data/products";
