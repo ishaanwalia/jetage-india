@@ -15,6 +15,7 @@ export interface Product {
   description: string;
   features: string[];
   image: string;
+  images: string[];
   badge?: string;
   specs?: Record<string, string>;
 }
@@ -38,6 +39,11 @@ export const products: Product[] = [
     description: "High-speed monochrome laser printing with automatic duplex. Perfect for small businesses needing reliable, fast document output.",
     features: ["30 ppm black", "Auto duplex", "USB 2.0", "Compact design"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107811.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107812.png"
+    ],
     badge: "Best Seller",
     specs: { "Print Speed": "30 ppm", "Resolution": "600 x 600 dpi", "Paper Capacity": "150 sheets", "Monthly Duty": "30,000 pages" }
   },
@@ -58,6 +64,11 @@ export const products: Product[] = [
     description: "Wireless monochrome laser with auto duplex and mobile printing. The ultimate productivity tool for modern offices.",
     features: ["30 ppm black", "Auto duplex", "Wi-Fi + USB", "HP Smart App"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107811.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107813.png"
+    ],
     badge: "Popular",
     specs: { "Print Speed": "30 ppm", "Resolution": "600 x 600 dpi", "Wireless": "Wi-Fi + Wi-Fi Direct", "Monthly Duty": "30,000 pages" }
   },
@@ -78,6 +89,11 @@ export const products: Product[] = [
     description: "Print, scan, copy with automatic duplex. All-in-one monochrome laser for demanding business environments.",
     features: ["Print/Scan/Copy", "30 ppm", "Auto duplex", "USB"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107811.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107814.png"
+    ],
     specs: { "Functions": "Print, Scan, Copy", "Print Speed": "30 ppm", "ADF": "35 sheets", "Monthly Duty": "30,000 pages" }
   },
   {
@@ -97,6 +113,11 @@ export const products: Product[] = [
     description: "Network-ready MFP with wireless, ethernet and auto duplex. The complete office solution.",
     features: ["Print/Scan/Copy", "Wi-Fi + Ethernet", "30 ppm", "Auto duplex"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107811.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107815.png"
+    ],
     specs: { "Functions": "Print, Scan, Copy", "Network": "Wi-Fi + Ethernet", "Print Speed": "30 ppm", "Monthly Duty": "30,000 pages" }
   },
   {
@@ -116,6 +137,11 @@ export const products: Product[] = [
     description: "Advanced MFP with ADF, wireless, ethernet and auto duplex. Built for high-volume enterprise printing.",
     features: ["ADF", "Wi-Fi + Ethernet", "30 ppm", "Auto duplex"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/2/A/2A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D5A6D.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107811.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107816.png"
+    ],
     badge: "Enterprise",
     specs: { "Functions": "Print, Scan, Copy", "ADF": "50 sheets", "Network": "Wi-Fi + Ethernet", "Monthly Duty": "30,000 pages" }
   },
@@ -136,6 +162,11 @@ export const products: Product[] = [
     description: "Compact, affordable monochrome laser printer. Perfect for home offices and students needing crisp text documents.",
     features: ["21 ppm", "USB 2.0", "Compact 4.2kg", "150-sheet tray"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/714Z8A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/714Z8A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107817.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107818.png"
+    ],
     specs: { "Print Speed": "21 ppm", "Weight": "4.2 kg", "Paper Capacity": "150 sheets", "Monthly Duty": "10,000 pages" }
   },
   {
@@ -155,6 +186,11 @@ export const products: Product[] = [
     description: "Wireless monochrome laser with HP Smart App support. Print from anywhere in your home or office.",
     features: ["21 ppm", "Wi-Fi + USB", "HP Smart App", "Wi-Fi Direct"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/714Z9A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/714Z9A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107819.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107820.png"
+    ],
     badge: "Value Pick",
     specs: { "Print Speed": "21 ppm", "Wireless": "Wi-Fi + Wi-Fi Direct", "Weight": "4.2 kg", "Monthly Duty": "10,000 pages" }
   },
@@ -175,6 +211,11 @@ export const products: Product[] = [
     description: "All-in-one monochrome laser with print, scan, copy. The perfect home office companion.",
     features: ["Print/Scan/Copy", "21 ppm", "USB", "Compact"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A4A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A4A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107821.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107822.png"
+    ],
     specs: { "Functions": "Print, Scan, Copy", "Print Speed": "21 ppm", "Weight": "6.3 kg", "Monthly Duty": "10,000 pages" }
   },
   {
@@ -194,6 +235,11 @@ export const products: Product[] = [
     description: "Wireless all-in-one with mobile printing. Print, scan, copy from your smartphone.",
     features: ["Print/Scan/Copy", "Wi-Fi", "21 ppm", "HP Smart App"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A5A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A5A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107823.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107824.png"
+    ],
     specs: { "Functions": "Print, Scan, Copy", "Wireless": "Wi-Fi + Wi-Fi Direct", "Print Speed": "21 ppm", "Monthly Duty": "10,000 pages" }
   },
   {
@@ -213,6 +259,11 @@ export const products: Product[] = [
     description: "Network-ready MFP with ethernet and wireless. Ideal for small office sharing.",
     features: ["Print/Scan/Copy", "Wi-Fi + Ethernet", "21 ppm", "Network ready"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A6A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A6A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107825.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107826.png"
+    ],
     specs: { "Functions": "Print, Scan, Copy", "Network": "Wi-Fi + Ethernet", "Print Speed": "21 ppm", "Monthly Duty": "10,000 pages" }
   },
   {
@@ -232,6 +283,11 @@ export const products: Product[] = [
     description: "Full-featured MFP with fax, wireless, and ethernet. The complete communication hub.",
     features: ["Print/Scan/Copy/Fax", "Wi-Fi + Ethernet", "21 ppm", "ADF"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A7A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/7/1/715A7A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107827.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107828.png"
+    ],
     badge: "Full Feature",
     specs: { "Functions": "Print, Scan, Copy, Fax", "ADF": "35 sheets", "Network": "Wi-Fi + Ethernet", "Monthly Duty": "10,000 pages" }
   },
@@ -252,6 +308,11 @@ export const products: Product[] = [
     description: "Legendary LaserJet reliability in a compact form. The world's most trusted printer series.",
     features: ["19 ppm", "USB 2.0", "Legendary reliability", "Compact"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/A/8/A80A3A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/A/8/A80A3A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107829.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107830.png"
+    ],
     specs: { "Print Speed": "19 ppm", "Weight": "4.2 kg", "Paper Capacity": "150 sheets", "Monthly Duty": "8,000 pages" }
   },
   {
@@ -271,6 +332,11 @@ export const products: Product[] = [
     description: "India's favorite LaserJet MFP. Print, scan, copy with proven reliability and low running costs.",
     features: ["Print/Scan/Copy", "20 ppm", "USB", "Low cost per page"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/C/Z/CZ174A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/C/Z/CZ174A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107831.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107832.png"
+    ],
     badge: "India's Favorite",
     specs: { "Functions": "Print, Scan, Copy", "Print Speed": "20 ppm", "Weight": "8.0 kg", "Monthly Duty": "8,000 pages" }
   },
@@ -291,6 +357,11 @@ export const products: Product[] = [
     description: "Wireless LaserJet MFP with AirPrint and Mopria. India's trusted choice, now with wireless freedom.",
     features: ["Print/Scan/Copy", "Wi-Fi", "20 ppm", "AirPrint & Mopria"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/C/Z/CZ175A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/C/Z/CZ175A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107833.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107834.png"
+    ],
     specs: { "Functions": "Print, Scan, Copy", "Wireless": "Wi-Fi + AirPrint", "Print Speed": "20 ppm", "Monthly Duty": "8,000 pages" }
   },
   {
@@ -310,6 +381,11 @@ export const products: Product[] = [
     description: "Affordable color laser with wireless. Bring your documents to life with vibrant color printing.",
     features: ["Color laser", "Wi-Fi", "18 ppm black", "Compact"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/Z/4ZB95A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/Z/4ZB95A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107835.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107836.png"
+    ],
     specs: { "Print Speed": "18 ppm B&W / 4 ppm Color", "Resolution": "600 x 600 dpi", "Wireless": "Wi-Fi", "Monthly Duty": "20,000 pages" }
   },
   {
@@ -329,6 +405,11 @@ export const products: Product[] = [
     description: "Wireless color MFP with print, scan, copy. Professional color documents from your desk.",
     features: ["Print/Scan/Copy Color", "Wi-Fi", "18 ppm black", "Compact color"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/Z/4ZB96A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/Z/4ZB96A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107837.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107838.png"
+    ],
     badge: "Color Choice",
     specs: { "Functions": "Print, Scan, Copy (Color)", "Print Speed": "18 ppm B&W / 4 ppm Color", "Wireless": "Wi-Fi", "Monthly Duty": "20,000 pages" }
   },
@@ -349,6 +430,11 @@ export const products: Product[] = [
     description: "High-speed duplex color laser with enterprise connectivity. Professional color at blazing speed.",
     features: ["33 ppm color", "Auto duplex", "Wi-Fi + Ethernet", "Enterprise grade"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/9/499M5A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/9/499M5A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107839.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107840.png"
+    ],
     badge: "Pro Grade",
     specs: { "Print Speed": "33 ppm B&W / 33 ppm Color", "Auto Duplex": "Yes", "Network": "Wi-Fi + Ethernet", "Monthly Duty": "50,000 pages" }
   },
@@ -369,6 +455,11 @@ export const products: Product[] = [
     description: "Ultimate color MFP with ADF, duplex, and enterprise networking. The pinnacle of office printing.",
     features: ["Print/Scan/Copy Color", "33 ppm", "ADF + Duplex", "Enterprise"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/9/499M6A.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/4/9/499M6A.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107841.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107842.png"
+    ],
     badge: "Flagship",
     specs: { "Functions": "Print, Scan, Copy (Color)", "ADF": "50 sheets", "Print Speed": "33 ppm", "Monthly Duty": "50,000 pages" }
   },
@@ -389,6 +480,11 @@ export const products: Product[] = [
     description: "Ultra-low-cost color printing with self-reset WiFi. Perfect for home users who print photos and documents.",
     features: ["Print/Scan/Copy", "Ultra-low ink cost", "Self-reset WiFi", "HP Smart App"],
     image: "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/6/0/60K34B.png",
+    images: [
+      "https://in-media.apjonlinecdn.com/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/6/0/60K34B.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107843.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107844.png"
+    ],
     badge: "Home Essential",
     specs: { "Functions": "Print, Scan, Copy", "Print Speed": "20 ppm B&W / 5.5 ppm Color", "Wireless": "Wi-Fi", "Monthly Duty": "1,000 pages" }
   },
@@ -411,6 +507,11 @@ export const products: Product[] = [
     description: "The perfect everyday laptop. AMD Ryzen 5 power, 16GB RAM, and a stunning 15.6\" FHD display for work, study, and entertainment.",
     features: ["AMD Ryzen 5 5625U", "16GB DDR4", "512GB SSD", "15.6\" FHD"],
     image: "https://kimi-web-img.moonshot.cn/img/ict.com.mm/f431dbf197b2900302579432e19b24826774f2bc.webp",
+    images: [
+      "https://kimi-web-img.moonshot.cn/img/ict.com.mm/f431dbf197b2900302579432e19b24826774f2bc.webp",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107845.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107846.png"
+    ],
     badge: "Best Seller",
     specs: { "Processor": "AMD Ryzen 5 5625U", "RAM": "16GB DDR4", "Storage": "512GB SSD", "Display": "15.6\" FHD IPS", "Weight": "1.75 kg", "Battery": "Up to 8 hours", "OS": "Windows 11 Home" }
   },
@@ -431,6 +532,11 @@ export const products: Product[] = [
     description: "2-in-1 convertible with OLED touchscreen. All-aluminum build, Intel Evo certified, and 360-degree hinge for ultimate flexibility.",
     features: ["Intel Core i7 12th Gen", "16GB LPDDR5", "1TB SSD", "13.3\" OLED Touch"],
     image: "https://kimi-web-img.moonshot.cn/img/ict.com.mm/0b264cd2a5ee1b23b409410923fbc8a209301ad0.jpg",
+    images: [
+      "https://kimi-web-img.moonshot.cn/img/ict.com.mm/0b264cd2a5ee1b23b409410923fbc8a209301ad0.jpg",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107847.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107848.png"
+    ],
     badge: "Premium",
     specs: { "Processor": "Intel Core i7-1255U", "RAM": "16GB LPDDR5", "Storage": "1TB SSD", "Display": "13.3\" 2.8K OLED Touch", "Weight": "1.34 kg", "Battery": "Up to 11 hours", "OS": "Windows 11 Home" }
   },
@@ -451,6 +557,11 @@ export const products: Product[] = [
     description: "Raw gaming power with RTX 4060 graphics and 165Hz display. OMEN Tempest cooling keeps performance at peak during intense sessions.",
     features: ["Intel Core i9 13th Gen", "16GB DDR5", "1TB SSD", "RTX 4060 8GB"],
     image: "https://kimi-web-img.moonshot.cn/img/ict.com.mm/f431dbf197b2900302579432e19b24826774f2bc.webp",
+    images: [
+      "https://kimi-web-img.moonshot.cn/img/ict.com.mm/f431dbf197b2900302579432e19b24826774f2bc.webp",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107849.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107850.png"
+    ],
     badge: "Gaming Beast",
     specs: { "Processor": "Intel Core i9-13900HX", "RAM": "16GB DDR5", "Storage": "1TB SSD", "Display": "16.1\" FHD 165Hz", "GPU": "NVIDIA RTX 4060 8GB", "Weight": "2.35 kg", "OS": "Windows 11 Home" }
   },
@@ -473,6 +584,11 @@ export const products: Product[] = [
     description: "AI-powered desktop with Intel Core Ultra processor. Compact tower design with real wood front panel. Built for the future of computing.",
     features: ["Intel Core Ultra 7", "32GB DDR5", "1TB SSD", "AI NPU"],
     image: "https://kimi-web-img.moonshot.cn/img/hp.widen.net/bc4619302724891b7801a7dce7e95c31e0da3590.png",
+    images: [
+      "https://kimi-web-img.moonshot.cn/img/hp.widen.net/bc4619302724891b7801a7dce7e95c31e0da3590.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107851.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107852.png"
+    ],
     badge: "AI Powered",
     specs: { "Processor": "Intel Core Ultra 7-155U", "RAM": "32GB DDR5-5600", "Storage": "1TB NVMe SSD", "Graphics": "Intel Arc Graphics", "AI NPU": "Intel AI Boost", "OS": "Windows 11 Home", "Form Factor": "Compact Tower" }
   },
@@ -493,6 +609,11 @@ export const products: Product[] = [
     description: "Reliable everyday desktop with AMD Ryzen 5 and integrated Radeon graphics. Perfect for home office, study, and light creative work.",
     features: ["AMD Ryzen 5 5600G", "8GB DDR4", "512GB SSD", "Radeon Graphics"],
     image: "https://kimi-web-img.moonshot.cn/img/www.hp.com/9882da4977054c715ca64d18f12e0276e6464efe.jpg",
+    images: [
+      "https://kimi-web-img.moonshot.cn/img/www.hp.com/9882da4977054c715ca64d18f12e0276e6464efe.jpg",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107853.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107854.png"
+    ],
     specs: { "Processor": "AMD Ryzen 5 5600G", "RAM": "8GB DDR4", "Storage": "512GB SSD", "Graphics": "AMD Radeon Graphics", "OS": "Windows 11 Home", "Form Factor": "Micro Tower" }
   },
 
@@ -514,6 +635,11 @@ export const products: Product[] = [
     description: "Stunning 27-inch IPS display with AMD FreeSync and Eyesafe certified low blue light. Ultra-slim design with micro-edge bezels.",
     features: ["27\" IPS FHD", "75Hz Refresh", "AMD FreeSync", "Eyesafe Certified"],
     image: "https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/445c5025ee2d8a0e1245703a5975ef40c112fa55.jpg",
+    images: [
+      "https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/445c5025ee2d8a0e1245703a5975ef40c112fa55.jpg",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107855.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107856.png"
+    ],
     badge: "Best Value",
     specs: { "Display": "27\" IPS FHD (1920x1080)", "Refresh Rate": "75 Hz", "Response Time": "5ms", "Panel": "IPS", "Brightness": "300 nits", "Color": "sRGB 99%", "Features": "AMD FreeSync, Eyesafe" }
   },
@@ -534,6 +660,11 @@ export const products: Product[] = [
     description: "QHD conferencing monitor with AI-powered webcam, integrated speakers, and ambient light sensor. Built for hybrid work.",
     features: ["27\" QHD IPS", "100Hz Refresh", "AI Webcam", "USB-C"],
     image: "https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/445c5025ee2d8a0e1245703a5975ef40c112fa55.jpg",
+    images: [
+      "https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/445c5025ee2d8a0e1245703a5975ef40c112fa55.jpg",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107857.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107858.png"
+    ],
     badge: "Pro Grade",
     specs: { "Display": "27\" QHD IPS (2560x1440)", "Refresh Rate": "100 Hz", "Webcam": "5MP AI Camera", "Speakers": "Integrated 2W", "Connectivity": "USB-C, HDMI, VGA", "Features": "Ambient Light Sensor, HP Eye Ease" }
   },
@@ -556,6 +687,11 @@ export const products: Product[] = [
     description: "Quiet chiclet-style keyboard with accurate 1600 DPI mouse. One USB receiver connects both. 16-month battery life.",
     features: ["Chiclet Keyboard", "1600 DPI Mouse", "16-Month Battery", "Single USB Receiver"],
     image: "https://kimi-web-img.moonshot.cn/img/au-media.apjonlinecdn.com/f5b9c336f38c64265c43f99690b13a1f5a9b51da.png",
+    images: [
+      "https://kimi-web-img.moonshot.cn/img/au-media.apjonlinecdn.com/f5b9c336f38c64265c43f99690b13a1f5a9b51da.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107859.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107860.png"
+    ],
     badge: "Best Seller",
     specs: { "Keyboard Type": "Chiclet (Full Size)", "Mouse DPI": "1600", "Connection": "2.4GHz Wireless", "Battery Life": "16 months", "Range": "Up to 10m", "Compatibility": "Windows, macOS, ChromeOS" }
   },
@@ -576,6 +712,11 @@ export const products: Product[] = [
     description: "Premium rechargeable mouse with 6 programmable buttons. Switch between 3 devices seamlessly. 90-day battery on single charge.",
     features: ["6 Programmable Buttons", "3-Device Switch", "90-Day Battery", "USB-C Charging"],
     image: "https://kimi-web-img.moonshot.cn/img/au-media.apjonlinecdn.com/f5b9c336f38c64265c43f99690b13a1f5a9b51da.png",
+    images: [
+      "https://kimi-web-img.moonshot.cn/img/au-media.apjonlinecdn.com/f5b9c336f38c64265c43f99690b13a1f5a9b51da.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107861.png",
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107862.png"
+    ],
     badge: "Premium",
     specs: { "Sensor": "4000 DPI Optical", "Buttons": "6 Programmable", "Connection": "BT 5.3 + 2.4GHz", "Battery": "90 days (rechargeable)", "Charging": "USB-C", "Compatibility": "Windows, macOS, iPadOS" }
   },
@@ -592,3 +733,4 @@ export const categories = [
 export const getProductById = (id: string): Product | undefined => products.find(p => p.id === id);
 export const getProductsByCategory = (category: string): Product[] => products.filter(p => p.category === category);
 export const getFeaturedProducts = (): Product[] => products.filter(p => p.badge && ["Best Seller", "Popular", "Premium", "AI Powered", "Gaming Beast"].includes(p.badge));
+

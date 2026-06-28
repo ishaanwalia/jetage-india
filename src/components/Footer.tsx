@@ -2,7 +2,6 @@
 
 import { MapPin, Phone, Mail, MessageCircle, Clock, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { Logo } from "./Logo";
 import { ScrambleText } from "./TextScramble";
 
 export function Footer() {
@@ -25,13 +24,18 @@ export function Footer() {
 
   return (
     <footer className="bg-jet-bg-elevated border-t border-jet-border relative overflow-hidden">
-      {/* Subtle glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-jet-primary/5 rounded-full blur-[100px] pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 relative z-10">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="space-y-6">
-            <Logo size="md" />
+            <div className="flex items-center gap-3">
+              <img src="/LogoJ.png" alt="Jetage India" className="w-10 h-10 rounded-xl" />
+              <div className="flex flex-col">
+                <span className="text-lg font-bold text-jet-text leading-tight">Jetage</span>
+                <span className="text-[10px] text-jet-text-muted tracking-[0.2em] uppercase font-medium">India</span>
+              </div>
+            </div>
             <p className="text-jet-text-dim text-sm leading-relaxed">
               Authorized HP World Partner since 1989. Visit our showroom at SCO-12, 
               Sector-17-E, Chandigarh — above the iconic Indian Coffee House.

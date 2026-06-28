@@ -22,6 +22,7 @@ export interface Product {
   description: string;
   features: string[];
   image: string;
+  images: string[];
   badge?: string;
   specs?: Record<string, string>;
 }
@@ -48,12 +49,12 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
 
   const categoryColors: Record<string, string> = {
     "laser": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
-    "color-laser": "bg-orange-500/10 text-orange-400 border-orange-500/20",
-    "inkjet": "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    "color-laser": "bg-orange-500/10 text-orange-500 border-orange-500/20",
+    "inkjet": "bg-blue-500/10 text-blue-500 border-blue-500/20",
     "consumer": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
-    "premium": "bg-purple-500/10 text-purple-400 border-purple-500/20",
-    "gaming": "bg-red-500/10 text-red-400 border-red-500/20",
-    "professional": "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    "premium": "bg-purple-500/10 text-purple-500 border-purple-500/20",
+    "gaming": "bg-red-500/10 text-red-500 border-red-500/20",
+    "professional": "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
     "input": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
   };
 
@@ -79,12 +80,12 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
       >
         <div className="relative aspect-[4/3] bg-gradient-to-br from-jet-bg-elevated to-jet-bg p-4 flex items-center justify-center overflow-hidden">
           {product.badge && (
-            <div className="absolute top-3 left-3 px-3 py-1 bg-jet-primary text-jet-bg text-xs font-bold rounded-full z-10">
+            <div className="absolute top-3 left-3 px-3 py-1 bg-jet-primary text-white text-xs font-bold rounded-full z-10">
               {product.badge}
             </div>
           )}
           {discount > 0 && (
-            <div className="absolute top-3 right-3 px-3 py-1 bg-red-500/20 text-red-400 text-xs font-bold rounded-full z-10 border border-red-500/30">
+            <div className="absolute top-3 right-3 px-3 py-1 bg-red-500/10 text-red-500 text-xs font-bold rounded-full z-10 border border-red-500/20">
               -{discount}%
             </div>
           )}
@@ -106,7 +107,7 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
           
           {isHovered && (
             <div className="absolute inset-0 bg-jet-bg/60 backdrop-blur-sm flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <Link href={`/products/${product.id}/`} className="w-10 h-10 rounded-full bg-jet-primary text-jet-bg flex items-center justify-center hover:scale-110 transition-transform">
+              <Link href={`/products/${product.id}/`} className="w-10 h-10 rounded-full bg-jet-primary text-white flex items-center justify-center hover:scale-110 transition-transform">
                 <Eye className="w-4 h-4" />
               </Link>
               <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-jet-whatsapp text-white flex items-center justify-center hover:scale-110 transition-transform">
@@ -143,7 +144,7 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-jet-bg-elevated text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-jet-bg transition-all"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-jet-bg-elevated text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
           >
             <MessageCircle className="w-4 h-4" />
             Get Quote
@@ -162,18 +163,18 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
       >
         <div className="relative aspect-[16/10] bg-gradient-to-br from-jet-bg-elevated via-jet-bg-card to-jet-bg p-8 flex items-center justify-center overflow-hidden">
           {product.badge && (
-            <div className="absolute top-5 left-5 px-4 py-1.5 bg-jet-primary text-jet-bg text-sm font-bold rounded-full z-10">
+            <div className="absolute top-5 left-5 px-4 py-1.5 bg-jet-primary text-white text-sm font-bold rounded-full z-10">
               {product.badge}
             </div>
           )}
           {discount > 0 && (
-            <div className="absolute top-5 right-5 px-4 py-1.5 bg-red-500/20 text-red-400 text-sm font-bold rounded-full z-10 border border-red-500/30">
+            <div className="absolute top-5 right-5 px-4 py-1.5 bg-red-500/10 text-red-500 text-sm font-bold rounded-full z-10 border border-red-500/20">
               Save {discount}%
             </div>
           )}
 
           <div className="absolute inset-0 opacity-30">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(201,168,76,0.1),transparent_70%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(8,145,178,0.08),transparent_70%)]" />
           </div>
 
           {!imageError ? (
@@ -193,7 +194,7 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
           
           {isHovered && (
             <div className="absolute inset-0 bg-jet-bg/60 backdrop-blur-sm flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-              <Link href={`/products/${product.id}/`} className="px-6 py-3 rounded-full bg-jet-primary text-jet-bg font-semibold text-sm flex items-center gap-2 hover:scale-105 transition-transform">
+              <Link href={`/products/${product.id}/`} className="px-6 py-3 rounded-full bg-jet-primary text-white font-semibold text-sm flex items-center gap-2 hover:scale-105 transition-transform">
                 <Eye className="w-4 h-4" />
                 View Details
               </Link>
@@ -247,7 +248,7 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
           <div className="flex gap-3 pt-2">
             <Link
               href={`/products/${product.id}/`}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-bg-elevated text-jet-text border border-jet-border rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-jet-bg hover:border-jet-primary transition-all"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-bg-elevated text-jet-text border border-jet-border rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white hover:border-jet-primary transition-all"
             >
               View Details
               <ChevronRight className="w-4 h-4" />
@@ -275,18 +276,18 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
     >
       <div className="relative aspect-[16/10] bg-gradient-to-br from-jet-bg-elevated to-jet-bg p-8 flex items-center justify-center overflow-hidden">
         {product.badge && (
-          <div className="absolute top-4 left-4 px-4 py-1.5 bg-jet-primary text-jet-bg text-sm font-bold rounded-full z-10">
+          <div className="absolute top-4 left-4 px-4 py-1.5 bg-jet-primary text-white text-sm font-bold rounded-full z-10">
             {product.badge}
           </div>
         )}
         {discount > 0 && (
-          <div className="absolute top-4 right-4 px-4 py-1.5 bg-red-500/20 text-red-400 text-sm font-bold rounded-full z-10 border border-red-500/30">
+          <div className="absolute top-4 right-4 px-4 py-1.5 bg-red-500/10 text-red-500 text-sm font-bold rounded-full z-10 border border-red-500/20">
             Save {discount}%
           </div>
         )}
 
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(201,168,76,0.1),transparent_70%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(8,145,178,0.08),transparent_70%)]" />
         </div>
 
         {!imageError ? (
@@ -334,7 +335,7 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
         <div className="flex gap-3 pt-2">
           <Link
             href={`/products/${product.id}/`}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-bg-elevated text-jet-text border border-jet-border rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-jet-bg hover:border-jet-primary transition-all"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-bg-elevated text-jet-text border border-jet-border rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white hover:border-jet-primary transition-all"
           >
             View Details
             <ChevronRight className="w-4 h-4" />
@@ -353,3 +354,4 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
     </div>
   );
 }
+

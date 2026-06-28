@@ -32,7 +32,7 @@ export function ParticleBackground() {
     window.addEventListener("resize", resize);
 
     const particleCount = Math.min(80, Math.floor(window.innerWidth / 20));
-    const colors = ["#c9a84c", "#e8d5a3", "#a88a3a", "#f5e6c0"];
+    const colors = ["#0891b2", "#22d3ee", "#0e7490", "#67e8f9"];
 
     particlesRef.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,

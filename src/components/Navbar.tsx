@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, MessageCircle, ChevronDown, Laptop, Monitor, Printer, Mouse } from "lucide-react";
 import Link from "next/link";
-import { Logo } from "./Logo";
+import Image from "next/image";
 
 const categories = [
   { id: "laptop", name: "Laptops", icon: Laptop, href: "/category/laptop/" },
@@ -55,9 +55,9 @@ export function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Home", id: "" },
-    { href: "#products", label: "Products", id: "products" },
-    { href: "#showroom", label: "Showroom", id: "showroom" },
-    { href: "#about", label: "About", id: "about" },
+    { href: "/products/", label: "Products", id: "products" },
+    { href: "/about/", label: "About", id: "about" },
+    { href: "/showroom/", label: "Showroom", id: "showroom" },
   ];
 
   return (
@@ -65,14 +65,28 @@ export function Navbar() {
       <nav 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled 
-            ? "glass-strong py-3 shadow-lg shadow-black/20" 
+            ? "glass-strong py-3 shadow-lg shadow-black/5" 
             : "bg-transparent py-5"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <Link href="/" className="group relative">
-              <Logo size="md" />
+            <Link href="/" className="group relative flex items-center gap-3">
+              <Image 
+                src="/LogoJ.png" 
+                alt="Jetage India" 
+                width={40} 
+                height={40} 
+                className="rounded-xl"
+              />
+              <div className="flex flex-col">
+                <span className="text-lg font-bold text-jet-text leading-tight tracking-tight">
+                  Jetage
+                </span>
+                <span className="text-[10px] text-jet-text-muted tracking-[0.2em] uppercase font-medium">
+                  India
+                </span>
+              </div>
               <div className="absolute -inset-2 bg-jet-primary/0 rounded-xl group-hover:bg-jet-primary/5 transition-all duration-300" />
             </Link>
 
@@ -209,3 +223,4 @@ export function Navbar() {
     </>
   );
 }
+

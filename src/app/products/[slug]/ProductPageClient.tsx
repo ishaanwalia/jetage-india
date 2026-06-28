@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { 
   Check, 
   ChevronLeft, 
@@ -16,7 +17,9 @@ import {
   MapPin,
   Copy,
   CheckCheck,
-  Eye
+  Eye,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -32,9 +35,10 @@ interface ProductPageClientProps {
 
 export default function ProductPageClient({ slug }: ProductPageClientProps) {
   const product = products.find(p => p.id === slug);
-  const [imageError, setImageError] = useState(false);
+  const [imageError, setImageError] = useState<Record<number, boolean>>({});
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState("specs");
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const heroRef = useRef<HTMLDivElement>(null);
@@ -76,7 +80,7 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 text-center">
           <h1 className="text-4xl font-bold text-jet-text mb-4">Product Not Found</h1>
           <p className="text-jet-text-dim mb-8">The product you are looking for does not exist.</p>
-          <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-jet-bg rounded-full font-bold hover:bg-jet-accent transition-all">
+          <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-white rounded-full font-bold hover:bg-jet-primary-dim transition-all">
             <ChevronLeft className="w-5 h-5" />
             Back to Home
           </Link>
@@ -112,13 +116,21 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const nextImage = () => {
+    setActiveImageIndex((prev) => (prev + 1) % product.images.length);
+  };
+
+  const prevImage = () => {
+    setActiveImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
+  };
+
   return (
     <main className="min-h-screen bg-jet-bg noise-bg">
       {/* Custom cursor glow */}
       <div 
         className="fixed pointer-events-none z-50 w-80 h-80 rounded-full opacity-15 blur-3xl transition-transform duration-100 ease-out hidden lg:block"
         style={{
-          background: "radial-gradient(circle, rgba(201,168,76,0.3) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(8,145,178,0.2) 0%, transparent 70%)",
           left: mousePos.x - 160,
           top: mousePos.y - 160,
         }}
@@ -132,7 +144,7 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
           <div className="flex items-center gap-2 text-sm text-jet-text-muted">
             <Link href="/" className="hover:text-jet-primary transition-colors">Home</Link>
             <ArrowRight className="w-3 h-3" />
-            <Link href="/#products" className="hover:text-jet-primary transition-colors">Products</Link>
+            <Link href="/products/" className="hover:text-jet-primary transition-colors">Products</Link>
             <ArrowRight className="w-3 h-3" />
             <span className="text-jet-text font-medium">{product.name}</span>
           </div>
@@ -143,19 +155,20 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
       <section ref={heroRef} className="py-12 lg:py-20 bg-jet-bg-elevated">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Image */}
-            <div className="product-hero-image relative">
+            {/* Image Gallery */}
+            <div className="product-hero-image relative space-y-4">
+              {/* Main Image */}
               <div className="aspect-square bg-gradient-to-br from-jet-bg-card to-jet-bg rounded-3xl border border-jet-border flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(201,168,76,0.08),transparent_60%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(8,145,178,0.06),transparent_60%)]" />
                 
-                {!imageError ? (
+                {!imageError[activeImageIndex] ? (
                   <Image 
-                    src={product.image} 
+                    src={product.images[activeImageIndex]} 
                     alt={product.name}
                     width={400}
                     height={400}
                     className="object-contain max-h-[350px] w-auto z-10"
-                    onError={() => setImageError(true)}
+                    onError={() => setImageError(prev => ({ ...prev, [activeImageIndex]: true }))}
                   />
                 ) : (
                   <div className="w-32 h-32 rounded-full bg-jet-primary/10 flex items-center justify-center z-10">
@@ -164,25 +177,67 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
                 )}
 
                 {product.badge && (
-                  <div className="absolute top-6 left-6 px-4 py-2 bg-jet-primary text-jet-bg font-bold rounded-full z-10">
+                  <div className="absolute top-6 left-6 px-4 py-2 bg-jet-primary text-white font-bold rounded-full z-10">
                     {product.badge}
                   </div>
                 )}
                 {discount > 0 && (
-                  <div className="absolute top-6 right-6 px-4 py-2 bg-red-500/20 text-red-400 font-bold rounded-full z-10 border border-red-500/30">
+                  <div className="absolute top-6 right-6 px-4 py-2 bg-red-500/10 text-red-500 font-bold rounded-full z-10 border border-red-500/20">
                     {discount}% OFF
                   </div>
+                )}
+
+                {/* Image Navigation Arrows */}
+                {product.images.length > 1 && (
+                  <>
+                    <button 
+                      onClick={prevImage}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center hover:bg-jet-primary hover:text-white hover:border-jet-primary transition-all z-20"
+                    >
+                      <ChevronLeftIcon className="w-5 h-5" />
+                    </button>
+                    <button 
+                      onClick={nextImage}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center hover:bg-jet-primary hover:text-white hover:border-jet-primary transition-all z-20"
+                    >
+                      <ChevronRightIcon className="w-5 h-5" />
+                    </button>
+                  </>
                 )}
               </div>
 
               {/* Thumbnail strip */}
-              <div className="flex gap-3 mt-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex-1 aspect-video bg-jet-bg-card rounded-xl border border-jet-border flex items-center justify-center hover:border-jet-primary/40 transition-all cursor-pointer">
-                    <Eye className="w-5 h-5 text-jet-text-muted" />
-                  </div>
-                ))}
-              </div>
+              {product.images.length > 1 && (
+                <div className="flex gap-3">
+                  {product.images.map((img, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveImageIndex(i)}
+                      className={`flex-1 aspect-video bg-jet-bg-card rounded-xl border-2 flex items-center justify-center transition-all overflow-hidden ${
+                        activeImageIndex === i 
+                          ? "border-jet-primary shadow-premium" 
+                          : "border-jet-border hover:border-jet-primary/40"
+                      }`}
+                    >
+                      <Image 
+                        src={img} 
+                        alt={`${product.name} view ${i + 1}`}
+                        width={120}
+                        height={80}
+                        className="object-contain max-h-[60px] w-auto"
+                        onError={() => setImageError(prev => ({ ...prev, [i]: true }))}
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Image counter */}
+              {product.images.length > 1 && (
+                <div className="text-center text-sm text-jet-text-muted">
+                  Image {activeImageIndex + 1} of {product.images.length}
+                </div>
+              )}
             </div>
 
             {/* Content */}
@@ -276,7 +331,7 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-6 py-3 rounded-full text-sm font-semibold transition-all border ${
                   activeTab === tab.id
-                    ? "bg-jet-primary text-jet-bg border-jet-primary"
+                    ? "bg-jet-primary text-white border-jet-primary"
                     : "bg-jet-bg-card text-jet-text-dim border-jet-border hover:border-jet-primary/40"
                 }`}
               >
@@ -381,7 +436,7 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
               href="https://maps.google.com/?q=SCO-12+Sector-17-E+Chandigarh"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-jet-bg rounded-full font-bold hover:bg-jet-accent transition-all shadow-glow"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-white rounded-full font-bold hover:bg-jet-primary-dim transition-all shadow-glow"
             >
               <MapPin className="w-5 h-5" />
               Get Directions
