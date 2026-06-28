@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     images: ["https://www.jetageindia.in/og-image.jpg"],
   },
   verification: {
-    google: "YOUR_GOOGLE_VERIFICATION_CODE", // Replace after GSC setup
+    google: "J7ndhmWvNH0vCWxCUU47KQPyBZsZ3sidauaZ3CUhdBc",
   },
 };
 
