@@ -504,8 +504,8 @@ export const products: Product[] = [
     duplex: false,
     dutyCycle: "N/A",
     idealFor: "Students & Home",
-    description: "The perfect everyday laptop. AMD Ryzen 5 power, 16GB RAM, and a stunning 15.6\\" FHD display for work, study, and entertainment.",
-    features: ["AMD Ryzen 5 5625U", "16GB DDR4", "512GB SSD", "15.6\\" FHD"],
+    description: "The perfect everyday laptop. AMD Ryzen 5 power, 16GB RAM, and a stunning 15.6\" FHD display for work, study, and entertainment.",
+    features: ["AMD Ryzen 5 5625U", "16GB DDR4", "512GB SSD", "15.6\" FHD"],
     image: "https://kimi-web-img.moonshot.cn/img/ict.com.mm/f431dbf197b2900302579432e19b24826774f2bc.webp",
     images: [
       "https://kimi-web-img.moonshot.cn/img/ict.com.mm/f431dbf197b2900302579432e19b24826774f2bc.webp",
@@ -513,7 +513,7 @@ export const products: Product[] = [
       "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107846.png"
     ],
     badge: "Best Seller",
-    specs: { "Processor": "AMD Ryzen 5 5625U", "RAM": "16GB DDR4", "Storage": "512GB SSD", "Display": "15.6\\" FHD IPS", "Weight": "1.75 kg", "Battery": "Up to 8 hours", "OS": "Windows 11 Home" }
+    specs: { "Processor": "AMD Ryzen 5 5625U", "RAM": "16GB DDR4", "Storage": "512GB SSD", "Display": "15.6\" FHD IPS", "Weight": "1.75 kg", "Battery": "Up to 8 hours", "OS": "Windows 11 Home" }
   },
   {
     id: "hp-envy-x360-13",
@@ -530,7 +530,7 @@ export const products: Product[] = [
     dutyCycle: "N/A",
     idealFor: "Creators & Professionals",
     description: "2-in-1 convertible with OLED touchscreen. All-aluminum build, Intel Evo certified, and 360-degree hinge for ultimate flexibility.",
-    features: ["Intel Core i7 12th Gen", "16GB LPDDR5", "1TB SSD", "13.3\\" OLED Touch"],
+    features: ["Intel Core i7 12th Gen", "16GB LPDDR5", "1TB SSD", "13.3\" OLED Touch"],
     image: "https://kimi-web-img.moonshot.cn/img/ict.com.mm/0b264cd2a5ee1b23b409410923fbc8a209301ad0.jpg",
     images: [
       "https://kimi-web-img.moonshot.cn/img/ict.com.mm/0b264cd2a5ee1b23b409410923fbc8a209301ad0.jpg",
@@ -538,7 +538,7 @@ export const products: Product[] = [
       "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107848.png"
     ],
     badge: "Premium",
-    specs: { "Processor": "Intel Core i7-1255U", "RAM": "16GB LPDDR5", "Storage": "1TB SSD", "Display": "13.3\\" 2.8K OLED Touch", "Weight": "1.34 kg", "Battery": "Up to 11 hours", "OS": "Windows 11 Home" }
+    specs: { "Processor": "Intel Core i7-1255U", "RAM": "16GB LPDDR5", "Storage": "1TB SSD", "Display": "13.3\" 2.8K OLED Touch", "Weight": "1.34 kg", "Battery": "Up to 11 hours", "OS": "Windows 11 Home" }
   },
   {
     id: "hp-omen-16",
@@ -563,7 +563,7 @@ export const products: Product[] = [
       "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107850.png"
     ],
     badge: "Gaming Beast",
-    specs: { "Processor": "Intel Core i9-13900HX", "RAM": "16GB DDR5", "Storage": "1TB SSD", "Display": "16.1\\" FHD 165Hz", "GPU": "NVIDIA RTX 4060 8GB", "Weight": "2.35 kg", "OS": "Windows 11 Home" }
+    specs: { "Processor": "Intel Core i9-13900HX", "RAM": "16GB DDR5", "Storage": "1TB SSD", "Display": "16.1\" FHD 165Hz", "GPU": "NVIDIA RTX 4060 8GB", "Weight": "2.35 kg", "OS": "Windows 11 Home" }
   },
 
   // === DESKTOPS (2) ===
@@ -620,7 +620,7 @@ export const products: Product[] = [
   // === MONITORS (2) ===
   {
     id: "hp-m27f",
-    name: "HP M27f 27\\" FHD Monitor",
+    name: "HP M27f 27\" FHD Monitor",
     shortName: "M27f Monitor",
     category: "monitor",
     subCategory: "consumer",
@@ -633,7 +633,7 @@ export const products: Product[] = [
     dutyCycle: "N/A",
     idealFor: "Home & Office",
     description: "Stunning 27-inch IPS display with AMD FreeSync and Eyesafe certified low blue light. Ultra-slim design with micro-edge bezels.",
-    features: ["27\\" IPS FHD", "75Hz Refresh", "AMD FreeSync", "Eyesafe Certified"],
+    features: ["27\" IPS FHD", "75Hz Refresh", "AMD FreeSync", "Eyesafe Certified"],
     image: "https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/445c5025ee2d8a0e1245703a5975ef40c112fa55.jpg",
     images: [
       "https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/445c5025ee2d8a0e1245703a5975ef40c112fa55.jpg",
@@ -641,11 +641,11 @@ export const products: Product[] = [
       "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107856.png"
     ],
     badge: "Best Value",
-    specs: { "Display": "27\\" IPS FHD (1920x1080)", "Refresh Rate": "75 Hz", "Response Time": "5ms", "Panel": "IPS", "Brightness": "300 nits", "Color": "sRGB 99%", "Features": "AMD FreeSync, Eyesafe" }
+    specs: { "Display": "27\" IPS FHD (1920x1080)", "Refresh Rate": "75 Hz", "Response Time": "5ms", "Panel": "IPS", "Brightness": "300 nits", "Color": "sRGB 99%", "Features": "AMD FreeSync, Eyesafe" }
   },
   {
     id: "hp-series-5-pro-27",
-    name: "HP Series 5 Pro 27\\" QHD Monitor",
+    name: "HP Series 5 Pro 27\" QHD Monitor",
     shortName: "Series 5 Pro 27",
     category: "monitor",
     subCategory: "professional",
@@ -658,7 +658,7 @@ export const products: Product[] = [
     dutyCycle: "N/A",
     idealFor: "Professionals",
     description: "QHD conferencing monitor with AI-powered webcam, integrated speakers, and ambient light sensor. Built for hybrid work.",
-    features: ["27\\" QHD IPS", "100Hz Refresh", "AI Webcam", "USB-C"],
+    features: ["27\" QHD IPS", "100Hz Refresh", "AI Webcam", "USB-C"],
     image: "https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/445c5025ee2d8a0e1245703a5975ef40c112fa55.jpg",
     images: [
       "https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/445c5025ee2d8a0e1245703a5975ef40c112fa55.jpg",
@@ -666,7 +666,7 @@ export const products: Product[] = [
       "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107858.png"
     ],
     badge: "Pro Grade",
-    specs: { "Display": "27\\" QHD IPS (2560x1440)", "Refresh Rate": "100 Hz", "Webcam": "5MP AI Camera", "Speakers": "Integrated 2W", "Connectivity": "USB-C, HDMI, VGA", "Features": "Ambient Light Sensor, HP Eye Ease" }
+    specs: { "Display": "27\" QHD IPS (2560x1440)", "Refresh Rate": "100 Hz", "Webcam": "5MP AI Camera", "Speakers": "Integrated 2W", "Connectivity": "USB-C, HDMI, VGA", "Features": "Ambient Light Sensor, HP Eye Ease" }
   },
 
   // === ACCESSORIES (2) ===
