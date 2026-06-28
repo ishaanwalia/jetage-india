@@ -1,32 +1,44 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { motion, useInView, useSpring, useTransform } from "framer-motion";
+import { motion, useInView, useSpring } from "framer-motion";
 import { Clock, Printer, Globe, Star } from "lucide-react";
 
-interface AnimatedCounter3DProps {
+// FIX 1: Use ComponentType instead of ElementType
+interface StatCard3DProps {
+  icon: React.ComponentType<{ className?: string }>;
   value: number;
-  suffix?: string;
-  prefix?: string;
+  suffix: string;
+  label: string;
+  sub?: string;
   decimals?: number;
-  duration?: number;
+  index: number;
 }
 
-function AnimatedCounter3D({ value, suffix = "", prefix = "", decimals = 0, duration = 2 }: AnimatedCounter3DProps) {
+function AnimatedCounter3D({ value, suffix = "", prefix = "", decimals = 0, duration = 2 }: {
+  value: number; suffix?: string; prefix?: string; decimals?: number; duration?: number;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [displayValue, setDisplayValue] = useState(0);
 
   const springValue = useSpring(0, { duration: duration * 1000, bounce: 0 });
-  const display = useTransform(springValue, (latest) => {
-    return prefix + latest.toFixed(decimals) + suffix;
-  });
 
   useEffect(() => {
-    if (isInView) {
-      springValue.set(value);
-    }
+    if (isInView) springValue.set(value);
   }, [isInView, springValue, value]);
+
+  // FIX 2: Use on("change") listener instead of display.get()
+  useEffect(() => {
+    const unsubscribe = springValue.on("change", (latest) => {
+      setDisplayValue(latest);
+    });
+    return () => unsubscribe();
+  }, [springValue]);
+
+  const formatted = decimals > 0 
+    ? displayValue.toFixed(decimals) 
+    : Math.round(displayValue).toString();
 
   return (
     <span ref={ref} className="inline-block">
@@ -37,20 +49,10 @@ function AnimatedCounter3D({ value, suffix = "", prefix = "", decimals = 0, dura
         transition={{ duration: 0.8, ease: "easeOut" }}
         style={{ transformOrigin: "bottom" }}
       >
-        {display.get()}
+        {prefix}{formatted}{suffix}
       </motion.span>
     </span>
   );
-}
-
-interface StatCard3DProps {
-  icon: React.ElementType;
-  value: number;
-  suffix: string;
-  label: string;
-  sub?: string;
-  decimals?: number;
-  index: number;
 }
 
 function StatCard3D({ icon: Icon, value, suffix, label, sub = "", decimals = 0, index }: StatCard3DProps) {
@@ -77,10 +79,7 @@ function StatCard3D({ icon: Icon, value, suffix, label, sub = "", decimals = 0, 
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => { setIsHovered(false); setMousePos({ x: 0, y: 0 }); }}
-      style={{
-        perspective: "1000px",
-        transformStyle: "preserve-3d",
-      }}
+      style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
     >
       <motion.div
         className="text-center space-y-4 p-6 rounded-2xl bg-jet-bg-card border border-jet-border hover:border-jet-border-strong transition-all duration-500 hover:shadow-premium group cursor-default relative overflow-hidden"
@@ -91,8 +90,7 @@ function StatCard3D({ icon: Icon, value, suffix, label, sub = "", decimals = 0, 
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{ transformStyle: "preserve-3d" }}
       >
-        {/* Spotlight effect */}
-        <motion.div
+        <motion.div 
           className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
           style={{
             background: isHovered
@@ -100,19 +98,16 @@ function StatCard3D({ icon: Icon, value, suffix, label, sub = "", decimals = 0, 
               : "none",
           }}
         />
-
         <motion.div 
           className="w-14 h-14 mx-auto bg-jet-primary/10 rounded-2xl flex items-center justify-center border border-jet-primary/20 group-hover:bg-jet-primary group-hover:scale-110 transition-all duration-500"
           style={{ transform: "translateZ(30px)" }}
         >
           <Icon className="w-7 h-7 text-jet-primary group-hover:text-jet-bg transition-colors" />
         </motion.div>
-        
         <div className="text-4xl lg:text-5xl font-bold text-jet-text" style={{ transform: "translateZ(20px)" }}>
           <AnimatedCounter3D value={value} suffix={suffix} decimals={decimals} />
           <span className="text-jet-primary">{sub}</span>
         </div>
-        
         <p className="text-jet-text-muted text-sm" style={{ transform: "translateZ(10px)" }}>{label}</p>
       </motion.div>
     </motion.div>
