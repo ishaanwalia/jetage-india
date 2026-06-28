@@ -9,6 +9,16 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal } from "@/components/Reveal";
 import { SlidersHorizontal } from "lucide-react";
 
+export function generateStaticParams() {
+  return [
+    { id: "printer" },
+    { id: "laptop" },
+    { id: "desktop" },
+    { id: "monitor" },
+    { id: "accessory" },
+  ];
+}
+
 interface CategoryPageProps {
   params: { id: string };
 }
