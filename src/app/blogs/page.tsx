@@ -10,24 +10,20 @@ const blogs = [
     id: "how-to-choose-hp-printer-2026",
     title: "How to Choose the Right HP Printer for Your Business in 2026",
     excerpt: "With HP's 2026 lineup featuring AI-powered print management and cloud connectivity, selecting the right printer can be overwhelming. We break down the key factors: print volume, connectivity needs, duplex requirements, and total cost of ownership. Whether you need a compact home office solution or an enterprise-grade MFP, this guide helps you make the right choice.",
-    content: `Full article content here...`,
     author: "Jetage Team",
     date: "June 15, 2026",
     readTime: "8 min read",
     category: "Buying Guide",
-    image: "/blog-printer-guide.jpg",
     tags: ["HP Printers", "Buying Guide", "Business", "2026"]
   },
   {
     id: "hp-ai-pc-revolution-omnibook",
     title: "The HP AI PC Revolution: Why the OmniBook X Changes Everything",
     excerpt: "HP's new OmniBook X series with Intel Core Ultra processors and dedicated AI NPUs represents a paradigm shift in personal computing. From real-time language translation to intelligent battery optimization, discover how AI is transforming the laptop experience. We compare the OmniBook X against traditional laptops and explain why it's the future of mobile productivity.",
-    content: `Full article content here...`,
     author: "Jetage Team",
     date: "June 20, 2026",
     readTime: "6 min read",
     category: "Technology",
-    image: "/blog-ai-pc.jpg",
     tags: ["HP Laptops", "AI PC", "OmniBook", "Technology"]
   }
 ];
