@@ -12,6 +12,41 @@ interface Product3DCardProps {
   index: number;
 }
 
+// Generate descriptive alt text for printers
+function getPrinterAltText(product: typeof products[0]): string {
+  const parts: string[] = [];
+  parts.push(product.name);
+  
+  if (product.subCategory === "laser") {
+    parts.push("monochrome laser printer");
+  } else if (product.subCategory === "color-laser") {
+    parts.push("color laser printer");
+  } else if (product.subCategory === "inkjet") {
+    parts.push("inkjet printer");
+  }
+  
+  if (product.duplex) {
+    parts.push("with automatic duplex printing");
+  }
+  
+  if (product.connectivity.includes("Wi-Fi")) {
+    parts.push("wireless connectivity");
+  }
+  
+  parts.push(product.speed);
+  
+  if (product.features.some(f => f.toLowerCase().includes("scan") || f.toLowerCase().includes("copy"))) {
+    parts.push("all-in-one MFP");
+  }
+  
+  return parts.join(" - ");
+}
+
+// Generate descriptive alt text for non-printer products
+function getProductAltText(product: typeof products[0]): string {
+  return `${product.name} - ${product.description.substring(0, 80)}`;
+}
+
 function Product3DCard({ product, index }: Product3DCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -48,6 +83,11 @@ function Product3DCard({ product, index }: Product3DCardProps) {
 
   const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
   const whatsappLink = `https://wa.me/919814958295?text=Hi%20Jetage%2C%20I'm%20interested%20in%20${encodeURIComponent(product.name)}`;
+
+  // Get proper alt text
+  const altText = product.category === "printer" 
+    ? getPrinterAltText(product) 
+    : getProductAltText(product);
 
   return (
     <motion.div
@@ -110,7 +150,7 @@ function Product3DCard({ product, index }: Product3DCardProps) {
           >
             <Image
               src={product.image}
-              alt={product.name}
+              alt={altText}
               width={200}
               height={150}
               className="object-contain max-h-[150px] w-auto drop-shadow-2xl"
@@ -129,8 +169,8 @@ function Product3DCard({ product, index }: Product3DCardProps) {
           </h3>
 
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-jet-text">₹{product.price.toLocaleString()}</span>
-            <span className="text-sm text-jet-text-muted line-through">₹{product.mrp.toLocaleString()}</span>
+            <span className="text-2xl font-bold text-jet-text">&#8377;{product.price.toLocaleString()}</span>
+            <span className="text-sm text-jet-text-muted line-through">&#8377;{product.mrp.toLocaleString()}</span>
           </div>
 
           <div className="flex gap-2 pt-2">

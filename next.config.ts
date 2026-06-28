@@ -1,14 +1,29 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
-  distDir: 'dist',
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
-  trailingSlash: true,
-  // Ensure clean URLs without .html extensions
-  cleanDistDir: true,
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "jetageindia.in",
+          },
+        ],
+        destination: "https://www.jetageindia.in/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -107,7 +107,7 @@ export default function Home() {
 
       {/* ==================== HORIZONTAL SCROLL SECTION ==================== */}
       <section ref={horizontalRef} className="relative bg-jet-bg-elevated overflow-hidden">
-        <div className="h-screen flex flex-col justify-center">
+        <div className="h-screen flex flex-col justify-center pt-24 pb-8">
           <div className="px-6 lg:px-8 mb-10">
             <div className="max-w-7xl mx-auto">
               <Reveal direction="left">
@@ -238,10 +238,10 @@ export default function Home() {
             {[
               { icon: Award, title: "Authorized HP World", description: "Genuine HP products with full manufacturer warranty and official support. No grey market risks." },
               { icon: Phone, title: "WhatsApp Ordering", description: "Order instantly via WhatsApp. Get quotes, place orders, and track delivery — all on your phone." },
-              { icon: Zap, title: "Best Price Guarantee", description: "We match and beat competitor prices. Exclusive deals you won't find on Amazon or Flipkart." },
+              { icon: Zap, title: "Best Price Guarantee", description: "We match and beat competitor prices. Exclusive deals you won\\'t find on Amazon or Flipkart." },
               { icon: Shield, title: "Expert Consultation", description: "35+ years of tech expertise. We help you choose the right product for your exact needs." },
               { icon: Truck, title: "All India Delivery", description: "Fast, insured shipping across India. Special handling for fragile components." },
-              { icon: Clock, title: "After-Sales Support", description: "Dedicated support for installation, setup, and troubleshooting. We're just a message away." }
+              { icon: Clock, title: "After-Sales Support", description: "Dedicated support for installation, setup, and troubleshooting. We\\'re just a message away." }
             ].map((item, i) => (
               <SpotlightCard key={i}>
                 <div className="group p-8 rounded-3xl bg-jet-bg-card border border-jet-border hover:border-jet-border-strong transition-all duration-500 hover:shadow-premium h-full cursor-default">

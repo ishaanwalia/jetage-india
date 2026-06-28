@@ -33,12 +33,52 @@ interface ProductCardProps {
   featured?: boolean;
 }
 
+// Generate descriptive alt text for printers
+function getPrinterAltText(product: Product): string {
+  const parts: string[] = [];
+  parts.push(product.name);
+  
+  if (product.subCategory === "laser") {
+    parts.push("monochrome laser printer");
+  } else if (product.subCategory === "color-laser") {
+    parts.push("color laser printer");
+  } else if (product.subCategory === "inkjet") {
+    parts.push("inkjet printer");
+  }
+  
+  if (product.duplex) {
+    parts.push("with automatic duplex printing");
+  }
+  
+  if (product.connectivity.includes("Wi-Fi")) {
+    parts.push("wireless connectivity");
+  }
+  
+  parts.push(product.speed);
+  
+  if (product.features.some(f => f.toLowerCase().includes("scan") || f.toLowerCase().includes("copy"))) {
+    parts.push("all-in-one MFP");
+  }
+  
+  return parts.join(" - ");
+}
+
+// Generate descriptive alt text for non-printer products
+function getProductAltText(product: Product): string {
+  return `${product.name} - ${product.description.substring(0, 80)}`;
+}
+
 export function ProductCard({ product, compact = false, featured = false }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   
   const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
   const whatsappLink = `https://wa.me/919814958295?text=Hi%20Jetage%2C%20I'm%20interested%20in%20${encodeURIComponent(product.name)}%20(SKU%3A%20${product.sku})`;
+
+  // Get proper alt text
+  const altText = product.category === "printer" 
+    ? getPrinterAltText(product) 
+    : getProductAltText(product);
 
   const getConnectivityIcon = (conn: string) => {
     if (conn === "Wi-Fi" || conn === "Wi-Fi 6" || conn === "Wi-Fi 6E") return <Wifi className="w-3 h-3" />;
@@ -93,7 +133,7 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
           {!imageError ? (
             <Image 
               src={product.image} 
-              alt={product.name}
+              alt={altText}
               width={200}
               height={150}
               className="object-contain max-h-[120px] w-auto group-hover:scale-110 transition-transform duration-700"
@@ -136,8 +176,8 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
           </div>
 
           <div className="flex items-baseline gap-2">
-            <span className="text-xl font-bold text-jet-text">₹{product.price.toLocaleString()}</span>
-            <span className="text-sm text-jet-text-muted line-through">₹{product.mrp.toLocaleString()}</span>
+            <span className="text-xl font-bold text-jet-text">&#8377;{product.price.toLocaleString()}</span>
+            <span className="text-sm text-jet-text-muted line-through">&#8377;{product.mrp.toLocaleString()}</span>
           </div>
 
           <a
@@ -180,7 +220,7 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
           {!imageError ? (
             <Image 
               src={product.image} 
-              alt={product.name}
+              alt={altText}
               width={300}
               height={220}
               className="object-contain max-h-[200px] w-auto group-hover:scale-110 transition-transform duration-700 z-10"
@@ -239,8 +279,8 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
 
           <div className="flex items-center gap-3 pt-2">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-jet-text">₹{product.price.toLocaleString()}</span>
-              <span className="text-sm text-jet-text-muted line-through">₹{product.mrp.toLocaleString()}</span>
+              <span className="text-2xl font-bold text-jet-text">&#8377;{product.price.toLocaleString()}</span>
+              <span className="text-sm text-jet-text-muted line-through">&#8377;{product.mrp.toLocaleString()}</span>
             </div>
             <span className="text-xs text-jet-success font-semibold bg-jet-success/10 px-2 py-1 rounded-full border border-jet-success/20">{discount}% off</span>
           </div>
@@ -293,7 +333,7 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
         {!imageError ? (
           <Image 
             src={product.image} 
-            alt={product.name}
+            alt={altText}
             width={280}
             height={200}
             className="object-contain max-h-[180px] w-auto group-hover:scale-110 transition-transform duration-700"
@@ -326,8 +366,8 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
 
         <div className="flex items-center gap-3 pt-2">
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-jet-text">₹{product.price.toLocaleString()}</span>
-            <span className="text-sm text-jet-text-muted line-through">₹{product.mrp.toLocaleString()}</span>
+            <span className="text-2xl font-bold text-jet-text">&#8377;{product.price.toLocaleString()}</span>
+            <span className="text-sm text-jet-text-muted line-through">&#8377;{product.mrp.toLocaleString()}</span>
           </div>
           <span className="text-xs text-jet-success font-semibold bg-jet-success/10 px-2 py-1 rounded-full border border-jet-success/20">{discount}% off</span>
         </div>
@@ -354,4 +394,3 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
     </div>
   );
 }
-

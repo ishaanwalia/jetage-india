@@ -282,7 +282,7 @@ export function Hero3D() {
                   >
                     <img 
                       src="https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107847.png"
-                      alt="HP OmniBook X"
+                      alt="HP OmniBook X laptop with Intel Core Ultra processor"
                       className="w-44 h-auto object-contain drop-shadow-2xl"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
@@ -301,10 +301,10 @@ export function Hero3D() {
                     <span className="text-lg font-bold text-jet-text">HP OmniBook X</span>
                     <span className="px-2 py-0.5 bg-jet-primary/10 text-jet-primary text-xs rounded-full font-semibold border border-jet-primary/20">AI PC</span>
                   </div>
-                  <p className="text-sm text-jet-text-muted">Intel Core Ultra • AI NPU • 16GB LPDDR5X</p>
+                  <p className="text-sm text-jet-text-muted">Intel Core Ultra &bull; AI NPU &bull; 16GB LPDDR5X</p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-jet-text">₹1,12,999</span>
-                    <span className="text-sm text-jet-text-muted line-through">₹1,45,999</span>
+                    <span className="text-2xl font-bold text-jet-text">&#8377;1,12,999</span>
+                    <span className="text-sm text-jet-text-muted line-through">&#8377;1,45,999</span>
                     <span className="text-xs text-jet-success font-semibold bg-jet-success/10 px-2 py-0.5 rounded-full">Save 23%</span>
                   </div>
                   <div className="flex gap-2 mt-3">

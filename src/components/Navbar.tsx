@@ -71,13 +71,13 @@ export function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            {/* Logo - increased size, removed text */}
+            {/* Logo - BIGGER SIZE */}
             <Link href="/" className="group relative flex items-center">
               <Image 
                 src="/LogoJ.png" 
-                alt="Jetage India" 
-                width={64} 
-                height={64} 
+                alt="Jetage India - Authorized HP World Partner in Chandigarh" 
+                width={80} 
+                height={80} 
                 className="rounded-xl transition-transform duration-300 group-hover:scale-105" 
               />
               <div className="absolute -inset-2 bg-jet-primary/0 rounded-xl group-hover:bg-jet-primary/5 transition-all duration-300" />
