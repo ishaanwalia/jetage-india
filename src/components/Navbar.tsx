@@ -76,9 +76,9 @@ export function Navbar() {
               <Image 
                 src="/LogoJ.png" 
                 alt="Jetage India" 
-                width={52} 
-                height={52} 
-                className="rounded-xl transition-transform duration-300 group-hover:scale-110"
+                width={64} 
+                height={64} 
+                className="rounded-xl transition-transform duration-300 group-hover:scale-105" 
               />
               <div className="absolute -inset-2 bg-jet-primary/0 rounded-xl group-hover:bg-jet-primary/5 transition-all duration-300" />
             </Link>
@@ -220,4 +220,3 @@ export function Navbar() {
     </>
   );
 }
-

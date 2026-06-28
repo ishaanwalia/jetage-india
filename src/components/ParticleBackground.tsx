@@ -34,7 +34,7 @@ export function ParticleBackground() {
     window.addEventListener("resize", resize);
 
     // 100x more particles (8000 vs 80) - spread across entire viewport
-    const particleCount = Math.min(8000, Math.floor((window.innerWidth * window.innerHeight) / 1500));
+    const particleCount = Math.min(2000, Math.floor((window.innerWidth * window.innerHeight) / 6000));
     const colors = ["#0891b2", "#22d3ee", "#0e7490", "#67e8f9", "#06b6d4", "#a5f3fc"];
 
     particlesRef.current = Array.from({ length: particleCount }, () => ({
@@ -45,7 +45,7 @@ export function ParticleBackground() {
       radius: Math.random() * 3 + 0.5,
       opacity: Math.random() * 0.8 + 0.2,
       color: colors[Math.floor(Math.random() * colors.length)],
-      glow: Math.random() * 20 + 10,
+      glow: Math.random() * 12 + 6,
     }));
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -113,7 +113,7 @@ export function ParticleBackground() {
           const dy = p.y - p2.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 80) {
+          if (dist < 60) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
@@ -169,4 +169,3 @@ export function ParticleBackground() {
     </>
   );
 }
-

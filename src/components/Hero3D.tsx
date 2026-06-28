@@ -280,23 +280,49 @@ export function Hero3D() {
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                     style={{ transform: "translateZ(40px)" }}
                   >
-                    <svg className="w-40 h-40 text-jet-primary/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                      <rect x="2" y="3" width="20" height="14" rx="2" />
-                      <line x1="8" y1="21" x2="16" y2="21" />
-                      <line x1="12" y1="17" x2="12" y2="21" />
-                    </svg>
+                    <img 
+                      src="https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107847.png"
+                      alt="HP OmniBook X"
+                      className="w-44 h-auto object-contain drop-shadow-2xl"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                      }}
+                    />
                   </motion.div>
                   
-                  <div className="absolute top-4 right-4 bg-jet-success/20 text-jet-success px-3 py-1 rounded-full text-xs font-bold border border-jet-success/30">In Stock</div>
-                  <div className="absolute bottom-4 left-4 bg-jet-primary/20 text-jet-primary px-3 py-1 rounded-full text-xs font-bold border border-jet-primary/30">Best Price</div>
+                  <div className="absolute top-4 right-4 bg-jet-success/20 text-jet-success px-3 py-1 rounded-full text-xs font-bold border border-jet-success/30 z-10">In Stock</div>
+                  <div className="absolute top-4 left-4 bg-jet-primary/10 text-jet-primary px-3 py-1 rounded-full text-xs font-bold border border-jet-primary/20 z-10">New Arrival</div>
+                  <div className="absolute bottom-4 left-4 bg-jet-primary/20 text-jet-primary px-3 py-1 rounded-full text-xs font-bold border border-jet-primary/30 z-10">Best Price</div>
                 </div>
 
-                <div className="mt-6 space-y-3" style={{ transform: "translateZ(20px)" }}>
-                  <div className="h-3 bg-jet-bg-elevated rounded-full w-3/4 animate-shimmer" />
-                  <div className="h-3 bg-jet-bg-elevated rounded-full w-1/2 animate-shimmer" style={{ animationDelay: "0.5s" }} />
-                  <div className="flex gap-2 mt-4">
-                    <div className="h-8 w-20 bg-jet-primary rounded-lg animate-pulse-slow" />
-                    <div className="h-8 w-8 bg-jet-bg-elevated rounded-lg border border-jet-border" />
+                <div className="mt-5 space-y-3" style={{ transform: "translateZ(20px)" }}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold text-jet-text">HP OmniBook X</span>
+                    <span className="px-2 py-0.5 bg-jet-primary/10 text-jet-primary text-xs rounded-full font-semibold border border-jet-primary/20">AI PC</span>
+                  </div>
+                  <p className="text-sm text-jet-text-muted">Intel Core Ultra • AI NPU • 16GB LPDDR5X</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-bold text-jet-text">₹1,12,999</span>
+                    <span className="text-sm text-jet-text-muted line-through">₹1,45,999</span>
+                    <span className="text-xs text-jet-success font-semibold bg-jet-success/10 px-2 py-0.5 rounded-full">Save 23%</span>
+                  </div>
+                  <div className="flex gap-2 mt-3">
+                    <a 
+                      href="/products/hp-envy-x360-13/"
+                      className="flex-1 text-center py-2.5 bg-jet-primary text-white rounded-xl font-bold text-sm hover:bg-jet-primary-dim transition-all"
+                    >
+                      View Details
+                    </a>
+                    <a 
+                      href="https://wa.me/919814958295?text=Hi%20Jetage%2C%20I'm%20interested%20in%20HP%20OmniBook%20X"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 px-4 py-2.5 bg-jet-whatsapp/10 text-jet-whatsapp border border-jet-whatsapp/20 rounded-xl font-bold text-sm hover:bg-jet-whatsapp hover:text-white transition-all"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      Quote
+                    </a>
                   </div>
                 </div>
               </motion.div>
