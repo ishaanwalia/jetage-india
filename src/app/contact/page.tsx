@@ -2,7 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
-import { Phone, Mail, MapPin, Clock, MessageCircle, Instagram, Facebook, Globe, Navigation, Car, Train } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, MessageCircle, Globe, Navigation, Car, Train } from "lucide-react";
 
 export default function ContactPage() {
   const contactMethods = [
