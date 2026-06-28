@@ -155,6 +155,15 @@
   .will-change-transform {
     will-change: transform;
   }
+
+  /* Hide scrollbar for horizontal scroll containers */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 /* ===== KEYFRAME ANIMATIONS ===== */
@@ -225,24 +234,6 @@
   background: linear-gradient(135deg, #f0f2f5 0%, #e2e8f0 50%, #f0f2f5 100%);
   background-size: 200% 100%;
   animation: shimmer 3s ease-in-out infinite;
-}
-
-/* Custom cursor styles */
-@media (pointer: fine) {
-  body {
-    cursor: none;
-  }
-  
-  a, button, [role="button"], input, select, textarea, [onclick] {
-    cursor: none;
-  }
-}
-
-/* Hide default cursor on interactive elements */
-@media (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
 }
 
 .perspective-1000 { perspective: 1000px; }

@@ -1,0 +1,36 @@
+1:"$Sreact.fragment"
+2:I[45678,["/_next/static/chunks/05-c3ty_6dwfk.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/09enr4-jl441l.js","/_next/static/chunks/2wlybhat2h39h.js"],"Navbar"]
+3:I[51582,["/_next/static/chunks/05-c3ty_6dwfk.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/09enr4-jl441l.js","/_next/static/chunks/2wlybhat2h39h.js"],"default"]
+5:I[13642,["/_next/static/chunks/05-c3ty_6dwfk.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/09enr4-jl441l.js","/_next/static/chunks/2wlybhat2h39h.js"],"Footer"]
+6:I[48621,["/_next/static/chunks/05-c3ty_6dwfk.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/09enr4-jl441l.js","/_next/static/chunks/2wlybhat2h39h.js"],"WhatsAppButton"]
+7:I[97367,["/_next/static/chunks/05-c3ty_6dwfk.js","/_next/static/chunks/14mrh2-p_w84d.js"],"OutletBoundary"]
+8:"$Sreact.suspense"
+4:T9d7,The personal computing landscape is undergoing its most significant transformation since the shift from desktop to mobile. HP's new OmniBook X series, powered by Intel Core Ultra processors with dedicated AI Neural Processing Units (NPUs), represents the vanguard of this revolution — and it's available now at Jetage India.
+
+## What Makes an AI PC Different?
+
+Traditional processors handle general computing tasks efficiently, but AI workloads require specialized hardware. The Intel Core Ultra series integrates three compute engines: the CPU for everyday tasks, the GPU for graphics and parallel processing, and the NPU for sustained AI operations. This architecture enables real-time features that were previously impossible on consumer hardware.
+
+## Real-World AI Features
+
+The OmniBook X leverages its NPU for intelligent battery optimization, extending unplugged usage by up to 40% compared to previous generations. Real-time language translation during video calls, AI-powered noise cancellation, and intelligent background blur work seamlessly without draining battery or CPU resources.
+
+For creative professionals, the NPU accelerates AI-assisted photo editing, video upscaling, and generative design tools. The HP OmniDesk AI M03 desktop extends these capabilities with Intel Arc Graphics and Intel AI Boost, creating a complete AI-powered workflow ecosystem.
+
+## Performance Comparison
+
+Against traditional laptops with comparable specs, the OmniBook X demonstrates remarkable efficiency gains. In benchmark tests, AI-accelerated tasks complete 3-5x faster while consuming significantly less power. This isn't just about speed — it's about enabling new capabilities that transform how we work.
+
+## Who Should Buy an AI PC?
+
+- **Content Creators:** AI-assisted editing, real-time effects, and faster rendering
+- **Business Professionals:** Intelligent meeting features, automated transcription, and productivity enhancements
+- **Developers:** Local AI model testing, code completion, and ML experimentation
+- **Students:** Research assistance, writing tools, and adaptive learning features
+
+## The Jetage Advantage
+
+As an Authorized HP World Partner, Jetage India offers exclusive access to the OmniBook X series with genuine warranty, competitive pricing, and expert setup assistance. Our team at SCO-12, Sector-17-E, Chandigarh, provides hands-on demos and personalized configuration advice.
+
+WhatsApp us at +91 98149 58295 for instant quotes and availability. Experience the future of computing today.0:{"rsc":["$","$1","c",{"children":[[["$","$L2",null,{}],["$","$L3",null,{"blog":{"id":"hp-ai-pc-revolution-omnibook","title":"The HP AI PC Revolution: Why the OmniBook X Changes Everything","content":"$4","author":"Jetage Team","date":"June 20, 2026","readTime":"6 min read","category":"Technology","tags":["HP Laptops","AI PC","OmniBook","Technology"]}}],["$","$L5",null,{}],["$","$L6",null,{}]],[["$","script","script-0",{"src":"/_next/static/chunks/09enr4-jl441l.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/2wlybhat2h39h.js","async":true}]],["$","$L7",null,{"children":["$","$8",null,{"name":"Next.MetadataOutlet","children":"$@9"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"CzDXJowYQDdrasKT9SOK8"}
+9:null

@@ -23,18 +23,17 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { products } from "@/lib/data/products";
+import { products, type Product } from "@/lib/data/products";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ProductCard } from "@/components/ProductCard";
 
 interface ProductPageClientProps {
-  slug: string;
+  product: Product;
 }
 
-export default function ProductPageClient({ slug }: ProductPageClientProps) {
-  const product = products.find(p => p.id === slug);
+export default function ProductPageClient({ product }: ProductPageClientProps) {
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState("specs");
