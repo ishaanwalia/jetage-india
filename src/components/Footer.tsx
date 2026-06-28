@@ -15,11 +15,18 @@ export function Footer() {
   ];
 
   const supportLinks = [
-    { label: "Warranty Info", href: "https://support.hp.com/in-en/warranty" },
-    { label: "Driver Downloads", href: "https://support.hp.com/in-en/drivers" },
-    { label: "Installation Help", href: "https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20need%20help%20with%20installation" },
-    { label: "Troubleshooting", href: "https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20need%20troubleshooting%20help" },
-    { label: "Bulk Orders", href: "https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20want%20to%20place%20a%20bulk%20order" },
+    { label: "Contact Us", href: "/contact/" },
+    { label: "Shipping & Returns", href: "/shipping/" },
+    { label: "Warranty Info", href: "/warranty/" },
+    { label: "Privacy Policy", href: "/privacy/" },
+    { label: "Terms of Service", href: "/terms/" },
+    { label: "Blogs", href: "/blogs/" },
+  ];
+
+  const externalLinks = [
+    { label: "HP Support", href: "https://support.hp.com/in-en" },
+    { label: "HP Drivers", href: "https://support.hp.com/in-en/drivers" },
+    { label: "HP Warranty Check", href: "https://support.hp.com/in-en/warranty" },
   ];
 
   return (
@@ -30,7 +37,7 @@ export function Footer() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="space-y-6">
             <div className="flex items-center gap-3">
-              <img src="/LogoJ.png" alt="Jetage India" className="w-10 h-10 rounded-xl" />
+              <img src="/LogoJ.png" alt="Jetage India" className="w-12 h-12 rounded-xl" />
               <div className="flex flex-col">
                 <span className="text-lg font-bold text-jet-text leading-tight">Jetage</span>
                 <span className="text-[10px] text-jet-text-muted tracking-[0.2em] uppercase font-medium">India</span>
@@ -78,15 +85,12 @@ export function Footer() {
             <ul className="space-y-3">
               {supportLinks.map((link) => (
                 <li key={link.label}>
-                  <a 
+                  <Link 
                     href={link.href}
-                    target={link.href.startsWith("http") ? "_blank" : undefined}
-                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                     className="text-jet-text-dim hover:text-jet-primary transition-colors text-sm inline-flex items-center gap-1 group"
                   >
                     {link.label}
-                    <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -134,9 +138,12 @@ export function Footer() {
           <p className="text-jet-text-muted text-sm">
             © 1989-{new Date().getFullYear()} Jetage Computer Traders. All rights reserved.
           </p>
-          <p className="text-jet-text-muted text-sm">
-            Authorized HP World Partner • SCO-12, Sector-17-E, Chandigarh
-          </p>
+          <div className="flex items-center gap-4 text-sm text-jet-text-muted">
+            <Link href="/privacy/" className="hover:text-jet-primary transition-colors">Privacy</Link>
+            <Link href="/terms/" className="hover:text-jet-primary transition-colors">Terms</Link>
+            <Link href="/shipping/" className="hover:text-jet-primary transition-colors">Shipping</Link>
+            <Link href="/warranty/" className="hover:text-jet-primary transition-colors">Warranty</Link>
+          </div>
         </div>
       </div>
     </footer>

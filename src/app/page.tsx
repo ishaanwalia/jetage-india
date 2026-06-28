@@ -125,7 +125,7 @@ export default function Home() {
       {/* ==================== HERO SECTION ==================== */}
       <section 
         ref={heroRef}
-        className="relative min-h-screen flex items-center overflow-hidden pt-28 lg:pt-0"
+        className="relative min-h-screen flex items-center overflow-hidden pt-36 lg:pt-8"
       >
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-jet-primary/5 rounded-full blur-[120px] animate-float" />

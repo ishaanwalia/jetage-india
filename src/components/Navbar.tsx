@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, MessageCircle, ChevronDown, Laptop, Monitor, Printer, Mouse } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const categories = [
   { id: "laptop", name: "Laptops", icon: Laptop, href: "/category/laptop/" },
@@ -14,11 +15,11 @@ const categories = [
 ];
 
 export function Navbar() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,16 +27,6 @@ export function Navbar() {
       setIsScrolled(scrollY > 50);
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       setScrollProgress((scrollY / docHeight) * 100);
-
-      const sections = ["products", "showroom", "about"];
-      for (const section of sections.reverse()) {
-        const el = document.getElementById(section);
-        if (el && scrollY >= el.offsetTop - 200) {
-          setActiveSection(section);
-          break;
-        }
-      }
-      if (scrollY < 200) setActiveSection("");
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -53,11 +44,20 @@ export function Navbar() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
+  // Check if a link is active based on pathname
+  const isLinkActive = (href: string) => {
+    if (href === "/") {
+      return pathname === "/" || pathname === "";
+    }
+    return pathname.startsWith(href.replace(/\/$/, ""));
+  };
+
   const navLinks = [
-    { href: "/", label: "Home", id: "" },
-    { href: "/products/", label: "Products", id: "products" },
-    { href: "/about/", label: "About", id: "about" },
-    { href: "/showroom/", label: "Showroom", id: "showroom" },
+    { href: "/", label: "Home" },
+    { href: "/products/", label: "Products" },
+    { href: "/about/", label: "About" },
+    { href: "/showroom/", label: "Showroom" },
+    { href: "/blogs/", label: "Blogs" },
   ];
 
   return (
@@ -71,22 +71,15 @@ export function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <Link href="/" className="group relative flex items-center gap-3">
+            {/* Logo - increased size, removed text */}
+            <Link href="/" className="group relative flex items-center">
               <Image 
                 src="/LogoJ.png" 
                 alt="Jetage India" 
-                width={40} 
-                height={40} 
-                className="rounded-xl"
+                width={52} 
+                height={52} 
+                className="rounded-xl transition-transform duration-300 group-hover:scale-110"
               />
-              <div className="flex flex-col">
-                <span className="text-lg font-bold text-jet-text leading-tight tracking-tight">
-                  Jetage
-                </span>
-                <span className="text-[10px] text-jet-text-muted tracking-[0.2em] uppercase font-medium">
-                  India
-                </span>
-              </div>
               <div className="absolute -inset-2 bg-jet-primary/0 rounded-xl group-hover:bg-jet-primary/5 transition-all duration-300" />
             </Link>
 
@@ -96,14 +89,14 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 group ${
-                    activeSection === link.id || (link.id === "" && activeSection === "")
+                    isLinkActive(link.href)
                       ? "text-jet-primary"
                       : "text-jet-text-dim hover:text-jet-primary"
                   }`}
                 >
                   {link.label}
                   <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-jet-primary rounded-full transition-all duration-300 ${
-                    activeSection === link.id || (link.id === "" && activeSection === "")
+                    isLinkActive(link.href)
                       ? "w-6 opacity-100"
                       : "w-0 opacity-0 group-hover:w-6 group-hover:opacity-100"
                   }`} />
@@ -116,7 +109,7 @@ export function Navbar() {
                     e.stopPropagation();
                     setIsCategoryOpen(!isCategoryOpen);
                   }}
-                  className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-jet-text-dim hover:text-jet-primary transition-colors group"
+                  className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-jet-text-dim hover:text-jet-primary transition-colors group relative"
                 >
                   Categories
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCategoryOpen ? 'rotate-180' : ''}`} />
@@ -179,7 +172,11 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block px-4 py-3 text-jet-text-dim font-medium hover:text-jet-primary hover:bg-jet-primary/5 rounded-xl transition-all"
+                  className={`block px-4 py-3 font-medium rounded-xl transition-all ${
+                    isLinkActive(link.href)
+                      ? "text-jet-primary bg-jet-primary/5"
+                      : "text-jet-text-dim hover:text-jet-primary hover:bg-jet-primary/5"
+                  }`}
                 >
                   {link.label}
                 </Link>

@@ -31,6 +31,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        <link rel="icon" type="image/png" href="/FaviconJ.png" />
+        <link rel="shortcut icon" type="image/png" href="/FaviconJ.png" />
+        <link rel="apple-touch-icon" href="/FaviconJ.png" />
+      </head>
       <body className="antialiased">{children}</body>
     </html>
   );
