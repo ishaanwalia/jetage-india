@@ -88,7 +88,7 @@ export function ProductImage3D({
     <>
       <motion.div
         ref={containerRef}
-        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-jet-bg-elevated to-jet-bg ${className}`}
+        className={`relative rounded-2xl bg-jet-bg-elevated ${className}`}
         style={{ perspective: 1000, transformStyle: "preserve-3d" }}
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}

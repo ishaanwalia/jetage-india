@@ -19,7 +19,8 @@ import {
   CheckCheck,
   Eye,
   ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon
+  ChevronRight as ChevronRightIcon,
+  ShoppingCart
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -28,6 +29,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ProductCard } from "@/components/ProductCard";
+import { useCart } from "@/context/CartContext";
 
 interface ProductPageClientProps {
   product: Product;
@@ -91,6 +93,19 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
   const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
   const whatsappLink = `https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20want%20to%20buy%20${encodeURIComponent(product.name)}%20(SKU%3A%20${product.sku})`;
+  const { addItem } = useCart();
+
+  const handleAddToCart = () => {
+    addItem({
+      productId: product.id,
+      name: product.name,
+      shortName: product.shortName,
+      price: product.price,
+      mrp: product.mrp,
+      image: product.image,
+      sku: product.sku,
+    });
+  };
 
   const relatedProducts = products
     .filter(p => p.category === product.category && p.id !== product.id)
@@ -288,6 +303,13 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                   <MessageCircle className="w-6 h-6" />
                   Order on WhatsApp
                 </a>
+                <button
+                  onClick={handleAddToCart}
+                  className="flex items-center justify-center gap-3 px-8 py-4 bg-jet-primary text-white rounded-xl font-bold text-lg hover:bg-jet-primary-dim transition-all hover:scale-[1.02] shadow-lg"
+                >
+                  <ShoppingCart className="w-6 h-6" />
+                  Add to Cart
+                </button>
                 <a
                   href="tel:+919814958295"
                   className="flex items-center justify-center gap-3 px-8 py-4 bg-jet-bg-card text-jet-text border border-jet-border rounded-xl font-bold text-lg hover:border-jet-primary/40 hover:text-jet-primary transition-all"

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, MessageCircle, ChevronDown, Laptop, Monitor, Printer, Mouse } from "lucide-react";
+import { Menu, X, MessageCircle, ChevronDown, Laptop, Monitor, Printer, Mouse, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useCart } from "@/context/CartContext";
 
 const categories = [
   { id: "laptop", name: "Laptops", icon: Laptop, href: "/category/laptop/" },
@@ -20,6 +21,7 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const { totalItems, setIsCartOpen } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -141,6 +143,20 @@ export function Navbar() {
             </div>
 
             <div className="hidden lg:flex items-center gap-3">
+              {/* Cart Button */}
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="relative inline-flex items-center gap-2 px-4 py-2.5 bg-jet-bg-elevated text-jet-text border border-jet-border rounded-full text-sm font-semibold hover:border-jet-primary/40 hover:text-jet-primary transition-all"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                <span>Cart</span>
+                {totalItems > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-jet-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-jet-bg-card">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
+
               <a
                 href="https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20want%20to%20inquire%20about%20HP%20products"
                 target="_blank"
@@ -197,12 +213,22 @@ export function Navbar() {
                   ))}
                 </div>
               </div>
-              <div className="pt-4 border-t border-jet-border px-4">
+              <div className="pt-4 border-t border-jet-border px-4 flex flex-col gap-2">
+                <button
+                  onClick={() => {
+                    setIsCartOpen(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-full text-sm font-semibold hover:bg-jet-primary hover:text-white transition-all w-full justify-center"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  View Cart {totalItems > 0 && `(${totalItems})`}
+                </button>
                 <a
                   href="https://wa.me/919814958295"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-jet-whatsapp text-white rounded-full text-sm font-semibold"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-jet-whatsapp text-white rounded-full text-sm font-semibold w-full justify-center"
                 >
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp Order

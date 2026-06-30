@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/context/CartContext";
+import { GlobalShell } from "@/components/GlobalShell";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -161,7 +163,11 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <CartProvider>
+          <GlobalShell>{children}</GlobalShell>
+        </CartProvider>
+      </body>
     </html>
   );
 }

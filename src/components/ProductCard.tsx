@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Wifi, Usb, EthernetPort, ChevronRight, MessageCircle, Check, Eye } from "lucide-react";
+import { Wifi, Usb, EthernetPort, ChevronRight, MessageCircle, Check, Eye, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { ProductImage3D } from "./ProductImage3D";
+import { useCart } from "@/context/CartContext";
 
 export interface Product {
   id: string;
@@ -70,9 +71,22 @@ function getProductAltText(product: Product): string {
 
 export function ProductCard({ product, compact = false, featured = false }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { addItem } = useCart();
   
   const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
   const whatsappLink = `https://wa.me/919814958295?text=Hi%20Jetage%2C%20I'm%20interested%20in%20${encodeURIComponent(product.name)}%20(SKU%3A%20${product.sku})`;
+
+  const handleAddToCart = () => {
+    addItem({
+      productId: product.id,
+      name: product.name,
+      shortName: product.shortName,
+      price: product.price,
+      mrp: product.mrp,
+      image: product.image,
+      sku: product.sku,
+    });
+  };
 
   // Get proper alt text
   const altText = product.category === "printer" 
@@ -176,15 +190,24 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
             <span className="text-sm text-jet-text-muted line-through">&#8377;{product.mrp.toLocaleString()}</span>
           </div>
 
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-jet-bg-elevated text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
-          >
-            <MessageCircle className="w-4 h-4" />
-            Get Quote
-          </a>
+          <div className="flex gap-2 pt-2">
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-jet-bg-elevated text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Get Quote
+            </a>
+            <button
+              onClick={handleAddToCart}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
+              title="Add to Cart"
+            >
+              <ShoppingCart className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -282,6 +305,13 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
               View Details
               <ChevronRight className="w-4 h-4" />
             </Link>
+            <button
+              onClick={handleAddToCart}
+              className="flex items-center justify-center gap-2 px-4 py-3 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
+              title="Add to Cart"
+            >
+              <ShoppingCart className="w-4 h-4" />
+            </button>
             <a
               href={whatsappLink}
               target="_blank"
@@ -362,6 +392,13 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
             View Details
             <ChevronRight className="w-4 h-4" />
           </Link>
+          <button
+            onClick={handleAddToCart}
+            className="flex items-center justify-center gap-2 px-4 py-3 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
+            title="Add to Cart"
+          >
+            <ShoppingCart className="w-4 h-4" />
+          </button>
           <a
             href={whatsappLink}
             target="_blank"
