@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Wifi, Usb, EthernetPort, ChevronRight, MessageCircle, Check, Eye } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import { ProductImage3D } from "./ProductImage3D";
 
 export interface Product {
   id: string;
@@ -69,7 +69,6 @@ function getProductAltText(product: Product): string {
 }
 
 export function ProductCard({ product, compact = false, featured = false }: ProductCardProps) {
-  const [imageError, setImageError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   
   const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
@@ -79,6 +78,9 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
   const altText = product.category === "printer" 
     ? getPrinterAltText(product) 
     : getProductAltText(product);
+
+  // Build image array — use all available images, deduplicate
+  const allImages = Array.from(new Set([product.image, ...product.images])).filter(Boolean);
 
   const getConnectivityIcon = (conn: string) => {
     if (conn === "Wi-Fi" || conn === "Wi-Fi 6" || conn === "Wi-Fi 6E") return <Wifi className="w-3 h-3" />;
@@ -118,35 +120,29 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="relative aspect-[4/3] bg-gradient-to-br from-jet-bg-elevated to-jet-bg p-4 flex items-center justify-center overflow-hidden">
+        {/* 3D Product Image Area */}
+        <div className="relative aspect-[4/3] p-4">
           {product.badge && (
-            <div className="absolute top-3 left-3 px-3 py-1 bg-jet-primary text-white text-xs font-bold rounded-full z-10">
+            <div className="absolute top-3 left-3 px-3 py-1 bg-jet-primary text-white text-xs font-bold rounded-full z-20">
               {product.badge}
             </div>
           )}
           {discount > 0 && (
-            <div className="absolute top-3 right-3 px-3 py-1 bg-red-500/10 text-red-500 text-xs font-bold rounded-full z-10 border border-red-500/20">
+            <div className="absolute top-3 right-3 px-3 py-1 bg-red-500/10 text-red-500 text-xs font-bold rounded-full z-20 border border-red-500/20">
               -{discount}%
             </div>
           )}
           
-          {!imageError ? (
-            <Image 
-              src={product.image} 
-              alt={altText}
-              width={200}
-              height={150}
-              className="object-contain max-h-[120px] w-auto group-hover:scale-110 transition-transform duration-700"
-              onError={() => setImageError(true)}
-            />
-          ) : (
-            <div className="w-16 h-16 rounded-full bg-jet-primary/10 flex items-center justify-center">
-              <span className="text-2xl font-bold text-jet-primary">{product.shortName.charAt(0)}</span>
-            </div>
-          )}
+          <ProductImage3D
+            images={allImages}
+            alt={altText}
+            className="w-full h-full"
+            compact
+            enableRotation
+          />
           
           {isHovered && (
-            <div className="absolute inset-0 bg-jet-bg/60 backdrop-blur-sm flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute inset-0 bg-jet-bg/60 backdrop-blur-sm flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
               <Link href={`/products/${product.id}/`} className="w-10 h-10 rounded-full bg-jet-primary text-white flex items-center justify-center hover:scale-110 transition-transform">
                 <Eye className="w-4 h-4" />
               </Link>
@@ -201,14 +197,15 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="relative aspect-[16/10] bg-gradient-to-br from-jet-bg-elevated via-jet-bg-card to-jet-bg p-8 flex items-center justify-center overflow-hidden">
+        {/* 3D Product Image Area */}
+        <div className="relative aspect-[16/10] p-6">
           {product.badge && (
-            <div className="absolute top-5 left-5 px-4 py-1.5 bg-jet-primary text-white text-sm font-bold rounded-full z-10">
+            <div className="absolute top-5 left-5 px-4 py-1.5 bg-jet-primary text-white text-sm font-bold rounded-full z-20">
               {product.badge}
             </div>
           )}
           {discount > 0 && (
-            <div className="absolute top-5 right-5 px-4 py-1.5 bg-red-500/10 text-red-500 text-sm font-bold rounded-full z-10 border border-red-500/20">
+            <div className="absolute top-5 right-5 px-4 py-1.5 bg-red-500/10 text-red-500 text-sm font-bold rounded-full z-20 border border-red-500/20">
               Save {discount}%
             </div>
           )}
@@ -217,23 +214,15 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(8,145,178,0.08),transparent_70%)]" />
           </div>
 
-          {!imageError ? (
-            <Image 
-              src={product.image} 
-              alt={altText}
-              width={300}
-              height={220}
-              className="object-contain max-h-[200px] w-auto group-hover:scale-110 transition-transform duration-700 z-10"
-              onError={() => setImageError(true)}
-            />
-          ) : (
-            <div className="w-24 h-24 rounded-full bg-jet-primary/10 flex items-center justify-center z-10">
-              <span className="text-4xl font-bold text-jet-primary">{product.shortName.charAt(0)}</span>
-            </div>
-          )}
+          <ProductImage3D
+            images={allImages}
+            alt={altText}
+            className="w-full h-full"
+            enableRotation
+          />
           
           {isHovered && (
-            <div className="absolute inset-0 bg-jet-bg/60 backdrop-blur-sm flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+            <div className="absolute inset-0 bg-jet-bg/60 backdrop-blur-sm flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
               <Link href={`/products/${product.id}/`} className="px-6 py-3 rounded-full bg-jet-primary text-white font-semibold text-sm flex items-center gap-2 hover:scale-105 transition-transform">
                 <Eye className="w-4 h-4" />
                 View Details
@@ -314,14 +303,15 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative aspect-[16/10] bg-gradient-to-br from-jet-bg-elevated to-jet-bg p-8 flex items-center justify-center overflow-hidden">
+      {/* 3D Product Image Area */}
+      <div className="relative aspect-[16/10] p-6">
         {product.badge && (
-          <div className="absolute top-4 left-4 px-4 py-1.5 bg-jet-primary text-white text-sm font-bold rounded-full z-10">
+          <div className="absolute top-4 left-4 px-4 py-1.5 bg-jet-primary text-white text-sm font-bold rounded-full z-20">
             {product.badge}
           </div>
         )}
         {discount > 0 && (
-          <div className="absolute top-4 right-4 px-4 py-1.5 bg-red-500/10 text-red-500 text-sm font-bold rounded-full z-10 border border-red-500/20">
+          <div className="absolute top-4 right-4 px-4 py-1.5 bg-red-500/10 text-red-500 text-sm font-bold rounded-full z-20 border border-red-500/20">
             Save {discount}%
           </div>
         )}
@@ -330,20 +320,12 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(8,145,178,0.08),transparent_70%)]" />
         </div>
 
-        {!imageError ? (
-          <Image 
-            src={product.image} 
-            alt={altText}
-            width={280}
-            height={200}
-            className="object-contain max-h-[180px] w-auto group-hover:scale-110 transition-transform duration-700"
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <div className="w-20 h-20 rounded-full bg-jet-primary/10 flex items-center justify-center">
-            <span className="text-3xl font-bold text-jet-primary">{product.shortName.charAt(0)}</span>
-          </div>
-        )}
+        <ProductImage3D
+          images={allImages}
+          alt={altText}
+          className="w-full h-full"
+          enableRotation
+        />
       </div>
 
       <div className="p-6 lg:p-8 space-y-4">

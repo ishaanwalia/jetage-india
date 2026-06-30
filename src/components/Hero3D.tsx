@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ScrambleText } from "./TextScramble";
 import { Typewriter } from "./Typewriter";
 import { MagneticButton } from "./MagneticButton";
+import { ProductImage3D } from "./ProductImage3D";
 
 export function Hero3D() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,6 +37,13 @@ export function Hero3D() {
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
+
+  // Featured product images for the hero
+  const heroProductImages = [
+    "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107847.png",
+    "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107848.png",
+    "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107849.png",
+  ];
 
   return (
     <section 
@@ -210,7 +218,7 @@ export function Hero3D() {
             </motion.div>
           </div>
 
-          {/* Right - 3D Product Showcase */}
+          {/* Right - 3D Product Showcase Card */}
           <motion.div 
             className="relative hidden lg:block"
             initial={{ opacity: 0, scale: 0.8, rotateY: 15 }}
@@ -251,9 +259,9 @@ export function Hero3D() {
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               />
               
-              {/* Front Card - Main */}
+              {/* Front Card - Main with ProductImage3D */}
               <motion.div
-                className="relative bg-jet-bg-card rounded-3xl shadow-premium border border-jet-border p-8 backdrop-blur-sm"
+                className="relative bg-jet-bg-card rounded-3xl shadow-premium border border-jet-border p-6 backdrop-blur-sm overflow-hidden"
                 style={{ 
                   transform: "translateZ(0px)",
                   transformStyle: "preserve-3d",
@@ -268,32 +276,19 @@ export function Hero3D() {
                 {/* Glow effect on hover */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-jet-primary/20 via-jet-accent/20 to-jet-primary/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                 
-                <div className="aspect-[4/3] bg-gradient-to-br from-jet-bg-elevated to-jet-bg rounded-2xl flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(8,145,178,0.15),transparent_50%)]" />
+                {/* Product Image with 3D Viewer */}
+                <div className="aspect-[4/3] rounded-2xl overflow-hidden relative">
+                  <div className="absolute top-3 right-3 z-20 bg-jet-success/20 text-jet-success px-3 py-1 rounded-full text-xs font-bold border border-jet-success/30">In Stock</div>
+                  <div className="absolute top-3 left-3 z-20 bg-jet-primary/10 text-jet-primary px-3 py-1 rounded-full text-xs font-bold border border-jet-primary/20">New Arrival</div>
+                  <div className="absolute bottom-3 left-3 z-20 bg-jet-primary/20 text-jet-primary px-3 py-1 rounded-full text-xs font-bold border border-jet-primary/30">Best Price</div>
                   
-                  {/* 3D Floating Product Image */}
-                  <motion.div
-                    animate={{ 
-                      y: [0, -10, 0],
-                      rotateY: [0, 5, 0],
-                    }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    style={{ transform: "translateZ(40px)" }}
-                  >
-                    <img 
-                      src="https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107847.png"
-                      alt="HP OmniBook X laptop with Intel Core Ultra processor"
-                      className="w-44 h-auto object-contain drop-shadow-2xl"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                      }}
-                    />
-                  </motion.div>
-                  
-                  <div className="absolute top-4 right-4 bg-jet-success/20 text-jet-success px-3 py-1 rounded-full text-xs font-bold border border-jet-success/30 z-10">In Stock</div>
-                  <div className="absolute top-4 left-4 bg-jet-primary/10 text-jet-primary px-3 py-1 rounded-full text-xs font-bold border border-jet-primary/20 z-10">New Arrival</div>
-                  <div className="absolute bottom-4 left-4 bg-jet-primary/20 text-jet-primary px-3 py-1 rounded-full text-xs font-bold border border-jet-primary/30 z-10">Best Price</div>
+                  <ProductImage3D
+                    images={heroProductImages}
+                    alt="HP OmniBook X laptop with Intel Core Ultra processor"
+                    className="w-full h-full"
+                    enableRotation
+                    enableZoom
+                  />
                 </div>
 
                 <div className="mt-5 space-y-3" style={{ transform: "translateZ(20px)" }}>
