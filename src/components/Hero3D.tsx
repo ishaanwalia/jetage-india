@@ -142,7 +142,7 @@ export function Hero3D() {
             </motion.div>
 
             <motion.h1 
-              className="text-5xl lg:text-7xl xl:text-8xl font-bold text-jet-text leading-[0.95] tracking-tight"
+              className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-bold text-jet-text leading-[0.95] tracking-tight"
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 1 }}
@@ -152,7 +152,7 @@ export function Hero3D() {
               <span className="block text-gradient-gold glow-text">
                 <Typewriter texts={["Products", "Laptops", "Printers", "Desktops"]} speed={100} pauseDuration={3000} />
               </span>
-              <span className="block text-jet-text-dim text-3xl lg:text-4xl xl:text-5xl mt-4 font-medium">
+              <span className="block text-jet-text-dim text-2xl sm:text-3xl lg:text-4xl xl:text-5xl mt-4 font-medium">
                 Delivered to You
               </span>
             </motion.h1>
@@ -220,7 +220,7 @@ export function Hero3D() {
 
           {/* Right - 3D Product Showcase Card */}
           <motion.div 
-            className="relative hidden md:block lg:block"
+            className="relative mt-8 md:mt-0"
             initial={{ opacity: 0, scale: 0.8, rotateY: 15 }}
             animate={{ opacity: 1, scale: 1, rotateY: 0 }}
             transition={{ delay: 0.5, duration: 1.2, type: "spring" }}
@@ -230,7 +230,7 @@ export function Hero3D() {
             }}
           >
             {/* 3D Card Stack */}
-            <div className="relative w-full max-w-lg mx-auto" style={{ transformStyle: "preserve-3d" }}>
+            <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg mx-auto" style={{ transformStyle: "preserve-3d" }}>
               {/* Back Card */}
               <motion.div
                 className="absolute inset-0 bg-jet-bg-card rounded-3xl border border-jet-border shadow-premium"
@@ -261,7 +261,7 @@ export function Hero3D() {
               
               {/* Front Card - Main with ProductImage3D */}
               <motion.div
-                className="relative bg-jet-bg-card rounded-3xl shadow-premium border border-jet-border p-6 backdrop-blur-sm overflow-hidden"
+                className="relative bg-jet-bg-card rounded-3xl shadow-premium border border-jet-border p-4 sm:p-6 backdrop-blur-sm"
                 style={{ 
                   transform: "translateZ(0px)",
                   transformStyle: "preserve-3d",
@@ -283,7 +283,7 @@ export function Hero3D() {
                   <span className="px-3 py-1 bg-jet-primary/10 text-jet-primary text-xs font-bold rounded-full border border-jet-primary/20">Best Price</span>
                 </div>
 
-                <div className="aspect-[4/3] rounded-2xl relative p-1">
+                <div className="aspect-[4/3] rounded-2xl relative bg-gradient-to-br from-jet-bg-elevated/30 to-jet-bg/30 p-1">
                   <ProductImage3D
                     images={heroProductImages}
                     alt="HP OmniBook X laptop with Intel Core Ultra processor"
@@ -293,7 +293,7 @@ export function Hero3D() {
                   />
                 </div>
 
-                <div className="mt-5 space-y-3" style={{ transform: "translateZ(20px)" }}>
+                <div className="mt-5 space-y-3">
                   <div className="flex items-center gap-2">
                     <span className="text-lg font-bold text-jet-text">HP OmniBook X</span>
                     <span className="px-2 py-0.5 bg-jet-primary/10 text-jet-primary text-xs rounded-full font-semibold border border-jet-primary/20">AI PC</span>
@@ -326,7 +326,7 @@ export function Hero3D() {
 
               {/* Floating Stats */}
               <motion.div 
-                className="absolute -bottom-4 -left-6 bg-jet-bg-card rounded-2xl shadow-premium p-4 border border-jet-border"
+                className="absolute -bottom-4 -left-6 bg-jet-bg-card rounded-2xl shadow-premium p-4 border border-jet-border hidden sm:block"
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 style={{ transform: "translateZ(30px)" }}
@@ -343,7 +343,7 @@ export function Hero3D() {
               </motion.div>
 
               <motion.div 
-                className="absolute -top-4 -right-4 bg-jet-bg-card rounded-2xl shadow-premium p-4 border border-jet-border"
+                className="absolute -top-4 -right-4 bg-jet-bg-card rounded-2xl shadow-premium p-4 border border-jet-border hidden sm:block"
                 animate={{ y: [0, -15, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 style={{ transform: "translateZ(40px)" }}

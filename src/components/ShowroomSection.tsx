@@ -75,25 +75,18 @@ export function ShowroomSection() {
           <div className="relative">
             <div className="absolute -inset-4 bg-gradient-to-br from-jet-primary/10 to-transparent rounded-3xl blur-2xl" />
             <div className="relative bg-jet-bg-card rounded-3xl shadow-premium border border-jet-border overflow-hidden">
-              <div className="aspect-[4/3] bg-gradient-to-br from-jet-bg-elevated to-jet-bg relative overflow-hidden flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  <div className="w-20 h-20 mx-auto bg-jet-primary/10 rounded-2xl flex items-center justify-center border border-jet-primary/20">
-                    <MapPin className="w-10 h-10 text-jet-primary" />
-                  </div>
-                  <div>
-                    <p className="text-lg font-bold text-jet-text">SCO-12, Sector-17-E</p>
-                    <p className="text-sm text-jet-text-muted">Chandigarh</p>
-                  </div>
-                  <a 
-                    href="https://maps.google.com/?q=SCO-12+Sector-17-E+Chandigarh"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-jet-primary text-jet-bg rounded-full text-sm font-bold hover:bg-jet-accent transition-all shadow-glow"
-                  >
-                    <MapPin className="w-4 h-4" />
-                    Get Directions
-                  </a>
-                </div>
+              {/* Live Google Maps Embed */}
+              <div className="aspect-[4/3] relative bg-jet-bg-elevated">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430!2d76.780592!3d30.7401467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fed0a8f6e1ac9%3A0xfd75de97e90ec3f0!2sHP%20World%20-%20Sector%2017E!5e0!3m2!1sen!2sin!4v1700000000000"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Jetage India Showroom Location - SCO-12, Sector-17-E, Chandigarh"
+                />
               </div>
 
               <div className="p-6 space-y-4">
@@ -116,6 +109,16 @@ export function ShowroomSection() {
                     </span>
                   ))}
                 </div>
+
+                <a 
+                  href="https://www.google.com/maps/dir/HP+World+-+Sector+17E,+1st+Floor,+SCO+12,+Shopping+Plaza,+17E,+Sector+17,+Chandigarh,+160017/HP+World+-+Sector+17E,+1st+Floor,+SCO+12,+Shopping+Plaza,+17E,+Sector+17,+Chandigarh,+160017/@30.8959353,77.0679584,15z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x390fed0a8f6e1ac9:0xfd75de97e90ec3f0!2m2!1d76.780592!2d30.7401467!1m5!1m1!1s0x390fed0a8f6e1ac9:0xfd75de97e90ec3f0!2m2!1d76.780592!2d30.7401467?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 bg-jet-primary text-jet-bg rounded-xl text-sm font-bold hover:bg-jet-accent transition-all shadow-glow"
+                >
+                  <MapPin className="w-4 h-4" />
+                  Get Directions on Google Maps
+                </a>
               </div>
             </div>
 

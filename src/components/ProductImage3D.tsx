@@ -88,7 +88,7 @@ export function ProductImage3D({
     <>
       <motion.div
         ref={containerRef}
-        className={`relative rounded-2xl bg-jet-bg-elevated ${className}`}
+        className={`relative rounded-2xl bg-transparent ${className}`}
         style={{ perspective: 1000, transformStyle: "preserve-3d" }}
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
@@ -121,7 +121,6 @@ export function ProductImage3D({
               className="relative z-0"
               animate={{ y: isHovered ? -6 : 0, scale: isHovered ? 1.05 : 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              style={{ transform: "translateZ(20px)" }}
             >
               <Image
                 src={currentImage}
@@ -134,7 +133,7 @@ export function ProductImage3D({
               />
             </motion.div>
           ) : (
-            <div className="flex flex-col items-center justify-center gap-3 z-0" style={{ transform: "translateZ(20px)" }}>
+            <div className="flex flex-col items-center justify-center gap-3 z-0">
               <div className="w-20 h-20 rounded-full bg-jet-primary/10 flex items-center justify-center border border-jet-primary/20">
                 <span className="text-3xl font-bold text-jet-primary">{alt.charAt(0)}</span>
               </div>
