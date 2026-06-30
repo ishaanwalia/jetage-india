@@ -220,7 +220,7 @@ export function Hero3D() {
 
           {/* Right - 3D Product Showcase Card */}
           <motion.div 
-            className="relative hidden lg:block"
+            className="relative hidden md:block lg:block"
             initial={{ opacity: 0, scale: 0.8, rotateY: 15 }}
             animate={{ opacity: 1, scale: 1, rotateY: 0 }}
             transition={{ delay: 0.5, duration: 1.2, type: "spring" }}
@@ -276,16 +276,18 @@ export function Hero3D() {
                 {/* Glow effect on hover */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-jet-primary/20 via-jet-accent/20 to-jet-primary/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                 
-                {/* Product Image with 3D Viewer */}
-                <div className="aspect-[4/3] rounded-2xl overflow-hidden relative">
-                  <div className="absolute top-3 right-3 z-20 bg-jet-success/20 text-jet-success px-3 py-1 rounded-full text-xs font-bold border border-jet-success/30">In Stock</div>
-                  <div className="absolute top-3 left-3 z-20 bg-jet-primary/10 text-jet-primary px-3 py-1 rounded-full text-xs font-bold border border-jet-primary/20">New Arrival</div>
-                  <div className="absolute bottom-3 left-3 z-20 bg-jet-primary/20 text-jet-primary px-3 py-1 rounded-full text-xs font-bold border border-jet-primary/30">Best Price</div>
-                  
+                {/* Product Image with 3D Viewer — badges moved outside to prevent overlap */}
+                <div className="flex flex-wrap gap-2 mb-3">
+                  <span className="px-3 py-1 bg-jet-primary/10 text-jet-primary text-xs font-bold rounded-full border border-jet-primary/20">New Arrival</span>
+                  <span className="px-3 py-1 bg-jet-success/10 text-jet-success text-xs font-bold rounded-full border border-jet-success/20">In Stock</span>
+                  <span className="px-3 py-1 bg-jet-primary/10 text-jet-primary text-xs font-bold rounded-full border border-jet-primary/20">Best Price</span>
+                </div>
+
+                <div className="aspect-[4/3] rounded-2xl relative p-1">
                   <ProductImage3D
                     images={heroProductImages}
                     alt="HP OmniBook X laptop with Intel Core Ultra processor"
-                    className="w-full h-full"
+                    className="w-full h-full rounded-2xl"
                     enableRotation
                     enableZoom
                   />

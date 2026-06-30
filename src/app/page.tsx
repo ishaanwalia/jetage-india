@@ -53,6 +53,7 @@ import { CategoryGrid3D } from "@/components/CategoryGrid3D";
 import { Marquee3D } from "@/components/Marquee3D";
 import { ProcessSteps3D } from "@/components/ProcessSteps3D";
 import { ProductShowcase3D } from "@/components/ProductShowcase3D";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -256,6 +257,9 @@ export default function Home() {
           </StaggerReveal>
         </div>
       </section>
+
+      {/* ==================== TESTIMONIALS ==================== */}
+      <TestimonialsSection />
 
       {/* ==================== 3D MARQUEE ==================== */}
       <Marquee3D />

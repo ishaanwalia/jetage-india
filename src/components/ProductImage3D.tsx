@@ -95,7 +95,7 @@ export function ProductImage3D({
         onMouseLeave={handleMouseLeave}
       >
         <motion.div
-          className="relative w-full h-full flex items-center justify-center"
+          className="relative w-full h-full flex items-center justify-center p-3"
           style={{
             rotateX: enableRotation ? rotateX : 0,
             rotateY: enableRotation ? rotateY : 0,
@@ -119,9 +119,9 @@ export function ProductImage3D({
           {!hasError ? (
             <motion.div
               className="relative z-0"
-              animate={{ y: isHovered ? -8 : 0, scale: isHovered ? 1.08 : 1 }}
+              animate={{ y: isHovered ? -6 : 0, scale: isHovered ? 1.05 : 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              style={{ transform: "translateZ(40px)" }}
+              style={{ transform: "translateZ(20px)" }}
             >
               <Image
                 src={currentImage}
@@ -134,7 +134,7 @@ export function ProductImage3D({
               />
             </motion.div>
           ) : (
-            <div className="flex flex-col items-center justify-center gap-3 z-0" style={{ transform: "translateZ(40px)" }}>
+            <div className="flex flex-col items-center justify-center gap-3 z-0" style={{ transform: "translateZ(20px)" }}>
               <div className="w-20 h-20 rounded-full bg-jet-primary/10 flex items-center justify-center border border-jet-primary/20">
                 <span className="text-3xl font-bold text-jet-primary">{alt.charAt(0)}</span>
               </div>
@@ -145,7 +145,7 @@ export function ProductImage3D({
           <motion.div
             className="absolute bottom-4 left-1/2 -translate-x-1/2 w-3/4 h-4 bg-black/10 rounded-full blur-xl"
             animate={{ scale: isHovered ? 0.8 : 1, opacity: isHovered ? 0.3 : 0.15 }}
-            style={{ transform: "translateZ(-20px)" }}
+            style={{ transform: "translateZ(-10px)" }}
           />
         </motion.div>
 
