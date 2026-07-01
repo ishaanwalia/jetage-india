@@ -32,50 +32,31 @@ const subCategoryMap: Record<string, Record<string, string>> = {
     laser: "Laser Printers",
     "color-laser": "Color Laser",
     inkjet: "InkJet Printers",
-  },
-  laptop: {
-    consumer: "Consumer",
-    premium: "Premium",
-    gaming: "Gaming",
-  },
-  desktop: {
-    consumer: "Consumer",
-  },
-  monitor: {
-    consumer: "Consumer",
-    professional: "Professional",
+    officejet: "OfficeJet",
+    "smart-tank": "Smart Tank",
+    deskjet: "DeskJet",
   },
   accessory: {
-    input: "Input Devices",
+    mouse: "Mouse",
+    keyboard: "Keyboard",
+    combo: "Combos",
   },
 };
 
 const categoryNames: Record<string, string> = {
   printer: "Printers",
-  laptop: "Laptops",
-  desktop: "Desktops",
-  monitor: "Monitors",
   accessory: "Accessories",
 };
 
 const categoryDescriptions: Record<string, string> = {
   printer:
-    "High-quality HP printers for home, office, and enterprise needs — from compact inkjets to high-volume laser MFPs.",
-  laptop:
-    "From everyday productivity machines to gaming powerhouses and premium 2-in-1 convertibles with OLED displays.",
-  desktop:
-    "Powerful desktop PCs including AI-powered OmniDesk systems, compact towers, and reliable home-office builds.",
-  monitor:
-    "Stunning displays from FHD to QHD with professional color accuracy, high refresh rates, and eye-care technology.",
+    "High-quality HP printers for home, office, and enterprise — Laser, Color Laser, InkJet, Smart Tank & OfficeJet.",
   accessory:
-    "Genuine HP keyboards, mice, and essential accessories designed for comfort, precision, and durability.",
+    "Genuine HP keyboards, mice, and essential combos designed for comfort, precision, and durability.",
 };
 
 const categoryMeta: Record<string, { icon: string; tagline: string }> = {
   printer: { icon: "Printer", tagline: "Print with confidence" },
-  laptop: { icon: "Laptop", tagline: "Power meets portability" },
-  desktop: { icon: "Monitor", tagline: "Performance redefined" },
-  monitor: { icon: "Monitor", tagline: "See the difference" },
   accessory: { icon: "Mouse", tagline: "Precision in every click" },
 };
 

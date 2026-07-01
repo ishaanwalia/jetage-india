@@ -107,22 +107,34 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
     "laser": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
     "color-laser": "bg-orange-500/10 text-orange-500 border-orange-500/20",
     "inkjet": "bg-blue-500/10 text-blue-500 border-blue-500/20",
+    "officejet": "bg-teal-500/10 text-teal-500 border-teal-500/20",
+    "smart-tank": "bg-cyan-500/10 text-cyan-500 border-cyan-500/20",
+    "deskjet": "bg-indigo-500/10 text-indigo-500 border-indigo-500/20",
     "consumer": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
     "premium": "bg-purple-500/10 text-purple-500 border-purple-500/20",
     "gaming": "bg-red-500/10 text-red-500 border-red-500/20",
     "professional": "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
     "input": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
+    "mouse": "bg-pink-500/10 text-pink-500 border-pink-500/20",
+    "keyboard": "bg-violet-500/10 text-violet-500 border-violet-500/20",
+    "combo": "bg-amber-500/10 text-amber-500 border-amber-500/20",
   };
 
   const categoryLabelMap: Record<string, string> = {
     "laser": "Laser Printer",
     "color-laser": "Color Laser",
     "inkjet": "InkJet",
+    "officejet": "OfficeJet",
+    "smart-tank": "Smart Tank",
+    "deskjet": "DeskJet",
     "consumer": "Consumer",
     "premium": "Premium",
     "gaming": "Gaming",
     "professional": "Professional",
     "input": "Input Device",
+    "mouse": "Mouse",
+    "keyboard": "Keyboard",
+    "combo": "Combo",
   };
 
   const categoryLabel = categoryLabelMap[product.subCategory] || product.subCategory;

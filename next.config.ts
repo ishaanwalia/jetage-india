@@ -1,24 +1,22 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "export",
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "ssl-product-images.www8-hp.com",
+      },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
       },
     ],
+    formats: ["image/webp", "image/avif"],
+    minimumCacheTTL: 60 * 60 * 24 * 7, // 7 days
   },
-async redirects() {
-  return [
-    {
-      source: '/:path*',
-      has: [{ type: 'host', value: 'www.jetageindia.in' }],
-      destination: 'https://jetageindia.in/:path*',
-      permanent: true,
-    },
-  ];
-}
 };
 
 export default nextConfig;

@@ -11,9 +11,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   const categoryNames: Record<string, string> = {
     printer: "HP Printers",
-    laptop: "HP Laptops", 
-    desktop: "HP Desktops",
-    monitor: "HP Monitors",
     accessory: "HP Accessories",
   };
 

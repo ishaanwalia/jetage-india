@@ -6,11 +6,8 @@ import { Laptop, Monitor, Printer, Mouse, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 const categories = [
-  { id: "laptop", name: "Laptops", icon: Laptop, description: "Consumer, Premium & Gaming", count: 3, color: "#0891b2" },
-  { id: "desktop", name: "Desktops", icon: Monitor, description: "AI PCs & Tower Systems", count: 2, color: "#22d3ee" },
-  { id: "printer", name: "Printers", icon: Printer, description: "Laser, Color Laser & InkJet", count: 19, color: "#0e7490" },
-  { id: "monitor", name: "Monitors", icon: Monitor, description: "FHD, QHD & Professional", count: 2, color: "#67e8f9" },
-  { id: "accessory", name: "Accessories", icon: Mouse, description: "Keyboards, Mice & More", count: 2, color: "#06b6d4" },
+  { id: "printer", name: "Printers", icon: Printer, description: "Laser, Color Laser, InkJet, Smart Tank & OfficeJet", count: 20, color: "#0891b2" },
+  { id: "accessory", name: "Accessories", icon: Mouse, description: "Keyboards, Mice & Combos", count: 6, color: "#06b6d4" },
 ];
 
 function CategoryCard3D({ category, index }: { category: typeof categories[0]; index: number }) {
@@ -156,11 +153,11 @@ export function CategoryGrid3D() {
             Everything <span className="text-gradient-gold">HP</span>
           </h2>
           <p className="text-jet-text-dim max-w-2xl mx-auto text-lg">
-            From powerful workstations to everyday essentials — find your perfect HP product.
+            Genuine HP printers and accessories at the best prices. Find your perfect product today.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-5" style={{ transformStyle: "preserve-3d" }}>
+        <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto" style={{ transformStyle: "preserve-3d" }}>
           {categories.map((cat, i) => (
             <CategoryCard3D key={cat.id} category={cat} index={i} />
           ))}

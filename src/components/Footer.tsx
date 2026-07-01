@@ -7,10 +7,7 @@ import { ScrambleText } from "./TextScramble";
 export function Footer() {
   const quickLinks = [
     { label: "All Products", href: "/products/" },
-    { label: "Laptops", href: "/category/laptop/" },
-    { label: "Desktops", href: "/category/desktop/" },
     { label: "Printers", href: "/category/printer/" },
-    { label: "Monitors", href: "/category/monitor/" },
     { label: "Accessories", href: "/category/accessory/" },
   ];
 

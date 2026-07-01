@@ -111,15 +111,30 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     .filter(p => p.category === product.category && p.id !== product.id)
     .slice(0, 3);
 
+  // Bundle recommendations: suggest accessories with printers, or related items
+  const bundleProducts = products
+    .filter(p => {
+      if (product.category === "printer") return p.category === "accessory";
+      if (product.category === "accessory") return p.category === "printer";
+      return false;
+    })
+    .slice(0, 3);
+
   const categoryLabelMap: Record<string, string> = {
     "laser": "Laser Printer",
     "color-laser": "Color Laser",
     "inkjet": "InkJet",
+    "officejet": "OfficeJet",
+    "smart-tank": "Smart Tank",
+    "deskjet": "DeskJet",
     "consumer": "Consumer",
     "premium": "Premium",
     "gaming": "Gaming",
     "professional": "Professional",
     "input": "Input Device",
+    "mouse": "Mouse",
+    "keyboard": "Keyboard",
+    "combo": "Combo",
   };
 
   const categoryLabel = categoryLabelMap[product.subCategory] || product.subCategory;
@@ -273,6 +288,20 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 <h1 className="text-3xl lg:text-5xl font-bold text-jet-text leading-tight">
                   {product.name}
                 </h1>
+                
+                {/* SKU & Stock */}
+                <div className="flex items-center gap-3 mt-3 flex-wrap">
+                  <span className="text-sm text-jet-text-muted bg-jet-bg-card px-3 py-1 rounded-full border border-jet-border">
+                    SKU: <span className="font-mono font-medium text-jet-text">{product.sku}</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-500/10 text-green-400 text-sm rounded-full border border-green-500/20">
+                    <Check className="w-3.5 h-3.5" /> In Stock
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-jet-primary/10 text-jet-primary text-sm rounded-full border border-jet-primary/20">
+                    <Shield className="w-3.5 h-3.5" /> HP Authorized
+                  </span>
+                </div>
+                
                 <p className="text-jet-text-dim mt-4 leading-relaxed text-lg">{product.description}</p>
               </div>
 
@@ -435,6 +464,32 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             <h2 className="text-3xl font-bold text-jet-text mb-8">You May Also Like</h2>
             <div className="grid md:grid-cols-3 gap-8">
               {relatedProducts.map((p) => (
+                <div key={p.id} className="related-card">
+                  <ProductCard product={p} compact />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ==================== BUNDLE RECOMMENDATIONS ==================== */}
+      {bundleProducts.length > 0 && (
+        <section className="py-16 bg-jet-bg-elevated border-t border-jet-border">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <span className="inline-block px-4 py-1.5 bg-jet-primary/10 text-jet-primary text-sm font-semibold rounded-full border border-jet-primary/20 mb-3">
+                Complete Your Setup
+              </span>
+              <h2 className="text-3xl font-bold text-jet-text">
+                Frequently Bought <span className="text-gradient-gold">Together</span>
+              </h2>
+              <p className="text-jet-text-dim mt-2 max-w-xl mx-auto">
+                Customers who bought this also purchased these items. Get everything you need in one go.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {bundleProducts.map((p) => (
                 <div key={p.id} className="related-card">
                   <ProductCard product={p} compact />
                 </div>

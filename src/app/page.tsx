@@ -175,10 +175,7 @@ export default function Home() {
           <Reveal direction="up" delay={0.2} className="flex justify-center gap-3 mb-10 flex-wrap">
             {[
               { id: "all", label: "All" },
-              { id: "laptop", label: "Laptops" },
-              { id: "desktop", label: "Desktops" },
               { id: "printer", label: "Printers" },
-              { id: "monitor", label: "Monitors" },
               { id: "accessory", label: "Accessories" },
             ].map((cat) => (
               <MagneticButton key={cat.id} strength={0.15}>

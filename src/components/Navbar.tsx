@@ -8,10 +8,7 @@ import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 
 const categories = [
-  { id: "laptop", name: "Laptops", icon: Laptop, href: "/category/laptop/" },
-  { id: "desktop", name: "Desktops", icon: Monitor, href: "/category/desktop/" },
   { id: "printer", name: "Printers", icon: Printer, href: "/category/printer/" },
-  { id: "monitor", name: "Monitors", icon: Monitor, href: "/category/monitor/" },
   { id: "accessory", name: "Accessories", icon: Mouse, href: "/category/accessory/" },
 ];
 
