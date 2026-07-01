@@ -1,663 +1,397 @@
+
 export interface Product {
   id: string;
+  slug: string;
   name: string;
-  shortName: string;
   category: string;
-  subCategory: string;
+  subcategory: string;
   price: number;
-  mrp: number;
-  sku: string;
-  speed: string;
-  connectivity: string[];
-  duplex: boolean;
-  dutyCycle: string;
-  idealFor: string;
+  originalPrice: number;
+  badge: string;
   description: string;
+  shortSpecs: string[];
   features: string[];
-  image: string;
+  specifications: Record<string, string>;
+  useCases: string[];
+  types: string[];
+  proTips: string[];
+  compatibleWith: string[];
+  inBox: string[];
+  warranty: string;
   images: string[];
-  badge?: string;
-  specs?: Record<string, string>;
+  stock: number;
+  rating: number;
+  reviews: number;
+  isNew: boolean;
+  isBestseller: boolean;
 }
-
-// Helper to generate placeholder with product initials
-function getPlaceholder(name: string): string {
-  const initials = name.split(" ").map(w => w[0]).join("").slice(0, 3).toUpperCase();
-  return `https://placehold.co/400x300/f0f2f5/0891b2?text=${encodeURIComponent(initials)}`;
-}
-
-export const products: Product[] = [
-  // === PRINTERS (20) ===
-  // --- OfficeJet ---
-  {
-    id: "hp-officejet-pro-9720",
-    name: "HP OfficeJet Pro 9720 A3 All-in-One",
-    shortName: "OfficeJet Pro 9720",
-    category: "printer",
-    subCategory: "officejet",
-    price: 42999,
-    mrp: 58000,
-    sku: "4A7Z9A",
-    speed: "22 ppm black / 18 ppm color",
-    connectivity: ["Wi-Fi", "Ethernet", "USB"],
-    duplex: true,
-    dutyCycle: "20,000 pages/month",
-    idealFor: "Business",
-    description: "A3 wide-format all-in-one with professional color output. Print, scan, copy, and fax up to A3 size. Perfect for architects, designers, and businesses needing large-format documents.",
-    features: ["A3 wide-format", "22 ppm black", "Auto duplex", "Wi-Fi + Ethernet", "Fax capable"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107811.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107811.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107812.png",
-    ],
-    badge: "Pro Grade",
-    specs: { "Print Speed": "22 ppm B&W / 18 ppm Color", "Functions": "Print, Scan, Copy, Fax", "Paper Size": "A3, A4, Letter", "ADF": "35 sheets", "Monthly Duty": "20,000 pages", "Duplex": "Automatic" }
-  },
-
-  // --- Smart Tank ---
-  {
-    id: "hp-smart-tank-524",
-    name: "HP Smart Tank 524 All-in-One",
-    shortName: "Smart Tank 524",
-    category: "printer",
-    subCategory: "smart-tank",
-    price: 11999,
-    mrp: 16500,
-    sku: "1F3W2A",
-    speed: "11 ppm black / 5 ppm color",
-    connectivity: ["Wi-Fi", "USB"],
-    duplex: false,
-    dutyCycle: "3,000 pages/month",
-    idealFor: "Home",
-    description: "Compact Smart Tank with ultra-low cost per page. Perfect for home users who need reliable color printing without breaking the bank.",
-    features: ["Print/Scan/Copy", "Ultra-low cost", "Wi-Fi", "HP Smart App"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107813.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107813.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107814.png",
-    ],
-    specs: { "Print Speed": "11 ppm B&W / 5 ppm Color", "Ink System": "Tank (refillable)", "Monthly Duty": "3,000 pages", "Wireless": "Wi-Fi + Wi-Fi Direct" }
-  },
-  {
-    id: "hp-smart-tank-790",
-    name: "HP Smart Tank 790 All-in-One",
-    shortName: "Smart Tank 790",
-    category: "printer",
-    subCategory: "smart-tank",
-    price: 24999,
-    mrp: 32000,
-    sku: "2F3W3A",
-    speed: "15 ppm black / 9 ppm color",
-    connectivity: ["Wi-Fi", "Ethernet", "USB"],
-    duplex: true,
-    dutyCycle: "5,000 pages/month",
-    idealFor: "Home & Small Office",
-    description: "High-capacity Smart Tank with auto duplex and ADF. Low-cost printing for busy homes and small offices that need volume and versatility.",
-    features: ["Print/Scan/Copy", "Auto duplex", "ADF", "Wi-Fi + Ethernet"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107815.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107815.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107816.png",
-    ],
-    badge: "Best Seller",
-    specs: { "Print Speed": "15 ppm B&W / 9 ppm Color", "ADF": "35 sheets", "Ink System": "Tank (refillable)", "Monthly Duty": "5,000 pages", "Duplex": "Automatic" }
-  },
-  {
-    id: "hp-smart-tank-750",
-    name: "HP Smart Tank 750 All-in-One",
-    shortName: "Smart Tank 750",
-    category: "printer",
-    subCategory: "smart-tank",
-    price: 22999,
-    mrp: 30000,
-    sku: "2F3W4A",
-    speed: "15 ppm black / 9 ppm color",
-    connectivity: ["Wi-Fi", "USB"],
-    duplex: true,
-    dutyCycle: "5,000 pages/month",
-    idealFor: "Home & Small Office",
-    description: "Smart Tank with auto duplex and wireless printing. Great for home offices that need efficient, low-cost color printing.",
-    features: ["Print/Scan/Copy", "Auto duplex", "Wi-Fi", "HP Smart App"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107817.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107817.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107818.png",
-    ],
-    specs: { "Print Speed": "15 ppm B&W / 9 ppm Color", "Ink System": "Tank (refillable)", "Monthly Duty": "5,000 pages", "Wireless": "Wi-Fi + Wi-Fi Direct", "Duplex": "Automatic" }
-  },
-  {
-    id: "hp-smart-tank-675",
-    name: "HP Smart Tank 675 All-in-One",
-    shortName: "Smart Tank 675",
-    category: "printer",
-    subCategory: "smart-tank",
-    price: 17999,
-    mrp: 24000,
-    sku: "2F3W5A",
-    speed: "12 ppm black / 7 ppm color",
-    connectivity: ["Wi-Fi", "USB"],
-    duplex: false,
-    dutyCycle: "4,000 pages/month",
-    idealFor: "Home",
-    description: "Affordable Smart Tank with wireless printing and scanning. Ultra-low running costs make it ideal for families and students.",
-    features: ["Print/Scan/Copy", "Wi-Fi", "Ultra-low cost", "Compact"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107819.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107819.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107820.png",
-    ],
-    specs: { "Print Speed": "12 ppm B&W / 7 ppm Color", "Ink System": "Tank (refillable)", "Monthly Duty": "4,000 pages", "Wireless": "Wi-Fi + Wi-Fi Direct" }
-  },
-  {
-    id: "hp-smart-tank-670",
-    name: "HP Smart Tank 670 All-in-One",
-    shortName: "Smart Tank 670",
-    category: "printer",
-    subCategory: "smart-tank",
-    price: 16499,
-    mrp: 22000,
-    sku: "2F3W6A",
-    speed: "12 ppm black / 7 ppm color",
-    connectivity: ["USB"],
-    duplex: false,
-    dutyCycle: "4,000 pages/month",
-    idealFor: "Home",
-    description: "Entry-level Smart Tank with reliable home printing and copying. The most affordable way to get into HP's tank system.",
-    features: ["Print/Scan/Copy", "USB", "Ultra-low cost", "Compact"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107821.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107821.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107822.png",
-    ],
-    specs: { "Print Speed": "12 ppm B&W / 7 ppm Color", "Ink System": "Tank (refillable)", "Monthly Duty": "4,000 pages", "Connection": "USB" }
-  },
-
-  // --- DeskJet ---
-  {
-    id: "hp-deskjet-4926",
-    name: "HP DeskJet Ink Advantage Ultra 4926",
-    shortName: "DeskJet Ultra 4926",
-    category: "printer",
-    subCategory: "deskjet",
-    price: 7999,
-    mrp: 11500,
-    sku: "6UQ98A",
-    speed: "20 ppm black / 5.5 ppm color",
-    connectivity: ["Wi-Fi", "USB"],
-    duplex: false,
-    dutyCycle: "1,000 pages/month",
-    idealFor: "Home",
-    description: "Ultra-low-cost color printing with self-reset WiFi. Perfect for home users who print photos and documents occasionally.",
-    features: ["Print/Scan/Copy", "Ultra-low ink cost", "Self-reset WiFi", "HP Smart App"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107823.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107823.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107824.png",
-    ],
-    badge: "Home Essential",
-    specs: { "Functions": "Print, Scan, Copy", "Print Speed": "20 ppm B&W / 5.5 ppm Color", "Wireless": "Wi-Fi", "Monthly Duty": "1,000 pages" }
-  },
-
-  // --- Color Laser ---
-  {
-    id: "hp-color-laserjet-pro-3203dw",
-    name: "HP Color LaserJet Pro 3203dw",
-    shortName: "Color LaserJet Pro 3203dw",
-    category: "printer",
-    subCategory: "color-laser",
-    price: 34999,
-    mrp: 48000,
-    sku: "499M5A",
-    speed: "33 ppm black / 33 ppm color",
-    connectivity: ["Wi-Fi", "Ethernet", "USB"],
-    duplex: true,
-    dutyCycle: "50,000 pages/month",
-    idealFor: "Enterprise",
-    description: "High-speed duplex color laser with enterprise connectivity. Professional color at blazing speed for demanding offices.",
-    features: ["33 ppm color", "Auto duplex", "Wi-Fi + Ethernet", "Enterprise grade"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107825.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107825.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107826.png",
-    ],
-    badge: "Enterprise",
-    specs: { "Print Speed": "33 ppm B&W / 33 ppm Color", "Auto Duplex": "Yes", "Network": "Wi-Fi + Ethernet", "Monthly Duty": "50,000 pages" }
-  },
-  {
-    id: "hp-color-laserjet-pro-mfp-3303sdw",
-    name: "HP Color LaserJet Pro MFP 3303sdw",
-    shortName: "Color LaserJet Pro MFP 3303sdw",
-    category: "printer",
-    subCategory: "color-laser",
-    price: 44999,
-    mrp: 62000,
-    sku: "499M6A",
-    speed: "33 ppm black / 33 ppm color",
-    connectivity: ["Wi-Fi", "Ethernet", "USB"],
-    duplex: true,
-    dutyCycle: "50,000 pages/month",
-    idealFor: "Enterprise",
-    description: "Ultimate color MFP with ADF, duplex, and enterprise networking. The pinnacle of office color printing with full MFP functionality.",
-    features: ["Print/Scan/Copy Color", "33 ppm", "ADF + Duplex", "Enterprise"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107827.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107827.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107828.png",
-    ],
-    badge: "Flagship",
-    specs: { "Functions": "Print, Scan, Copy (Color)", "ADF": "50 sheets", "Print Speed": "33 ppm", "Monthly Duty": "50,000 pages" }
-  },
-  {
-    id: "hp-color-laser-150nw",
-    name: "HP Color Laser 150nw",
-    shortName: "Color Laser 150nw",
-    category: "printer",
-    subCategory: "color-laser",
-    price: 18499,
-    mrp: 26000,
-    sku: "4ZB95A",
-    speed: "18 ppm black / 4 ppm color",
-    connectivity: ["Wi-Fi", "USB"],
-    duplex: false,
-    dutyCycle: "20,000 pages/month",
-    idealFor: "Business",
-    description: "Affordable color laser with wireless. Bring your documents to life with vibrant color printing from your desk.",
-    features: ["Color laser", "Wi-Fi", "18 ppm black", "Compact"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107829.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107829.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107830.png",
-    ],
-    specs: { "Print Speed": "18 ppm B&W / 4 ppm Color", "Resolution": "600 x 600 dpi", "Wireless": "Wi-Fi", "Monthly Duty": "20,000 pages" }
-  },
-  {
-    id: "hp-color-laser-mfp-178nw",
-    name: "HP Color Laser MFP 178nw",
-    shortName: "Color Laser MFP 178nw",
-    category: "printer",
-    subCategory: "color-laser",
-    price: 24999,
-    mrp: 35000,
-    sku: "4ZB96A",
-    speed: "18 ppm black / 4 ppm color",
-    connectivity: ["Wi-Fi", "USB"],
-    duplex: false,
-    dutyCycle: "20,000 pages/month",
-    idealFor: "Business",
-    description: "Wireless color MFP with print, scan, copy. Professional color documents and versatile MFP functionality from your desk.",
-    features: ["Print/Scan/Copy Color", "Wi-Fi", "18 ppm black", "Compact color"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107831.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107831.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107832.png",
-    ],
-    badge: "Color Choice",
-    specs: { "Functions": "Print, Scan, Copy (Color)", "Print Speed": "18 ppm B&W / 4 ppm Color", "Wireless": "Wi-Fi", "Monthly Duty": "20,000 pages" }
-  },
-
-  // --- Laser ---
-  {
-    id: "hp-laserjet-pro-mfp-m126a",
-    name: "HP LaserJet Pro MFP M126a",
-    shortName: "LaserJet Pro M126a",
-    category: "printer",
-    subCategory: "laser",
-    price: 15499,
-    mrp: 21000,
-    sku: "CZ174A",
-    speed: "20 ppm",
-    connectivity: ["USB"],
-    duplex: false,
-    dutyCycle: "8,000 pages/month",
-    idealFor: "Small Office",
-    description: "India's favorite LaserJet MFP. Print, scan, copy with proven reliability and low running costs that businesses trust.",
-    features: ["Print/Scan/Copy", "20 ppm", "USB", "Low cost per page"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107833.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107833.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107834.png",
-    ],
-    badge: "India's Favorite",
-    specs: { "Functions": "Print, Scan, Copy", "Print Speed": "20 ppm", "Weight": "8.0 kg", "Monthly Duty": "8,000 pages" }
-  },
-  {
-    id: "hp-laserjet-pro-mfp-m126a-plus",
-    name: "HP LaserJet Pro MFP M126a Plus",
-    shortName: "LaserJet Pro M126a Plus",
-    category: "printer",
-    subCategory: "laser",
-    price: 16499,
-    mrp: 22500,
-    sku: "CZ174A-Plus",
-    speed: "20 ppm",
-    connectivity: ["USB"],
-    duplex: false,
-    dutyCycle: "8,000 pages/month",
-    idealFor: "Small Office",
-    description: "Enhanced version of India's favorite LaserJet MFP with improved reliability and faster first-page-out time.",
-    features: ["Print/Scan/Copy", "20 ppm", "USB", "Enhanced reliability"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107835.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107835.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107836.png",
-    ],
-    specs: { "Functions": "Print, Scan, Copy", "Print Speed": "20 ppm", "Weight": "8.0 kg", "Monthly Duty": "8,000 pages" }
-  },
-  {
-    id: "hp-laserjet-pro-mfp-m126nw",
-    name: "HP LaserJet Pro MFP M126nw",
-    shortName: "LaserJet Pro M126nw",
-    category: "printer",
-    subCategory: "laser",
-    price: 17499,
-    mrp: 24000,
-    sku: "CZ175A",
-    speed: "20 ppm",
-    connectivity: ["Wi-Fi", "USB"],
-    duplex: false,
-    dutyCycle: "8,000 pages/month",
-    idealFor: "Small Office",
-    description: "Wireless LaserJet MFP with AirPrint and Mopria. India's trusted choice, now with wireless freedom for shared office printing.",
-    features: ["Print/Scan/Copy", "Wi-Fi", "20 ppm", "AirPrint & Mopria"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107837.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107837.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107838.png",
-    ],
-    badge: "Popular",
-    specs: { "Functions": "Print, Scan, Copy", "Wireless": "Wi-Fi + AirPrint", "Print Speed": "20 ppm", "Monthly Duty": "8,000 pages" }
-  },
-  {
-    id: "hp-laserjet-pro-mfp-m126nw-plus",
-    name: "HP LaserJet Pro MFP M126nw Plus",
-    shortName: "LaserJet Pro M126nw Plus",
-    category: "printer",
-    subCategory: "laser",
-    price: 18499,
-    mrp: 25500,
-    sku: "CZ175A-Plus",
-    speed: "20 ppm",
-    connectivity: ["Wi-Fi", "USB"],
-    duplex: false,
-    dutyCycle: "8,000 pages/month",
-    idealFor: "Small Office",
-    description: "Enhanced wireless LaserJet MFP with improved connectivity and faster setup. The wireless MFP you trust, made even better.",
-    features: ["Print/Scan/Copy", "Wi-Fi", "20 ppm", "Enhanced connectivity"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107839.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107839.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107840.png",
-    ],
-    specs: { "Functions": "Print, Scan, Copy", "Wireless": "Wi-Fi + AirPrint", "Print Speed": "20 ppm", "Monthly Duty": "8,000 pages" }
-  },
-  {
-    id: "hp-laserjet-pro-p1108-plus",
-    name: "HP LaserJet Pro P1108 Plus",
-    shortName: "LaserJet Pro P1108 Plus",
-    category: "printer",
-    subCategory: "laser",
-    price: 11999,
-    mrp: 16500,
-    sku: "A80A3A",
-    speed: "19 ppm",
-    connectivity: ["USB"],
-    duplex: false,
-    dutyCycle: "8,000 pages/month",
-    idealFor: "Home & Small Office",
-    description: "Legendary LaserJet reliability in a compact form. The world's most trusted printer series, now enhanced with better performance.",
-    features: ["19 ppm", "USB 2.0", "Legendary reliability", "Compact"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107841.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107841.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107842.png",
-    ],
-    badge: "Value Pick",
-    specs: { "Print Speed": "19 ppm", "Weight": "4.2 kg", "Paper Capacity": "150 sheets", "Monthly Duty": "8,000 pages" }
-  },
-  {
-    id: "hp-laser-mfp-1188nw",
-    name: "HP Laser MFP 1188nw",
-    shortName: "Laser MFP 1188nw",
-    category: "printer",
-    subCategory: "laser",
-    price: 15999,
-    mrp: 22000,
-    sku: "715A6A",
-    speed: "21 ppm",
-    connectivity: ["Wi-Fi", "Ethernet", "USB"],
-    duplex: false,
-    dutyCycle: "10,000 pages/month",
-    idealFor: "Small Office",
-    description: "Network-ready MFP with ethernet and wireless. Ideal for small office sharing and workgroup environments.",
-    features: ["Print/Scan/Copy", "Wi-Fi + Ethernet", "21 ppm", "Network ready"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107843.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107843.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107844.png",
-    ],
-    specs: { "Functions": "Print, Scan, Copy", "Network": "Wi-Fi + Ethernet", "Print Speed": "21 ppm", "Monthly Duty": "10,000 pages" }
-  },
-  {
-    id: "hp-laser-mfp-1188a",
-    name: "HP Laser MFP 1188a",
-    shortName: "Laser MFP 1188a",
-    category: "printer",
-    subCategory: "laser",
-    price: 13499,
-    mrp: 18500,
-    sku: "715A4A",
-    speed: "21 ppm",
-    connectivity: ["USB"],
-    duplex: false,
-    dutyCycle: "10,000 pages/month",
-    idealFor: "Home & Small Office",
-    description: "All-in-one monochrome laser with print, scan, copy. The perfect home office companion for crisp document output.",
-    features: ["Print/Scan/Copy", "21 ppm", "USB", "Compact"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107845.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107845.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107846.png",
-    ],
-    specs: { "Functions": "Print, Scan, Copy", "Print Speed": "21 ppm", "Weight": "6.3 kg", "Monthly Duty": "10,000 pages" }
-  },
-  {
-    id: "hp-laser-mfp-323sdnw",
-    name: "HP Laser MFP 323sdnw",
-    shortName: "Laser MFP 323sdnw",
-    category: "printer",
-    subCategory: "laser",
-    price: 21999,
-    mrp: 31000,
-    sku: "A58WFA-323",
-    speed: "30 ppm",
-    connectivity: ["Wi-Fi", "Ethernet", "USB"],
-    duplex: true,
-    dutyCycle: "30,000 pages/month",
-    idealFor: "Enterprise",
-    description: "Advanced MFP with ADF, wireless, ethernet and auto duplex. Built for high-volume enterprise printing environments.",
-    features: ["ADF", "Wi-Fi + Ethernet", "30 ppm", "Auto duplex"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107847.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107847.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107848.png",
-    ],
-    badge: "Enterprise",
-    specs: { "Functions": "Print, Scan, Copy", "ADF": "50 sheets", "Network": "Wi-Fi + Ethernet", "Monthly Duty": "30,000 pages" }
-  },
-  {
-    id: "hp-laser-303dw",
-    name: "HP Laser 303dw",
-    shortName: "Laser 303dw",
-    category: "printer",
-    subCategory: "laser",
-    price: 15999,
-    mrp: 22500,
-    sku: "A58WFA-303",
-    speed: "30 ppm",
-    connectivity: ["Wi-Fi", "USB"],
-    duplex: true,
-    dutyCycle: "30,000 pages/month",
-    idealFor: "Business",
-    description: "Wireless monochrome laser with auto duplex and mobile printing. The ultimate productivity tool for modern offices.",
-    features: ["30 ppm black", "Auto duplex", "Wi-Fi + USB", "HP Smart App"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107849.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107849.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107850.png",
-    ],
-    badge: "Best Seller",
-    specs: { "Print Speed": "30 ppm", "Resolution": "600 x 600 dpi", "Wireless": "Wi-Fi + Wi-Fi Direct", "Monthly Duty": "30,000 pages" }
-  },
-
-  // === ACCESSORIES (6) ===
-  {
-    id: "hp-z3700-wireless-mouse",
-    name: "HP Z3700 Wireless Mouse",
-    shortName: "Z3700 Wireless Mouse",
-    category: "accessory",
-    subCategory: "mouse",
-    price: 899,
-    mrp: 1299,
-    sku: "V0L80AA",
-    speed: "1200 DPI",
-    connectivity: ["2.4GHz Wireless"],
-    duplex: false,
-    dutyCycle: "N/A",
-    idealFor: "Home & Office",
-    description: "Slim, stylish wireless mouse with reliable 2.4GHz connection. Perfect for laptops and everyday computing on the go.",
-    features: ["1200 DPI", "2.4GHz Wireless", "Slim design", "12-month battery"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107851.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107851.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107852.png",
-    ],
-    badge: "Best Seller",
-    specs: { "DPI": "1200", "Connection": "2.4GHz Wireless", "Battery": "12 months", "Range": "Up to 10m" }
-  },
-  {
-    id: "hp-m10-wired-mouse",
-    name: "HP M10 Wired Mouse",
-    shortName: "M10 Wired Mouse",
-    category: "accessory",
-    subCategory: "mouse",
-    price: 349,
-    mrp: 549,
-    sku: "7KX10AA",
-    speed: "1000 DPI",
-    connectivity: ["USB"],
-    duplex: false,
-    dutyCycle: "N/A",
-    idealFor: "Home",
-    description: "Simple, reliable wired mouse for everyday computing. No batteries needed — just plug and play.",
-    features: ["1000 DPI", "USB Plug & Play", "Ambidextrous", "Lightweight"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107853.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107853.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107854.png",
-    ],
-    specs: { "DPI": "1000", "Connection": "USB", "Buttons": "3", "Cable": "1.5m" }
-  },
-  {
-    id: "hp-s500-wireless-mouse",
-    name: "HP S500 Wireless Mouse",
-    shortName: "S500 Wireless Mouse",
-    category: "accessory",
-    subCategory: "mouse",
-    price: 649,
-    mrp: 999,
-    sku: "6CR71AA",
-    speed: "1600 DPI",
-    connectivity: ["2.4GHz Wireless"],
-    duplex: false,
-    dutyCycle: "N/A",
-    idealFor: "Home & Office",
-    description: "Comfortable wireless mouse with high-precision tracking. Ergonomic design for all-day use with extended battery life.",
-    features: ["1600 DPI", "2.4GHz Wireless", "Ergonomic", "15-month battery"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107855.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107855.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107856.png",
-    ],
-    specs: { "DPI": "1600", "Connection": "2.4GHz Wireless", "Battery": "15 months", "Range": "Up to 10m" }
-  },
-  {
-    id: "hp-k160-wired-keyboard",
-    name: "HP K160 Wired Keyboard",
-    shortName: "K160 Wired Keyboard",
-    category: "accessory",
-    subCategory: "keyboard",
-    price: 549,
-    mrp: 799,
-    sku: "9SR37AA",
-    speed: "N/A",
-    connectivity: ["USB"],
-    duplex: false,
-    dutyCycle: "N/A",
-    idealFor: "Home & Office",
-    description: "Full-size wired keyboard with comfortable typing experience. Spill-resistant design for worry-free everyday use.",
-    features: ["Full-size layout", "Spill-resistant", "USB Plug & Play", "Quiet keys"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107857.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107857.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107858.png",
-    ],
-    badge: "Value Pick",
-    specs: { "Layout": "Full-size", "Connection": "USB", "Keys": "104", "Features": "Spill-resistant" }
-  },
-  {
-    id: "hp-km260-wireless-combo",
-    name: "HP KM260 Wireless Keyboard and Mouse Combo",
-    shortName: "KM260 Wireless Combo",
-    category: "accessory",
-    subCategory: "combo",
-    price: 1299,
-    mrp: 1899,
-    sku: "3L1F0AA",
-    speed: "1600 DPI",
-    connectivity: ["2.4GHz Wireless", "USB Dongle"],
-    duplex: false,
-    dutyCycle: "N/A",
-    idealFor: "Home & Office",
-    description: "Quiet chiclet-style keyboard with accurate 1600 DPI mouse. One USB receiver connects both. 16-month battery life.",
-    features: ["Chiclet Keyboard", "1600 DPI Mouse", "Single USB Receiver", "16-month battery"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107859.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107859.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107860.png",
-    ],
-    badge: "Popular",
-    specs: { "Keyboard Type": "Chiclet (Full Size)", "Mouse DPI": "1600", "Connection": "2.4GHz Wireless", "Battery Life": "16 months", "Range": "Up to 10m" }
-  },
-  {
-    id: "hp-km160-wired-combo",
-    name: "HP KM160 Wired Keyboard and Mouse Combo",
-    shortName: "KM160 Wired Combo",
-    category: "accessory",
-    subCategory: "combo",
-    price: 799,
-    mrp: 1199,
-    sku: "9SR38AA",
-    speed: "1000 DPI",
-    connectivity: ["USB"],
-    duplex: false,
-    dutyCycle: "N/A",
-    idealFor: "Home",
-    description: "Affordable wired keyboard and mouse combo for everyday use. Reliable plug-and-play setup with no batteries needed.",
-    features: ["Full-size keyboard", "1000 DPI Mouse", "USB Plug & Play", "Spill-resistant"],
-    image: "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107861.png",
-    images: [
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107861.png",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08107862.png",
-    ],
-    specs: { "Keyboard Type": "Full-size", "Mouse DPI": "1000", "Connection": "USB", "Cable": "1.5m each" }
-  },
-];
 
 export const categories = [
-  { id: "printer", name: "Printers", icon: "Printer", count: 20, description: "Laser, Color Laser, InkJet, Smart Tank & OfficeJet" },
-  { id: "accessory", name: "Accessories", icon: "Mouse", count: 6, description: "Keyboards, Mice & Combos" },
+  { id: 'all', name: 'All Products', icon: 'LayoutGrid' },
+  { id: 'inkjet-printers', name: 'Inkjet Printers', icon: 'Printer' },
+  { id: 'laser-printers', name: 'Laser Printers', icon: 'Scan' },
+  { id: 'color-laser', name: 'Color Laser', icon: 'Palette' },
+  { id: 'accessories', name: 'Accessories', icon: 'Mouse' },
 ];
 
-export const getProductById = (id: string): Product | undefined => products.find(p => p.id === id);
-export const getProductsByCategory = (category: string): Product[] => products.filter(p => p.category === category);
-export const getFeaturedProducts = (): Product[] => products.filter(p => p.badge && ["Best Seller", "Popular", "Enterprise", "Flagship", "India's Favorite", "Value Pick", "Pro Grade", "Home Essential", "Color Choice"].includes(p.badge));
+export const products: Product[] = [
+{
+    id: 'hp-z3700-mouse',
+    slug: 'hp-z3700-wireless-mouse',
+    name: 'HP Z3700 Wireless Mouse',
+    category: 'accessories',
+    subcategory: 'Mouse',
+    price: 1299,
+    originalPrice: 1799,
+    badge: 'Best Price',
+    description: 'Sleek wireless mouse with 2.4 GHz connectivity. 1200 DPI precision, 16-month battery life, and ambidextrous design. Perfect for everyday computing.',
+    shortSpecs: ['Wireless 2.4 GHz', '1200 DPI', '16-Month Battery', 'Ambidextrous'],
+    features: [
+      '2.4 GHz wireless connectivity',
+      '1200 DPI optical sensor',
+      'Up to 16-month battery life',
+      'Ambidextrous design',
+      'Plug-and-play USB receiver',
+      'Sleek and portable',
+      'Compatible with all operating systems'
+    ],
+    specifications: {
+      'Connectivity': '2.4 GHz Wireless',
+      'Sensor': 'Optical, 1200 DPI',
+      'Buttons': '3 (Left, Right, Scroll)',
+      'Battery Life': 'Up to 16 months',
+      'Battery Type': '1 x AA (included)',
+      'Range': 'Up to 10 meters',
+      'Dimensions': '57 x 98 x 31 mm',
+      'Weight': '56 g (without battery)',
+      'Color': 'Black/Silver',
+      'Warranty': '1 Year'
+    },
+    useCases: ['Home', 'Office', 'Students', 'Travel'],
+    types: ['Wireless Mouse', 'Optical', 'Portable'],
+    proTips: [
+      'Use high-quality AA battery for best life',
+      'Store USB receiver in mouse when traveling',
+      'Works on most surfaces except glass',
+      'Turn off when not in use to extend battery'
+    ],
+    compatibleWith: ['Windows', 'macOS', 'Linux', 'Chrome OS'],
+    inBox: [
+      'HP Z3700 Wireless Mouse',
+      'USB Nano Receiver',
+      '1 x AA Battery',
+      'User Documentation'
+    ],
+    warranty: '1 Year HP Limited Warranty.',
+    images: ['/images/products/hp-z3700-mouse-1.jpg', '/images/products/hp-z3700-mouse-2.jpg'],
+    stock: 50,
+    rating: 4.2,
+    reviews: 567,
+    isNew: false,
+    isBestseller: false
+  },
+  {
+    id: 'hp-m10-mouse',
+    slug: 'hp-m10-wired-mouse',
+    name: 'HP M10 Wired Mouse',
+    category: 'accessories',
+    subcategory: 'Mouse',
+    price: 399,
+    originalPrice: 599,
+    badge: 'Best Price',
+    description: 'Affordable wired optical mouse with 1000 DPI. USB connectivity, ergonomic design, and reliable performance for everyday use.',
+    shortSpecs: ['Wired USB', '1000 DPI', 'Ergonomic', 'Plug & Play'],
+    features: [
+      'USB wired connectivity',
+      '1000 DPI optical sensor',
+      'Ergonomic comfortable design',
+      'Plug-and-play setup',
+      '3 buttons with scroll wheel',
+      'Durable build quality',
+      'Compatible with all systems'
+    ],
+    specifications: {
+      'Connectivity': 'USB 2.0 Wired',
+      'Sensor': 'Optical, 1000 DPI',
+      'Buttons': '3 (Left, Right, Scroll)',
+      'Cable Length': '1.5 meters',
+      'Dimensions': '60 x 105 x 38 mm',
+      'Weight': '85 g',
+      'Color': 'Black',
+      'Warranty': '1 Year'
+    },
+    useCases: ['Home', 'Office', 'Students', 'Basic Computing'],
+    types: ['Wired Mouse', 'Optical', 'Budget'],
+    proTips: [
+      'Most affordable HP mouse',
+      'No battery needed - always ready',
+      'Use mouse pad for best tracking',
+      'Clean sensor regularly for accuracy'
+    ],
+    compatibleWith: ['Windows', 'macOS', 'Linux', 'Chrome OS'],
+    inBox: [
+      'HP M10 Wired Mouse',
+      'User Documentation'
+    ],
+    warranty: '1 Year HP Limited Warranty.',
+    images: ['/images/products/hp-m10-mouse-1.jpg', '/images/products/hp-m10-mouse-2.jpg'],
+    stock: 100,
+    rating: 4.0,
+    reviews: 892,
+    isNew: false,
+    isBestseller: false
+  },
+  {
+    id: 'hp-s500-mouse',
+    slug: 'hp-s500-wireless-mouse',
+    name: 'HP S500 Wireless Mouse',
+    category: 'accessories',
+    subcategory: 'Mouse',
+    price: 899,
+    originalPrice: 1299,
+    badge: 'Popular',
+    description: 'Wireless mouse with 2.4 GHz connectivity and 1600 DPI. Ergonomic design, 12-month battery life, and precise tracking for productivity.',
+    shortSpecs: ['Wireless 2.4 GHz', '1600 DPI', '12-Month Battery', 'Ergonomic'],
+    features: [
+      '2.4 GHz wireless with USB receiver',
+      '1600 DPI high-precision sensor',
+      'Up to 12-month battery life',
+      'Ergonomic right-hand design',
+      '5 buttons including forward/backward',
+      'Plug-and-play setup',
+      'Compatible with all systems'
+    ],
+    specifications: {
+      'Connectivity': '2.4 GHz Wireless',
+      'Sensor': 'Optical, 1600 DPI',
+      'Buttons': '5 (Left, Right, Scroll, Forward, Back)',
+      'Battery Life': 'Up to 12 months',
+      'Battery Type': '1 x AA (included)',
+      'Range': 'Up to 10 meters',
+      'Dimensions': '65 x 105 x 38 mm',
+      'Weight': '75 g (without battery)',
+      'Color': 'Black',
+      'Warranty': '1 Year'
+    },
+    useCases: ['Office', 'Home', 'Students', 'Gaming Light'],
+    types: ['Wireless Mouse', 'Optical', 'Ergonomic'],
+    proTips: [
+      'Use high-quality AA battery',
+      '5 buttons for improved productivity',
+      '1600 DPI for precise cursor control',
+      'Store receiver in mouse bottom when traveling'
+    ],
+    compatibleWith: ['Windows', 'macOS', 'Linux', 'Chrome OS'],
+    inBox: [
+      'HP S500 Wireless Mouse',
+      'USB Nano Receiver',
+      '1 x AA Battery',
+      'User Documentation'
+    ],
+    warranty: '1 Year HP Limited Warranty.',
+    images: ['/images/products/hp-s500-mouse-1.jpg', '/images/products/hp-s500-mouse-2.jpg'],
+    stock: 60,
+    rating: 4.3,
+    reviews: 445,
+    isNew: false,
+    isBestseller: false
+  },
+  {
+    id: 'hp-k160-keyboard',
+    slug: 'hp-k160-wired-keyboard',
+    name: 'HP K160 Wired Keyboard',
+    category: 'accessories',
+    subcategory: 'Keyboard',
+    price: 799,
+    originalPrice: 1099,
+    badge: 'Best Price',
+    description: 'Full-size wired keyboard with number pad. Durable keys, spill-resistant design, and comfortable typing for everyday use.',
+    shortSpecs: ['Wired USB', 'Full-Size', 'Spill-Resistant', 'Number Pad'],
+    features: [
+      'Full-size 104-key layout with number pad',
+      'USB wired connectivity',
+      'Spill-resistant design',
+      'Durable key switches',
+      'Adjustable tilt legs',
+      'Plug-and-play setup',
+      'Compatible with all systems'
+    ],
+    specifications: {
+      'Connectivity': 'USB 2.0 Wired',
+      'Layout': 'Full-size 104 keys',
+      'Key Type': 'Membrane',
+      'Cable Length': '1.5 meters',
+      'Dimensions': '450 x 170 x 25 mm',
+      'Weight': '550 g',
+      'Color': 'Black',
+      'Special Features': 'Spill-resistant, Adjustable tilt',
+      'Warranty': '1 Year'
+    },
+    useCases: ['Office', 'Home', 'Students', 'Basic Computing'],
+    types: ['Wired Keyboard', 'Full-Size', 'Membrane'],
+    proTips: [
+      'Most affordable HP full-size keyboard',
+      'Spill-resistant for accidental liquid exposure',
+      'Adjustable tilt for comfortable typing angle',
+      'Clean keys regularly for best performance'
+    ],
+    compatibleWith: ['Windows', 'macOS', 'Linux', 'Chrome OS'],
+    inBox: [
+      'HP K160 Wired Keyboard',
+      'User Documentation'
+    ],
+    warranty: '1 Year HP Limited Warranty.',
+    images: ['/images/products/hp-k160-keyboard-1.jpg', '/images/products/hp-k160-keyboard-2.jpg'],
+    stock: 80,
+    rating: 4.1,
+    reviews: 678,
+    isNew: false,
+    isBestseller: false
+  },
+  {
+    id: 'hp-km260-combo',
+    slug: 'hp-km260-wireless-keyboard-mouse-combo',
+    name: 'HP KM260 Wireless Keyboard and Mouse Combo',
+    category: 'accessories',
+    subcategory: 'Combo',
+    price: 1699,
+    originalPrice: 2299,
+    badge: 'Popular',
+    description: 'Wireless keyboard and mouse combo with 2.4 GHz connectivity. Full-size keyboard with multimedia keys and ergonomic wireless mouse.',
+    shortSpecs: ['Wireless 2.4 GHz', 'Full-Size Keyboard', '1200 DPI Mouse', '12-Month Battery'],
+    features: [
+      '2.4 GHz wireless combo with single USB receiver',
+      'Full-size keyboard with 12 multimedia keys',
+      'Wireless mouse with 1200 DPI',
+      'Up to 12-month battery life',
+      'Spill-resistant keyboard design',
+      'Adjustable keyboard tilt legs',
+      'Plug-and-play setup'
+    ],
+    specifications: {
+      'Keyboard Connectivity': '2.4 GHz Wireless',
+      'Mouse Connectivity': '2.4 GHz Wireless (shared receiver)',
+      'Keyboard Layout': 'Full-size 104 keys + 12 multimedia',
+      'Mouse Sensor': 'Optical, 1200 DPI',
+      'Keyboard Battery': '2 x AAA (included)',
+      'Mouse Battery': '1 x AA (included)',
+      'Range': 'Up to 10 meters',
+      'Keyboard Dimensions': '450 x 170 x 25 mm',
+      'Mouse Dimensions': '60 x 100 x 35 mm',
+      'Keyboard Weight': '500 g',
+      'Mouse Weight': '70 g (without battery)',
+      'Color': 'Black',
+      'Warranty': '1 Year'
+    },
+    useCases: ['Office', 'Home', 'Students', 'Productivity'],
+    types: ['Wireless Combo', 'Full-Size', 'Multimedia'],
+    proTips: [
+      'Single USB receiver for both devices',
+      'Multimedia keys for quick access to functions',
+      'Store receiver in mouse when not in use',
+      'Use high-quality batteries for best life'
+    ],
+    compatibleWith: ['Windows', 'macOS', 'Linux', 'Chrome OS'],
+    inBox: [
+      'HP KM260 Wireless Keyboard',
+      'HP KM260 Wireless Mouse',
+      'USB Nano Receiver',
+      '2 x AAA Batteries (Keyboard)',
+      '1 x AA Battery (Mouse)',
+      'User Documentation'
+    ],
+    warranty: '1 Year HP Limited Warranty.',
+    images: ['/images/products/hp-km260-combo-1.jpg', '/images/products/hp-km260-combo-2.jpg'],
+    stock: 45,
+    rating: 4.3,
+    reviews: 334,
+    isNew: false,
+    isBestseller: false
+  },
+  {
+    id: 'hp-km160-combo',
+    slug: 'hp-km160-wired-keyboard-mouse-combo',
+    name: 'HP KM160 Wired Keyboard and Mouse Combo',
+    category: 'accessories',
+    subcategory: 'Combo',
+    price: 999,
+    originalPrice: 1399,
+    badge: 'Best Price',
+    description: 'Affordable wired keyboard and mouse combo. Full-size keyboard with number pad and optical mouse. Reliable performance for everyday computing.',
+    shortSpecs: ['Wired USB', 'Full-Size Keyboard', '1000 DPI Mouse', 'Plug & Play'],
+    features: [
+      'Wired USB combo - single cable for both',
+      'Full-size keyboard with number pad',
+      'Optical mouse with 1000 DPI',
+      'Spill-resistant keyboard',
+      'Adjustable keyboard tilt',
+      'Durable build quality',
+      'Plug-and-play setup'
+    ],
+    specifications: {
+      'Keyboard Connectivity': 'USB 2.0 Wired',
+      'Mouse Connectivity': 'USB 2.0 Wired (shared cable)',
+      'Keyboard Layout': 'Full-size 104 keys',
+      'Mouse Sensor': 'Optical, 1000 DPI',
+      'Cable Length': '1.5 meters',
+      'Keyboard Dimensions': '445 x 165 x 25 mm',
+      'Mouse Dimensions': '60 x 105 x 38 mm',
+      'Keyboard Weight': '520 g',
+      'Mouse Weight': '85 g',
+      'Color': 'Black',
+      'Warranty': '1 Year'
+    },
+    useCases: ['Home', 'Office', 'Students', 'Basic Computing'],
+    types: ['Wired Combo', 'Full-Size', 'Budget'],
+    proTips: [
+      'Most affordable HP keyboard-mouse combo',
+      'No batteries needed - always ready',
+      'Shared cable reduces desk clutter',
+      'Great for basic computing needs'
+    ],
+    compatibleWith: ['Windows', 'macOS', 'Linux', 'Chrome OS'],
+    inBox: [
+      'HP KM160 Wired Keyboard',
+      'HP KM160 Wired Mouse',
+      'User Documentation'
+    ],
+    warranty: '1 Year HP Limited Warranty.',
+    images: ['/images/products/hp-km160-combo-1.jpg', '/images/products/hp-km160-combo-2.jpg'],
+    stock: 75,
+    rating: 4.0,
+    reviews: 567,
+    isNew: false,
+    isBestseller: false
+  },
+];
+
+export function getProductBySlug(slug: string): Product | undefined {
+  return products.find(p => p.slug === slug);
+}
+
+export function getProductsByCategory(category: string): Product[] {
+  if (category === 'all') return products;
+  return products.filter(p => p.category === category);
+}
+
+export function getFeaturedProducts(): Product[] {
+  return products.filter(p => p.isBestseller || p.isNew).slice(0, 8);
+}
+
+export function getRelatedProducts(productId: string): Product[] {
+  const product = products.find(p => p.id === productId);
+  if (!product) return [];
+  return products
+    .filter(p => p.category === product.category && p.id !== productId)
+    .slice(0, 4);
+}
+
+export function searchProducts(query: string): Product[] {
+  const lowerQuery = query.toLowerCase();
+  return products.filter(p =>
+    p.name.toLowerCase().includes(lowerQuery) ||
+    p.description.toLowerCase().includes(lowerQuery) ||
+    p.category.toLowerCase().includes(lowerQuery) ||
+    p.subcategory.toLowerCase().includes(lowerQuery)
+  );
+}

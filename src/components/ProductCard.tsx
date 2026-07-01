@@ -1,427 +1,132 @@
 "use client";
 
-import { useState } from "react";
-import { Wifi, Usb, EthernetPort, ChevronRight, MessageCircle, Check, Eye, ShoppingCart } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { ProductImage3D } from "./ProductImage3D";
-import { useCart } from "@/context/CartContext";
-
-export interface Product {
-  id: string;
-  name: string;
-  shortName: string;
-  category: string;
-  subCategory: string;
-  price: number;
-  mrp: number;
-  sku: string;
-  speed: string;
-  connectivity: string[];
-  duplex: boolean;
-  dutyCycle: string;
-  idealFor: string;
-  description: string;
-  features: string[];
-  image: string;
-  images: string[];
-  badge?: string;
-  specs?: Record<string, string>;
-}
+import { Star, ShoppingCart, Check } from "lucide-react";
+import { Product } from "@/lib/products";
 
 interface ProductCardProps {
   product: Product;
-  compact?: boolean;
-  featured?: boolean;
 }
 
-// Generate descriptive alt text for printers
-function getPrinterAltText(product: Product): string {
-  const parts: string[] = [];
-  parts.push(product.name);
-  
-  if (product.subCategory === "laser") {
-    parts.push("monochrome laser printer");
-  } else if (product.subCategory === "color-laser") {
-    parts.push("color laser printer");
-  } else if (product.subCategory === "inkjet") {
-    parts.push("inkjet printer");
-  }
-  
-  if (product.duplex) {
-    parts.push("with automatic duplex printing");
-  }
-  
-  if (product.connectivity.includes("Wi-Fi")) {
-    parts.push("wireless connectivity");
-  }
-  
-  parts.push(product.speed);
-  
-  if (product.features.some(f => f.toLowerCase().includes("scan") || f.toLowerCase().includes("copy"))) {
-    parts.push("all-in-one MFP");
-  }
-  
-  return parts.join(" - ");
-}
-
-// Generate descriptive alt text for non-printer products
-function getProductAltText(product: Product): string {
-  return `${product.name} - ${product.description.substring(0, 80)}`;
-}
-
-export function ProductCard({ product, compact = false, featured = false }: ProductCardProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const { addItem } = useCart();
-  
-  const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
-  const whatsappLink = `https://wa.me/919814958295?text=Hi%20Jetage%2C%20I'm%20interested%20in%20${encodeURIComponent(product.name)}%20(SKU%3A%20${product.sku})`;
-
-  const handleAddToCart = () => {
-    addItem({
-      productId: product.id,
-      name: product.name,
-      shortName: product.shortName,
-      price: product.price,
-      mrp: product.mrp,
-      image: product.image,
-      sku: product.sku,
-    });
-  };
-
-  // Get proper alt text
-  const altText = product.category === "printer" 
-    ? getPrinterAltText(product) 
-    : getProductAltText(product);
-
-  // Build image array — use all available images, deduplicate
-  const allImages = Array.from(new Set([product.image, ...product.images])).filter(Boolean);
-
-  const getConnectivityIcon = (conn: string) => {
-    if (conn === "Wi-Fi" || conn === "Wi-Fi 6" || conn === "Wi-Fi 6E") return <Wifi className="w-3 h-3" />;
-    if (conn === "Ethernet") return <EthernetPort className="w-3 h-3" />;
-    if (conn === "USB" || conn === "USB 2.0" || conn === "USB 3.2" || conn === "USB-C" || conn === "USB-C Charging") return <Usb className="w-3 h-3" />;
-    return null;
-  };
-
-  const categoryColors: Record<string, string> = {
-    "laser": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
-    "color-laser": "bg-orange-500/10 text-orange-500 border-orange-500/20",
-    "inkjet": "bg-blue-500/10 text-blue-500 border-blue-500/20",
-    "officejet": "bg-teal-500/10 text-teal-500 border-teal-500/20",
-    "smart-tank": "bg-cyan-500/10 text-cyan-500 border-cyan-500/20",
-    "deskjet": "bg-indigo-500/10 text-indigo-500 border-indigo-500/20",
-    "consumer": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
-    "premium": "bg-purple-500/10 text-purple-500 border-purple-500/20",
-    "gaming": "bg-red-500/10 text-red-500 border-red-500/20",
-    "professional": "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-    "input": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
-    "mouse": "bg-pink-500/10 text-pink-500 border-pink-500/20",
-    "keyboard": "bg-violet-500/10 text-violet-500 border-violet-500/20",
-    "combo": "bg-amber-500/10 text-amber-500 border-amber-500/20",
-  };
-
-  const categoryLabelMap: Record<string, string> = {
-    "laser": "Laser Printer",
-    "color-laser": "Color Laser",
-    "inkjet": "InkJet",
-    "officejet": "OfficeJet",
-    "smart-tank": "Smart Tank",
-    "deskjet": "DeskJet",
-    "consumer": "Consumer",
-    "premium": "Premium",
-    "gaming": "Gaming",
-    "professional": "Professional",
-    "input": "Input Device",
-    "mouse": "Mouse",
-    "keyboard": "Keyboard",
-    "combo": "Combo",
-  };
-
-  const categoryLabel = categoryLabelMap[product.subCategory] || product.subCategory;
-
-  if (compact) {
-    return (
-      <div 
-        className="group bg-jet-bg-card rounded-2xl border border-jet-border overflow-hidden hover:shadow-premium-hover transition-all duration-500 hover:-translate-y-1 hover:border-jet-border-strong"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* 3D Product Image Area */}
-        <div className="relative aspect-[4/3] p-4">
-          {product.badge && (
-            <div className="absolute top-3 left-3 px-3 py-1 bg-jet-primary text-white text-xs font-bold rounded-full z-20">
-              {product.badge}
-            </div>
-          )}
-          {discount > 0 && (
-            <div className="absolute top-3 right-3 px-3 py-1 bg-red-500/10 text-red-500 text-xs font-bold rounded-full z-20 border border-red-500/20">
-              -{discount}%
-            </div>
-          )}
-          
-          <ProductImage3D
-            images={allImages}
-            alt={altText}
-            className="w-full h-full"
-            compact
-            enableRotation
-          />
-          
-          {isHovered && (
-            <div className="absolute inset-0 bg-jet-bg/60 backdrop-blur-sm flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
-              <Link href={`/products/${product.id}/`} className="w-10 h-10 rounded-full bg-jet-primary text-white flex items-center justify-center hover:scale-110 transition-transform">
-                <Eye className="w-4 h-4" />
-              </Link>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-jet-whatsapp text-white flex items-center justify-center hover:scale-110 transition-transform">
-                <MessageCircle className="w-4 h-4" />
-              </a>
-            </div>
-          )}
-        </div>
-
-        <div className="p-5 space-y-3">
-          <div className="flex items-center gap-2 text-xs">
-            <span className={`px-2.5 py-1 rounded-full font-medium border ${categoryColors[product.subCategory] || "bg-jet-text-muted/10 text-jet-text-muted border-jet-text-muted/20"}`}>
-              {product.idealFor}
-            </span>
-          </div>
-
-          <h3 className="font-bold text-jet-text group-hover:text-jet-primary transition-colors line-clamp-2 text-sm leading-snug">
-            {product.name}
-          </h3>
-
-          <div className="flex items-center gap-2 text-xs text-jet-text-muted">
-            {product.connectivity.slice(0, 3).map((conn, i) => (
-              <span key={i} className="flex items-center gap-1">{getConnectivityIcon(conn)}</span>
-            ))}
-            <span className="truncate">{product.speed}</span>
-          </div>
-
-          <div className="flex items-baseline gap-2">
-            <span className="text-xl font-bold text-jet-text">&#8377;{product.price.toLocaleString()}</span>
-            <span className="text-sm text-jet-text-muted line-through">&#8377;{product.mrp.toLocaleString()}</span>
-          </div>
-
-          <div className="flex gap-2 pt-2">
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-jet-bg-elevated text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
-            >
-              <MessageCircle className="w-4 h-4" />
-              Get Quote
-            </a>
-            <button
-              onClick={handleAddToCart}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
-              title="Add to Cart"
-            >
-              <ShoppingCart className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (featured) {
-    return (
-      <div 
-        className="group relative bg-jet-bg-card rounded-3xl border border-jet-border overflow-hidden hover:shadow-premium-hover transition-all duration-700 hover:-translate-y-2 hover:border-jet-border-strong"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* 3D Product Image Area */}
-        <div className="relative aspect-[16/10] p-6">
-          {product.badge && (
-            <div className="absolute top-5 left-5 px-4 py-1.5 bg-jet-primary text-white text-sm font-bold rounded-full z-20">
-              {product.badge}
-            </div>
-          )}
-          {discount > 0 && (
-            <div className="absolute top-5 right-5 px-4 py-1.5 bg-red-500/10 text-red-500 text-sm font-bold rounded-full z-20 border border-red-500/20">
-              Save {discount}%
-            </div>
-          )}
-
-          <div className="absolute inset-0 opacity-30">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(8,145,178,0.08),transparent_70%)]" />
-          </div>
-
-          <ProductImage3D
-            images={allImages}
-            alt={altText}
-            className="w-full h-full"
-            enableRotation
-          />
-          
-          {isHovered && (
-            <div className="absolute inset-0 bg-jet-bg/60 backdrop-blur-sm flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
-              <Link href={`/products/${product.id}/`} className="px-6 py-3 rounded-full bg-jet-primary text-white font-semibold text-sm flex items-center gap-2 hover:scale-105 transition-transform">
-                <Eye className="w-4 h-4" />
-                View Details
-              </Link>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-full bg-jet-whatsapp text-white font-semibold text-sm flex items-center gap-2 hover:scale-105 transition-transform">
-                <MessageCircle className="w-4 h-4" />
-                WhatsApp
-              </a>
-            </div>
-          )}
-        </div>
-
-        <div className="p-6 lg:p-8 space-y-4">
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${categoryColors[product.subCategory] || "bg-jet-text-muted/10 text-jet-text-muted border-jet-text-muted/20"}`}>
-              {product.idealFor}
-            </span>
-            <span className="px-3 py-1 bg-jet-bg-elevated text-jet-text-muted text-xs rounded-full font-medium border border-jet-border">
-              {categoryLabel}
-            </span>
-            {product.duplex && (
-              <span className="px-3 py-1 bg-jet-success/10 text-jet-success text-xs rounded-full font-medium flex items-center gap-1 border border-jet-success/20">
-                <Check className="w-3 h-3" /> Auto Duplex
-              </span>
-            )}
-          </div>
-
-          <h3 className="text-xl font-bold text-jet-text group-hover:text-jet-primary transition-colors leading-tight">
-            {product.name}
-          </h3>
-
-          <p className="text-jet-text-dim text-sm leading-relaxed line-clamp-2">
-            {product.description}
-          </p>
-
-          <div className="flex flex-wrap gap-2">
-            {product.features.slice(0, 3).map((feature, i) => (
-              <span key={i} className="text-xs text-jet-text-dim bg-jet-bg-elevated px-3 py-1.5 rounded-lg font-medium border border-jet-border">
-                {feature}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-3 pt-2">
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-jet-text">&#8377;{product.price.toLocaleString()}</span>
-              <span className="text-sm text-jet-text-muted line-through">&#8377;{product.mrp.toLocaleString()}</span>
-            </div>
-            <span className="text-xs text-jet-success font-semibold bg-jet-success/10 px-2 py-1 rounded-full border border-jet-success/20">{discount}% off</span>
-          </div>
-
-          <div className="flex gap-3 pt-2">
-            <Link
-              href={`/products/${product.id}/`}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-bg-elevated text-jet-text border border-jet-border rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white hover:border-jet-primary transition-all"
-            >
-              View Details
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-            <button
-              onClick={handleAddToCart}
-              className="flex items-center justify-center gap-2 px-4 py-3 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
-              title="Add to Cart"
-            >
-              <ShoppingCart className="w-4 h-4" />
-            </button>
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-whatsapp/10 text-jet-whatsapp border border-jet-whatsapp/20 rounded-xl font-semibold text-sm hover:bg-jet-whatsapp hover:text-white transition-all"
-            >
-              <MessageCircle className="w-4 h-4" />
-              WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    );
-  }
+export default function ProductCard({ product }: ProductCardProps) {
+  const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
 
   return (
-    <div 
-      className="group bg-jet-bg-card rounded-3xl border border-jet-border overflow-hidden hover:shadow-premium-hover transition-all duration-500 hover:-translate-y-2 hover:border-jet-border-strong"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* 3D Product Image Area */}
-      <div className="relative aspect-[16/10] p-6">
-        {product.badge && (
-          <div className="absolute top-4 left-4 px-4 py-1.5 bg-jet-primary text-white text-sm font-bold rounded-full z-20">
-            {product.badge}
-          </div>
-        )}
-        {discount > 0 && (
-          <div className="absolute top-4 right-4 px-4 py-1.5 bg-red-500/10 text-red-500 text-sm font-bold rounded-full z-20 border border-red-500/20">
-            Save {discount}%
-          </div>
-        )}
+    <article className="product-card group" aria-label={`${product.name} product card`}>
+      {/* Image Container - FIXED: No more "Image unavailable" placeholder */}
+      <div className="product-card-image relative">
+        {/* Badge */}
+        <span className={`badge-${product.isNew ? 'new' : product.isBestseller ? 'bestseller' : 'popular'}`}>
+          {product.badge}
+        </span>
 
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(8,145,178,0.08),transparent_70%)]" />
-        </div>
-
-        <ProductImage3D
-          images={allImages}
-          alt={altText}
-          className="w-full h-full"
-          enableRotation
-        />
-      </div>
-
-      <div className="p-6 lg:p-8 space-y-4">
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${categoryColors[product.subCategory] || "bg-jet-text-muted/10 text-jet-text-muted border-jet-text-muted/20"}`}>
-            {product.idealFor}
-          </span>
-          <span className="px-3 py-1 bg-jet-bg-elevated text-jet-text-muted text-xs rounded-full font-medium border border-jet-border">
-            {categoryLabel}
+        {/* Stock Indicator */}
+        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
+          <div className={`w-2 h-2 rounded-full ${product.stock > 10 ? 'bg-green-500' : 'bg-orange-500'}`} />
+          <span className={`text-xs font-medium ${product.stock > 10 ? 'text-green-700' : 'text-orange-700'}`}>
+            {product.stock > 10 ? 'In Stock' : 'Low Stock'}
           </span>
         </div>
 
-        <h3 className="text-xl font-bold text-jet-text group-hover:text-jet-primary transition-colors leading-tight">
-          {product.name}
-        </h3>
-
-        <p className="text-jet-text-dim text-sm leading-relaxed line-clamp-2">
-          {product.description}
-        </p>
-
-        <div className="flex items-center gap-3 pt-2">
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-jet-text">&#8377;{product.price.toLocaleString()}</span>
-            <span className="text-sm text-jet-text-muted line-through">&#8377;{product.mrp.toLocaleString()}</span>
+        {/* Product Image with proper fallback */}
+        <Link href={`/products/${product.slug}`} className="block w-full h-full">
+          <div className="relative w-full h-full flex items-center justify-center p-6">
+            <Image
+              src={product.images[0]}
+              alt={`${product.name} - ${product.shortSpecs[0]}`}
+              width={300}
+              height={300}
+              className="object-contain max-h-[200px] w-auto transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+              onError={(e) => {
+                // Fallback to a colored placeholder with product initial
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+                const parent = target.parentElement;
+                if (parent) {
+                  parent.innerHTML = `
+                    <div class="w-32 h-32 rounded-2xl bg-gradient-to-br from-blue-400 to-cyan-300 flex items-center justify-center shadow-lg">
+                      <span class="text-4xl font-bold text-white">${product.name.charAt(0)}</span>
+                    </div>
+                  `;
+                }
+              }}
+            />
           </div>
-          <span className="text-xs text-jet-success font-semibold bg-jet-success/10 px-2 py-1 rounded-full border border-jet-success/20">{discount}% off</span>
-        </div>
+        </Link>
 
-        <div className="flex gap-3 pt-2">
-          <Link
-            href={`/products/${product.id}/`}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-bg-elevated text-jet-text border border-jet-border rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white hover:border-jet-primary transition-all"
-          >
-            View Details
-            <ChevronRight className="w-4 h-4" />
-          </Link>
+        {/* Quick Actions Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
-            onClick={handleAddToCart}
-            className="flex items-center justify-center gap-2 px-4 py-3 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
-            title="Add to Cart"
+            className="w-full bg-white text-gray-900 py-2 rounded-lg font-medium text-sm hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
+            aria-label={`Add ${product.name} to cart`}
           >
             <ShoppingCart className="w-4 h-4" />
+            Add to Cart
           </button>
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-whatsapp/10 text-jet-whatsapp border border-jet-whatsapp/20 rounded-xl font-semibold text-sm hover:bg-jet-whatsapp hover:text-white transition-all"
-          >
-            <MessageCircle className="w-4 h-4" />
-            WhatsApp
-          </a>
         </div>
       </div>
-    </div>
+
+      {/* Content */}
+      <div className="p-4">
+        {/* Category */}
+        <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">{product.subcategory}</p>
+        
+        {/* Name */}
+        <Link href={`/products/${product.slug}`}>
+          <h3 className="font-semibold text-gray-900 text-sm leading-tight mb-2 hover:text-blue-600 transition-colors line-clamp-2">
+            {product.name}
+          </h3>
+        </Link>
+
+        {/* Rating */}
+        <div className="flex items-center gap-1 mb-2">
+          <div className="flex items-center">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`w-3.5 h-3.5 ${
+                  i < Math.floor(product.rating)
+                    ? "text-yellow-400 fill-yellow-400"
+                    : "text-gray-300"
+                }`}
+                aria-hidden="true"
+              />
+            ))}
+          </div>
+          <span className="text-xs text-gray-500">({product.reviews})</span>
+        </div>
+
+        {/* Specs */}
+        <div className="flex flex-wrap gap-1 mb-3">
+          {product.shortSpecs.slice(0, 2).map((spec, i) => (
+            <span key={i} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+              {spec}
+            </span>
+          ))}
+        </div>
+
+        {/* Price */}
+        <div className="flex items-baseline flex-wrap gap-1">
+          <span className="price-current">₹{product.price.toLocaleString("en-IN")}</span>
+          <span className="price-original">₹{product.originalPrice.toLocaleString("en-IN")}</span>
+          <span className="price-discount">{discount}% off</span>
+        </div>
+
+        {/* WhatsApp Order Button */}
+        <a
+          href={`https://wa.me/91XXXXXXXXXX?text=Hi, I want to order ${product.name} (₹${product.price})`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 w-full flex items-center justify-center gap-2 bg-green-500 text-white py-2 rounded-lg text-sm font-medium hover:bg-green-600 transition-colors"
+        >
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/>
+          </svg>
+          WhatsApp Order
+        </a>
+      </div>
+    </article>
   );
 }
