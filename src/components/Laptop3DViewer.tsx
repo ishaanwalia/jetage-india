@@ -6,7 +6,6 @@ import { Suspense } from 'react';
 
 function Model() {
   const { scene } = useGLTF('/models/hp_omen_laptop.glb');
-  // 25% bigger: 4.2 * 1.25 = 5.25
   return <primitive object={scene} scale={5.25} position={[0, -0.85, 0]} rotation={[0, -Math.PI / 6, 0]} />;
 }
 
@@ -43,7 +42,7 @@ export function Laptop3DViewer() {
         </Canvas>
       </div>
 
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-jet-primary/20 text-jet-primary px-5 py-2 rounded-full text-sm backdrop-blur-md border border-jet-primary/30 font-medium">
+      <div className="absolute bottom-[42px] left-1/2 -translate-x-1/2 bg-jet-primary/20 text-jet-primary px-6 py-2 rounded-full text-sm backdrop-blur-md border border-jet-primary/30 font-medium whitespace-nowrap">
         Check out our exclusive range of HP products
       </div>
     </div>
