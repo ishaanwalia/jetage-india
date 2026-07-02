@@ -24,14 +24,14 @@ interface BlogDetailClientProps {
 // ✅ FIX: Clean escaped Markdown from blog content
 function cleanMarkdown(content: string): string {
   return content
-    .replace(/\\\\\\*\\*/g, '**')
+    .replace(/\\\\\\\*\\\*/g, '**')
     .replace(/\\\\\\*/g, '*')
-    .replace(/\\\\\\|/g, '|')
+    .replace(/\\\\\\\|/g, '|')
     .replace(/\\\\\\-/g, '-')
-    .replace(/\\\\\\[/g, '[')
-    .replace(/\\\\\\]/g, ']')
-    .replace(/\\\\\\(/g, '(')
-    .replace(/\\\\\\)/g, ')');
+    .replace(/\\\\\\\[/g, '[')
+    .replace(/\\\\\\\]/g, ']')
+    .replace(/\\\\\\\(/g, '(')
+    .replace(/\\\\\\\)/g, ')');
 }
 
 export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
@@ -186,7 +186,6 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
               ),
             }}
           >
-            {/* ✅ FIXED: Clean the escaped Markdown before rendering */}
             {cleanMarkdown(blog.content)}
           </ReactMarkdown>
         </article>
