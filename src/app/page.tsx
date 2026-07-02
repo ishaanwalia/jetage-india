@@ -196,8 +196,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product, i) => (
               <Reveal key={product.id} direction="up" delay={i * 0.05}>
-                <ProductCard product={product} compact />
-              </Reveal>
+                <ProductCard product={product} />              </Reveal>
             ))}
           </div>
 

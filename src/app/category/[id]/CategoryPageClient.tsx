@@ -413,8 +413,7 @@ export default function CategoryPageClient({ id }: CategoryPageClientProps) {
                       ease: [0.25, 0.46, 0.45, 0.94],
                     }}
                   >
-                    <ProductCard product={product} compact />
-                  </motion.div>
+                    <ProductCard product={product} />                  </motion.div>
                 ))}
               </AnimatePresence>
             </motion.div>
