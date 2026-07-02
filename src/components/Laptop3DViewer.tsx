@@ -6,16 +6,16 @@ import { Suspense } from 'react';
 
 function Model() {
   const { scene } = useGLTF('/models/hp_omen_laptop.glb');
-  // 20% bigger: 3.5 * 1.2 = 4.2
-  return <primitive object={scene} scale={4.2} position={[0, -0.7, 0]} rotation={[0, -Math.PI / 6, 0]} />;
+  // 25% bigger: 4.2 * 1.25 = 5.25
+  return <primitive object={scene} scale={5.25} position={[0, -0.85, 0]} rotation={[0, -Math.PI / 6, 0]} />;
 }
 
 export function Laptop3DViewer() {
   return (
-    <div className="w-full h-[650px] lg:h-[750px] relative flex items-center justify-center overflow-visible">
+    <div className="w-full h-[700px] lg:h-[800px] relative flex items-center justify-center overflow-visible">
       <div className="w-full h-full relative">
         <Canvas
-          camera={{ position: [0, 1, 8], fov: 38 }}
+          camera={{ position: [0, 1.2, 9.5], fov: 38 }}
           style={{ background: 'transparent' }}
           gl={{ alpha: true, antialias: true }}
           className="w-full h-full"
@@ -43,8 +43,8 @@ export function Laptop3DViewer() {
         </Canvas>
       </div>
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/30 text-white/50 px-4 py-1.5 rounded-full text-xs backdrop-blur-sm border border-white/5">
-        Drag to rotate
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-jet-primary/20 text-jet-primary px-5 py-2 rounded-full text-sm backdrop-blur-md border border-jet-primary/30 font-medium">
+        Check out our exclusive range of HP products
       </div>
     </div>
   );
