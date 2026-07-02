@@ -6,11 +6,10 @@ import { Suspense } from 'react';
 
 function Model() {
   const { scene } = useGLTF('/models/hp_omen_laptop.glb');
-  // Much bigger scale, centered position
   return <primitive object={scene} scale={4.5} position={[0, -0.2, 0]} rotation={[0, -Math.PI / 6, 0]} />;
 }
 
-export default function Laptop3DViewer() {
+export function Laptop3DViewer() {
   return (
     <div className="w-full h-[700px] lg:h-[800px] relative">
       <Canvas
@@ -41,7 +40,6 @@ export default function Laptop3DViewer() {
         </Suspense>
       </Canvas>
 
-      {/* Subtle interaction hint */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/30 text-white/50 px-4 py-1.5 rounded-full text-xs backdrop-blur-sm border border-white/5">
         Drag to rotate
       </div>
