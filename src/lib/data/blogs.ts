@@ -943,8 +943,10 @@ Visit \\*\\*SCO-12, 1st Floor, Sector-17-E, Chandigarh\\*\\*, or WhatsApp \\*\\*
   },
 ];
 
-export const getBlogBySlug = (slug: string): BlogPost \\| undefined =>
-  blogPosts.find((b) => b.slug === slug);
+export function getBlogBySlug(slug: string): BlogPost | undefined {
+  return blogPosts.find((b) => b.slug === slug);
+}
 
-export const getBlogById = (id: string): BlogPost \\| undefined =>
-  blogPosts.find((b) => b.id === id);
+export function getBlogById(id: string): BlogPost | undefined {
+  return blogPosts.find((b) => b.id === id);
+}
