@@ -6,8 +6,8 @@ import { Calendar, Clock, User, Tag, ArrowLeft, Share2, MessageCircle } from "lu
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { blogPosts } from "@/lib/data/blogs";
-import ReactMarkdown from "react-markdown"; // npm install react-markdown
-import remarkGfm from "remark-gfm"; // npm install remark-gfm
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { Metadata } from "next";
 
 // Generate metadata for each blog post
