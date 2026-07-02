@@ -398,8 +398,8 @@ export function ProductsClient() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.2 }}
               >
-                <ProductCard product={product} viewMode={viewMode} />
-              </motion.div>
+                <ProductCard product={product} />              
+                </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>
