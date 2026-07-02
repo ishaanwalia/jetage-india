@@ -72,7 +72,7 @@ export function Hero3D() {
         className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-0 w-full"
         style={{ y, opacity, scale }}
       >
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8" style={{ transform: "translateZ(50px)" }}>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -140,7 +140,7 @@ export function Hero3D() {
           </div>
 
           <motion.div 
-            className="relative flex items-center justify-center lg:h-[85vh]"
+            className="relative flex items-center justify-center"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 1.2, type: "spring" }}
