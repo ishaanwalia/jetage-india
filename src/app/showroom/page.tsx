@@ -2,8 +2,9 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
-import { 
-  MapPin, Clock, Phone, MessageCircle, Landmark, TreePine, 
+import { ShowroomMap } from "@/components/ShowroomMap";
+import {
+  MapPin, Clock, Phone, MessageCircle, Landmark, TreePine,
   Coffee, Film, Star, Navigation, Car, Train
 } from "lucide-react";
 
@@ -24,7 +25,7 @@ export default function ShowroomPage() {
                 Experience HP at <span className="text-gradient-gold">Sector 17</span>
               </h1>
               <p className="text-jet-text-dim max-w-3xl mx-auto text-xl leading-relaxed">
-                Step into our showroom at the heart of Chandigarh — right above the iconic Indian Coffee House. 
+                Step into our showroom at the heart of Chandigarh — right above the iconic Indian Coffee House.
                 Since 1989, we've been the city's trusted destination for HP products.
               </p>
             </div>
@@ -98,30 +99,24 @@ export default function ShowroomPage() {
               </div>
             </Reveal>
 
+            {/* === EMBEDDED MAP (replaces the old placeholder card) === */}
             <Reveal direction="right">
               <div className="space-y-8">
-                <div className="bg-jet-bg-card rounded-3xl border border-jet-border p-8 shadow-premium">
-                  <div className="aspect-[4/3] bg-gradient-to-br from-jet-bg-elevated to-jet-bg rounded-2xl flex items-center justify-center mb-6">
-                    <div className="text-center space-y-3">
-                      <div className="w-20 h-20 mx-auto bg-jet-primary/10 rounded-2xl flex items-center justify-center border border-jet-primary/20">
-                        <MapPin className="w-10 h-10 text-jet-primary" />
-                      </div>
-                      <div>
-                        <p className="text-lg font-bold text-jet-text">SCO-12, Sector-17-E</p>
-                        <p className="text-sm text-jet-text-muted">Chandigarh</p>
-                      </div>
-                      <a 
-                        href="https://maps.google.com/?q=SCO-12+Sector-17-E+Chandigarh"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-jet-primary text-white rounded-full text-sm font-bold hover:bg-jet-primary-dim transition-all"
-                      >
-                        <Navigation className="w-4 h-4" />
-                        Open in Maps
-                      </a>
-                    </div>
+                <div className="bg-jet-bg-card rounded-3xl border border-jet-border p-2 shadow-premium">
+                  <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.1234!2d76.8031!3d30.7353!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fed0e0e0e0e0e%3A0x0!2sSCO-12%2C+Sector+17+E%2C+Chandigarh!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Jetage Showroom Location - SCO-12, Sector-17-E, Chandigarh"
+                      className="absolute inset-0 w-full h-full"
+                    />
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-4">
                     <div>
                       <p className="font-bold text-jet-text">Jetage Computer Traders</p>
                       <p className="text-sm text-jet-text-muted">Authorized HP World Partner</p>
@@ -189,12 +184,12 @@ export default function ShowroomPage() {
             Plan Your <span className="text-gradient-gold">Visit</span>
           </h2>
           <p className="text-jet-text-dim text-lg">
-            Can't make it to the showroom? No problem. We offer the same expert service and pricing via WhatsApp, 
+            Can't make it to the showroom? No problem. We offer the same expert service and pricing via WhatsApp,
             with All India Delivery to your doorstep.
           </p>
           <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <a 
-              href="https://maps.google.com/?q=SCO-12+Sector-17-E+Chandigarh"
+            <a
+              href="https://www.google.com/maps/dir//SCO-12,+1st+Floor,+Sector-17-E,+Chandigarh,+160017"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-jet-primary text-white rounded-full font-bold hover:bg-jet-primary-dim transition-all shadow-glow"
@@ -202,7 +197,7 @@ export default function ShowroomPage() {
               <MapPin className="w-5 h-5" />
               Get Directions
             </a>
-            <a 
+            <a
               href="https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20want%20to%20visit%20your%20showroom"
               target="_blank"
               rel="noopener noreferrer"

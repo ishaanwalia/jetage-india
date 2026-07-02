@@ -3,8 +3,9 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Counter } from "@/components/Counter";
-import { 
-  Award, Clock, MapPin, Phone, MessageCircle, Shield, 
+import { ShowroomMap } from "@/components/ShowroomMap";
+import {
+  Award, Clock, MapPin, Phone, MessageCircle, Shield,
   Truck, Zap, Users, Star, TrendingUp, Globe, Check
 } from "lucide-react";
 import Link from "next/link";
@@ -26,7 +27,7 @@ export default function AboutPage() {
                 The Jetage <span className="text-gradient-gold">Story</span>
               </h1>
               <p className="text-jet-text-dim max-w-3xl mx-auto text-xl leading-relaxed">
-                For over three decades, Jetage Computer Traders has been Chandigarh's most trusted destination 
+                For over three decades, Jetage Computer Traders has been Chandigarh's most trusted destination
                 for HP products. From a small shop in Sector 17 to an Authorized HP World Partner serving all of India.
               </p>
             </div>
@@ -67,18 +68,18 @@ export default function AboutPage() {
                 </h2>
                 <div className="space-y-4 text-jet-text-dim leading-relaxed">
                   <p>
-                    Founded in 1989 by visionary entrepreneurs, Jetage Computer Traders started as a modest 
-                    computer shop in the heart of Chandigarh's iconic Sector 17 market. Above the historic 
-                    Indian Coffee House, we began our journey with a simple mission: provide genuine technology 
+                    Founded in 1989 by visionary entrepreneurs, Jetage Computer Traders started as a modest
+                    computer shop in the heart of Chandigarh's iconic Sector 17 market. Above the historic
+                    Indian Coffee House, we began our journey with a simple mission: provide genuine technology
                     products with honest pricing and exceptional service.
                   </p>
                   <p>
-                    As HP's presence grew in India, so did our partnership. Today, we are proud to be an 
-                    <strong className="text-jet-text"> Authorized HP World Partner</strong>, offering the complete 
+                    As HP's presence grew in India, so did our partnership. Today, we are proud to be an
+                    <strong className="text-jet-text"> Authorized HP World Partner</strong>, offering the complete
                     range of HP products from entry-level printers to high-performance workstations.
                   </p>
                   <p>
-                    Our showroom at SCO-12, 1st Floor, Sector-17-E remains our flagship location, but our 
+                    Our showroom at SCO-12, 1st Floor, Sector-17-E remains our flagship location, but our
                     reach now extends across India through our WhatsApp ordering system and All India Delivery network.
                   </p>
                 </div>
@@ -193,7 +194,7 @@ export default function AboutPage() {
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <a 
+                    <a
                       href="https://maps.google.com/?q=SCO-12+Sector-17-E+Chandigarh"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -202,7 +203,7 @@ export default function AboutPage() {
                       <MapPin className="w-4 h-4" />
                       Directions
                     </a>
-                    <a 
+                    <a
                       href="https://wa.me/919814958295"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -218,6 +219,9 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* === EMBEDDED MAP SECTION === */}
+      <ShowroomMap variant="about" />
 
       <Footer />
       <WhatsAppButton />
