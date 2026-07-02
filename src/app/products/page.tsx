@@ -10,6 +10,23 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal } from "@/components/Reveal";
 import { motion, AnimatePresence } from "framer-motion";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "HP Products | Printers, Laptops & Accessories | Jetage India",
+  description: "Browse genuine HP printers, laptops, desktops, monitors and accessories at best prices. Authorized HP World Partner with All India delivery. WhatsApp ordering available.",
+  keywords: "HP printers India, HP laptops Chandigarh, HP accessories, HP monitors, HP products online, genuine HP dealer, HP ink cartridges",
+  alternates: {
+    canonical: "https://www.jetageindia.in/products",
+  },
+  openGraph: {
+    title: "HP Products | Printers, Laptops & Accessories | Jetage India",
+    description: "Genuine HP products at best prices. Printers, laptops, monitors & accessories. Authorized dealer with All India delivery.",
+    url: "https://www.jetageindia.in/products",
+    type: "website",
+  },
+};
+
 // Simple stock indicator component
 function StockBadge({ inStock = true }: { inStock?: boolean }) {
   return (

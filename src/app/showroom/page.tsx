@@ -7,6 +7,23 @@ import {
   Coffee, Film, Star, Navigation, Car, Train
 } from "lucide-react";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Visit Our Showroom | Jetage India",
+  description: "Visit our HP World showroom at SCO-12, Sector-17-E, Chandigarh. Experience HP products hands-on. Open Mon-Sat 10AM-8PM. Get directions and plan your visit.",
+  keywords: "HP showroom Chandigarh, Jetage showroom, HP World Sector 17, visit HP dealer Chandigarh, HP products showroom, SCO-12 Sector 17",
+  alternates: {
+    canonical: "https://www.jetageindia.in/showroom",
+  },
+  openGraph: {
+    title: "Visit Our Showroom | Jetage India - HP World Sector 17",
+    description: "Experience HP products at our Sector 17 showroom. SCO-12, 1st Floor, Chandigarh. Open Mon-Sat 10AM-8PM.",
+    url: "https://www.jetageindia.in/showroom",
+    type: "website",
+  },
+};
+
 export default function ShowroomPage() {
   return (
     <main className="min-h-screen bg-jet-bg">

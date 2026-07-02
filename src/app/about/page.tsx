@@ -9,6 +9,23 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us | Jetage India",
+  description: "Founded in 1989, Jetage Computer Traders is Chandigarh's most trusted HP dealer. Learn about our journey from Sector 17 to becoming an Authorized HP World Partner serving all of India.",
+  keywords: "Jetage India history, HP dealer Chandigarh, Authorized HP World Partner, Jetage Computer Traders, Sector 17 Chandigarh, HP dealer since 1989",
+  alternates: {
+    canonical: "https://www.jetageindia.in/about",
+  },
+  openGraph: {
+    title: "About Jetage India | Authorized HP Dealer Since 1989",
+    description: "Discover the story of Jetage Computer Traders — Chandigarh's trusted HP dealer since 1989. From Sector 17 to All India delivery.",
+    url: "https://www.jetageindia.in/about",
+    type: "website",
+  },
+};
+
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-jet-bg">
