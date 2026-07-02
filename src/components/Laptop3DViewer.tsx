@@ -6,16 +6,16 @@ import { Suspense } from 'react';
 
 function Model() {
   const { scene } = useGLTF('/models/hp_omen_laptop.glb');
-  // Bigger scale, slightly lowered to center visually
-  return <primitive object={scene} scale={3.5} position={[0, -0.6, 0]} rotation={[0, -Math.PI / 6, 0]} />;
+  // 20% bigger: 3.5 * 1.2 = 4.2
+  return <primitive object={scene} scale={4.2} position={[0, -0.7, 0]} rotation={[0, -Math.PI / 6, 0]} />;
 }
 
 export function Laptop3DViewer() {
   return (
-    <div className="w-full h-[600px] lg:h-[700px] relative flex items-center justify-center overflow-visible">
+    <div className="w-full h-[650px] lg:h-[750px] relative flex items-center justify-center overflow-visible">
       <div className="w-full h-full relative">
         <Canvas
-          camera={{ position: [0, 0.8, 7], fov: 38 }}
+          camera={{ position: [0, 1, 8], fov: 38 }}
           style={{ background: 'transparent' }}
           gl={{ alpha: true, antialias: true }}
           className="w-full h-full"
