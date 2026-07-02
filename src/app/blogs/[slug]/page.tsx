@@ -1,3 +1,4 @@
+
 import { blogPosts } from "@/lib/data/blogs";
 import { notFound } from "next/navigation";
 import BlogDetailClient from "./BlogDetailClient";
