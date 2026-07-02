@@ -1,0 +1,26 @@
+{
+  "name": "Jetage India - Authorized HP Dealer",
+  "short_name": "Jetage India",
+  "description": "Buy genuine HP printers and accessories at best prices. Authorized HP World Partner in Chandigarh since 1989.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0891b2",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/FaviconJ.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/LogoJ.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["shopping", "electronics"],
+  "lang": "en-IN",
+  "dir": "ltr"
+}
