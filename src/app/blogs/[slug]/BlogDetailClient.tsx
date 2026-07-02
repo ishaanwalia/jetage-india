@@ -1,7 +1,9 @@
 "use client";
 
-import { Calendar, Clock, User, ArrowLeft, MessageCircle, Share2, Tag } from "lucide-react";
+import { Calendar, Clock, User, ArrowLeft, Share2, MessageCircle, Tag } from "lucide-react";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Blog {
   id: string;
@@ -12,40 +14,11 @@ interface Blog {
   readTime: string;
   category: string;
   tags: string[];
+  metaDescription: string;
 }
 
 interface BlogDetailClientProps {
   blog: Blog;
-}
-
-function formatContent(content: string) {
-  return content.split("\n\n").map((paragraph, i) => {
-    if (paragraph.startsWith("## ")) {
-      return (
-        <h2 key={i} className="text-2xl font-bold text-jet-text mt-10 mb-4">
-          {paragraph.replace("## ", "")}
-        </h2>
-      );
-    }
-    if (paragraph.startsWith("- ")) {
-      const items = paragraph.split("\n").filter((line) => line.startsWith("- "));
-      return (
-        <ul key={i} className="space-y-2 mb-6 ml-4">
-          {items.map((item, j) => (
-            <li key={j} className="flex items-start gap-2 text-jet-text-dim">
-              <span className="w-1.5 h-1.5 bg-jet-primary rounded-full mt-2 flex-shrink-0" />
-              {item.replace("- ", "")}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-    return (
-      <p key={i} className="text-jet-text-dim leading-relaxed mb-6">
-        {paragraph}
-      </p>
-    );
-  });
 }
 
 export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
@@ -100,8 +73,108 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
       </div>
 
       <div className="max-w-3xl mx-auto px-6 lg:px-8 py-16">
-        <article className="prose prose-lg max-w-none">
-          {formatContent(blog.content)}
+        <article className="prose prose-invert prose-lg max-w-none">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              h2: ({ children }) => (
+                <h2 className="text-2xl lg:text-3xl font-bold text-jet-text mt-10 mb-4 leading-tight">
+                  {children}
+                </h2>
+              ),
+              h3: ({ children }) => (
+                <h3 className="text-xl lg:text-2xl font-bold text-jet-text mt-8 mb-3">
+                  {children}
+                </h3>
+              ),
+              p: ({ children }) => (
+                <p className="text-jet-text-dim leading-relaxed mb-6">
+                  {children}
+                </p>
+              ),
+              strong: ({ children }) => (
+                <strong className="text-jet-text font-bold">
+                  {children}
+                </strong>
+              ),
+              em: ({ children }) => (
+                <em className="text-jet-text italic">
+                  {children}
+                </em>
+              ),
+              ul: ({ children }) => (
+                <ul className="space-y-3 mb-6 list-none">
+                  {children}
+                </ul>
+              ),
+              ol: ({ children }) => (
+                <ol className="space-y-3 mb-6 list-decimal list-inside">
+                  {children}
+                </ol>
+              ),
+              li: ({ children }) => (
+                <li className="flex items-start gap-3 text-jet-text-dim">
+                  <span className="w-1.5 h-1.5 bg-jet-primary rounded-full mt-2.5 flex-shrink-0" />
+                  <span>{children}</span>
+                </li>
+              ),
+              a: ({ href, children }) => (
+                <Link
+                  href={href || "#"}
+                  className="text-jet-primary hover:text-jet-accent underline underline-offset-4 transition-colors"
+                >
+                  {children}
+                </Link>
+              ),
+              table: ({ children }) => (
+                <div className="overflow-x-auto mb-8">
+                  <table className="w-full text-sm border border-jet-border rounded-xl overflow-hidden">
+                    {children}
+                  </table>
+                </div>
+              ),
+              thead: ({ children }) => (
+                <thead className="bg-jet-bg-elevated">
+                  {children}
+                </thead>
+              ),
+              th: ({ children }) => (
+                <th className="px-4 py-3 text-left font-bold text-jet-text border-b border-jet-border">
+                  {children}
+                </th>
+              ),
+              td: ({ children }) => (
+                <td className="px-4 py-3 text-jet-text-dim border-b border-jet-border">
+                  {children}
+                </td>
+              ),
+              tr: ({ children }) => (
+                <tr className="hover:bg-jet-bg-elevated/50 transition-colors">
+                  {children}
+                </tr>
+              ),
+              hr: () => (
+                <hr className="border-jet-border my-8" />
+              ),
+              blockquote: ({ children }) => (
+                <blockquote className="border-l-4 border-jet-primary pl-6 py-2 my-6 bg-jet-bg-elevated/50 rounded-r-xl">
+                  <p className="text-jet-text italic mb-0">{children}</p>
+                </blockquote>
+              ),
+              code: ({ children }) => (
+                <code className="bg-jet-bg-elevated text-jet-primary px-2 py-1 rounded-lg text-sm font-mono">
+                  {children}
+                </code>
+              ),
+              pre: ({ children }) => (
+                <pre className="bg-jet-bg-elevated p-4 rounded-xl overflow-x-auto mb-6 border border-jet-border">
+                  {children}
+                </pre>
+              ),
+            }}
+          >
+            {blog.content}
+          </ReactMarkdown>
         </article>
 
         <div className="mt-12 pt-8 border-t border-jet-border">

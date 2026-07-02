@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Wifi, Usb, EthernetPort, ChevronRight, MessageCircle, Check, Eye, ShoppingCart } from "lucide-react";
 import Link from "next/link";
-import { ProductImage3D } from "./ProductImage3D";
+import { MessageCircle, ShoppingCart, Eye } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 export interface Product {
@@ -30,49 +29,12 @@ export interface Product {
 
 interface ProductCardProps {
   product: Product;
-  compact?: boolean;
-  featured?: boolean;
 }
 
-// Generate descriptive alt text for printers
-function getPrinterAltText(product: Product): string {
-  const parts: string[] = [];
-  parts.push(product.name);
-  
-  if (product.subCategory === "laser") {
-    parts.push("monochrome laser printer");
-  } else if (product.subCategory === "color-laser") {
-    parts.push("color laser printer");
-  } else if (product.subCategory === "inkjet") {
-    parts.push("inkjet printer");
-  }
-  
-  if (product.duplex) {
-    parts.push("with automatic duplex printing");
-  }
-  
-  if (product.connectivity.includes("Wi-Fi")) {
-    parts.push("wireless connectivity");
-  }
-  
-  parts.push(product.speed);
-  
-  if (product.features.some(f => f.toLowerCase().includes("scan") || f.toLowerCase().includes("copy"))) {
-    parts.push("all-in-one MFP");
-  }
-  
-  return parts.join(" - ");
-}
-
-// Generate descriptive alt text for non-printer products
-function getProductAltText(product: Product): string {
-  return `${product.name} - ${product.description.substring(0, 80)}`;
-}
-
-export function ProductCard({ product, compact = false, featured = false }: ProductCardProps) {
+export function ProductCard({ product }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { addItem } = useCart();
-  
+
   const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
   const whatsappLink = `https://wa.me/919814958295?text=Hi%20Jetage%2C%20I'm%20interested%20in%20${encodeURIComponent(product.name)}%20(SKU%3A%20${product.sku})`;
 
@@ -88,36 +50,21 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
     });
   };
 
-  // Get proper alt text
-  const altText = product.category === "printer" 
-    ? getPrinterAltText(product) 
-    : getProductAltText(product);
-
-  // Build image array — use all available images, deduplicate
-  const allImages = Array.from(new Set([product.image, ...product.images])).filter(Boolean);
-
-  const getConnectivityIcon = (conn: string) => {
-    if (conn === "Wi-Fi" || conn === "Wi-Fi 6" || conn === "Wi-Fi 6E") return <Wifi className="w-3 h-3" />;
-    if (conn === "Ethernet") return <EthernetPort className="w-3 h-3" />;
-    if (conn === "USB" || conn === "USB 2.0" || conn === "USB 3.2" || conn === "USB-C" || conn === "USB-C Charging") return <Usb className="w-3 h-3" />;
-    return null;
-  };
-
   const categoryColors: Record<string, string> = {
-    "laser": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
-    "color-laser": "bg-orange-500/10 text-orange-500 border-orange-500/20",
-    "inkjet": "bg-blue-500/10 text-blue-500 border-blue-500/20",
-    "officejet": "bg-teal-500/10 text-teal-500 border-teal-500/20",
-    "smart-tank": "bg-cyan-500/10 text-cyan-500 border-cyan-500/20",
-    "deskjet": "bg-indigo-500/10 text-indigo-500 border-indigo-500/20",
-    "consumer": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
-    "premium": "bg-purple-500/10 text-purple-500 border-purple-500/20",
-    "gaming": "bg-red-500/10 text-red-500 border-red-500/20",
-    "professional": "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-    "input": "bg-jet-primary/10 text-jet-primary border-jet-primary/20",
-    "mouse": "bg-pink-500/10 text-pink-500 border-pink-500/20",
-    "keyboard": "bg-violet-500/10 text-violet-500 border-violet-500/20",
-    "combo": "bg-amber-500/10 text-amber-500 border-amber-500/20",
+    "laser": "bg-cyan-50 text-cyan-700 border-cyan-200",
+    "color-laser": "bg-orange-50 text-orange-700 border-orange-200",
+    "inkjet": "bg-blue-50 text-blue-700 border-blue-200",
+    "officejet": "bg-teal-50 text-teal-700 border-teal-200",
+    "smart-tank": "bg-cyan-50 text-cyan-700 border-cyan-200",
+    "deskjet": "bg-indigo-50 text-indigo-700 border-indigo-200",
+    "consumer": "bg-gray-50 text-gray-700 border-gray-200",
+    "premium": "bg-purple-50 text-purple-700 border-purple-200",
+    "gaming": "bg-red-50 text-red-700 border-red-200",
+    "professional": "bg-emerald-50 text-emerald-700 border-emerald-200",
+    "input": "bg-gray-50 text-gray-700 border-gray-200",
+    "mouse": "bg-pink-50 text-pink-700 border-pink-200",
+    "keyboard": "bg-violet-50 text-violet-700 border-violet-200",
+    "combo": "bg-amber-50 text-amber-700 border-amber-200",
   };
 
   const categoryLabelMap: Record<string, string> = {
@@ -137,289 +84,94 @@ export function ProductCard({ product, compact = false, featured = false }: Prod
     "combo": "Combo",
   };
 
-  const categoryLabel = categoryLabelMap[product.subCategory] || product.subCategory;
-
-  if (compact) {
-    return (
-      <div 
-        className="group bg-jet-bg-card rounded-2xl border border-jet-border overflow-hidden hover:shadow-premium-hover transition-all duration-500 hover:-translate-y-1 hover:border-jet-border-strong"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* 3D Product Image Area */}
-        <div className="relative aspect-[4/3] p-4">
-          {product.badge && (
-            <div className="absolute top-3 left-3 px-3 py-1 bg-jet-primary text-white text-xs font-bold rounded-full z-20">
-              {product.badge}
-            </div>
-          )}
-          {discount > 0 && (
-            <div className="absolute top-3 right-3 px-3 py-1 bg-red-500/10 text-red-500 text-xs font-bold rounded-full z-20 border border-red-500/20">
-              -{discount}%
-            </div>
-          )}
-          
-          <ProductImage3D
-            images={allImages}
-            alt={altText}
-            className="w-full h-full"
-            compact
-            enableRotation
-          />
-          
-          {isHovered && (
-            <div className="absolute inset-0 bg-jet-bg/60 backdrop-blur-sm flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
-              <Link href={`/products/${product.id}/`} className="w-10 h-10 rounded-full bg-jet-primary text-white flex items-center justify-center hover:scale-110 transition-transform">
-                <Eye className="w-4 h-4" />
-              </Link>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-jet-whatsapp text-white flex items-center justify-center hover:scale-110 transition-transform">
-                <MessageCircle className="w-4 h-4" />
-              </a>
-            </div>
-          )}
-        </div>
-
-        <div className="p-5 space-y-3">
-          <div className="flex items-center gap-2 text-xs">
-            <span className={`px-2.5 py-1 rounded-full font-medium border ${categoryColors[product.subCategory] || "bg-jet-text-muted/10 text-jet-text-muted border-jet-text-muted/20"}`}>
-              {product.idealFor}
-            </span>
-          </div>
-
-          <h3 className="font-bold text-jet-text group-hover:text-jet-primary transition-colors line-clamp-2 text-sm leading-snug">
-            {product.name}
-          </h3>
-
-          <div className="flex items-center gap-2 text-xs text-jet-text-muted">
-            {product.connectivity.slice(0, 3).map((conn, i) => (
-              <span key={i} className="flex items-center gap-1">{getConnectivityIcon(conn)}</span>
-            ))}
-            <span className="truncate">{product.speed}</span>
-          </div>
-
-          <div className="flex items-baseline gap-2">
-            <span className="text-xl font-bold text-jet-text">&#8377;{product.price.toLocaleString()}</span>
-            <span className="text-sm text-jet-text-muted line-through">&#8377;{product.mrp.toLocaleString()}</span>
-          </div>
-
-          <div className="flex gap-2 pt-2">
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-jet-bg-elevated text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
-            >
-              <MessageCircle className="w-4 h-4" />
-              Get Quote
-            </a>
-            <button
-              onClick={handleAddToCart}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
-              title="Add to Cart"
-            >
-              <ShoppingCart className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (featured) {
-    return (
-      <div 
-        className="group relative bg-jet-bg-card rounded-3xl border border-jet-border overflow-hidden hover:shadow-premium-hover transition-all duration-700 hover:-translate-y-2 hover:border-jet-border-strong"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* 3D Product Image Area */}
-        <div className="relative aspect-[16/10] p-6">
-          {product.badge && (
-            <div className="absolute top-5 left-5 px-4 py-1.5 bg-jet-primary text-white text-sm font-bold rounded-full z-20">
-              {product.badge}
-            </div>
-          )}
-          {discount > 0 && (
-            <div className="absolute top-5 right-5 px-4 py-1.5 bg-red-500/10 text-red-500 text-sm font-bold rounded-full z-20 border border-red-500/20">
-              Save {discount}%
-            </div>
-          )}
-
-          <div className="absolute inset-0 opacity-30">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(8,145,178,0.08),transparent_70%)]" />
-          </div>
-
-          <ProductImage3D
-            images={allImages}
-            alt={altText}
-            className="w-full h-full"
-            enableRotation
-          />
-          
-          {isHovered && (
-            <div className="absolute inset-0 bg-jet-bg/60 backdrop-blur-sm flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
-              <Link href={`/products/${product.id}/`} className="px-6 py-3 rounded-full bg-jet-primary text-white font-semibold text-sm flex items-center gap-2 hover:scale-105 transition-transform">
-                <Eye className="w-4 h-4" />
-                View Details
-              </Link>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="px-6 py-3 rounded-full bg-jet-whatsapp text-white font-semibold text-sm flex items-center gap-2 hover:scale-105 transition-transform">
-                <MessageCircle className="w-4 h-4" />
-                WhatsApp
-              </a>
-            </div>
-          )}
-        </div>
-
-        <div className="p-6 lg:p-8 space-y-4">
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${categoryColors[product.subCategory] || "bg-jet-text-muted/10 text-jet-text-muted border-jet-text-muted/20"}`}>
-              {product.idealFor}
-            </span>
-            <span className="px-3 py-1 bg-jet-bg-elevated text-jet-text-muted text-xs rounded-full font-medium border border-jet-border">
-              {categoryLabel}
-            </span>
-            {product.duplex && (
-              <span className="px-3 py-1 bg-jet-success/10 text-jet-success text-xs rounded-full font-medium flex items-center gap-1 border border-jet-success/20">
-                <Check className="w-3 h-3" /> Auto Duplex
-              </span>
-            )}
-          </div>
-
-          <h3 className="text-xl font-bold text-jet-text group-hover:text-jet-primary transition-colors leading-tight">
-            {product.name}
-          </h3>
-
-          <p className="text-jet-text-dim text-sm leading-relaxed line-clamp-2">
-            {product.description}
-          </p>
-
-          <div className="flex flex-wrap gap-2">
-            {product.features.slice(0, 3).map((feature, i) => (
-              <span key={i} className="text-xs text-jet-text-dim bg-jet-bg-elevated px-3 py-1.5 rounded-lg font-medium border border-jet-border">
-                {feature}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-3 pt-2">
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-jet-text">&#8377;{product.price.toLocaleString()}</span>
-              <span className="text-sm text-jet-text-muted line-through">&#8377;{product.mrp.toLocaleString()}</span>
-            </div>
-            <span className="text-xs text-jet-success font-semibold bg-jet-success/10 px-2 py-1 rounded-full border border-jet-success/20">{discount}% off</span>
-          </div>
-
-          <div className="flex gap-3 pt-2">
-            <Link
-              href={`/products/${product.id}/`}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-bg-elevated text-jet-text border border-jet-border rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white hover:border-jet-primary transition-all"
-            >
-              View Details
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-            <button
-              onClick={handleAddToCart}
-              className="flex items-center justify-center gap-2 px-4 py-3 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
-              title="Add to Cart"
-            >
-              <ShoppingCart className="w-4 h-4" />
-            </button>
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-whatsapp/10 text-jet-whatsapp border border-jet-whatsapp/20 rounded-xl font-semibold text-sm hover:bg-jet-whatsapp hover:text-white transition-all"
-            >
-              <MessageCircle className="w-4 h-4" />
-              WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div 
-      className="group bg-jet-bg-card rounded-3xl border border-jet-border overflow-hidden hover:shadow-premium-hover transition-all duration-500 hover:-translate-y-2 hover:border-jet-border-strong"
+      className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 3D Product Image Area */}
-      <div className="relative aspect-[16/10] p-6">
+      {/* Image Area */}
+      <div className="relative aspect-square bg-gray-50 p-4 flex items-center justify-center">
         {product.badge && (
-          <div className="absolute top-4 left-4 px-4 py-1.5 bg-jet-primary text-white text-sm font-bold rounded-full z-20">
+          <div className="absolute top-3 left-3 px-3 py-1 bg-cyan-600 text-white text-xs font-bold rounded-full z-10">
             {product.badge}
           </div>
         )}
         {discount > 0 && (
-          <div className="absolute top-4 right-4 px-4 py-1.5 bg-red-500/10 text-red-500 text-sm font-bold rounded-full z-20 border border-red-500/20">
-            Save {discount}%
+          <div className="absolute top-3 right-3 px-3 py-1 bg-red-50 text-red-500 text-xs font-bold rounded-full z-10 border border-red-200">
+            -{discount}%
           </div>
         )}
-
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(8,145,178,0.08),transparent_70%)]" />
-        </div>
-
-        <ProductImage3D
-          images={allImages}
-          alt={altText}
-          className="w-full h-full"
-          enableRotation
+        
+        <img 
+          src={product.image} 
+          alt={product.name}
+          className="object-contain max-h-[200px] w-auto"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = `https://placehold.co/300x200/e2e8f0/64748b?text=${encodeURIComponent(product.shortName)}`;
+          }}
         />
+
+        {/* Hover Overlay */}
+        {isHovered && (
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+            <Link 
+              href={`/products/${product.id}/`} 
+              className="w-10 h-10 rounded-full bg-white text-gray-800 flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+              title="View Details"
+            >
+              <Eye className="w-4 h-4" />
+            </Link>
+            <a 
+              href={whatsappLink} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+              title="WhatsApp"
+            >
+              <MessageCircle className="w-4 h-4" />
+            </a>
+          </div>
+        )}
       </div>
 
-      <div className="p-6 lg:p-8 space-y-4">
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${categoryColors[product.subCategory] || "bg-jet-text-muted/10 text-jet-text-muted border-jet-text-muted/20"}`}>
-            {product.idealFor}
-          </span>
-          <span className="px-3 py-1 bg-jet-bg-elevated text-jet-text-muted text-xs rounded-full font-medium border border-jet-border">
-            {categoryLabel}
+      <div className="p-5 space-y-3">
+        <div className="flex items-center gap-2">
+          <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${categoryColors[product.subCategory] || "bg-gray-50 text-gray-600 border-gray-200"}`}>
+            {categoryLabelMap[product.subCategory] || product.subCategory}
           </span>
         </div>
 
-        <h3 className="text-xl font-bold text-jet-text group-hover:text-jet-primary transition-colors leading-tight">
+        <h3 className="font-bold text-gray-900 group-hover:text-cyan-600 transition-colors line-clamp-2 text-sm leading-snug">
           {product.name}
         </h3>
 
-        <p className="text-jet-text-dim text-sm leading-relaxed line-clamp-2">
-          {product.description}
-        </p>
-
-        <div className="flex items-center gap-3 pt-2">
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-jet-text">&#8377;{product.price.toLocaleString()}</span>
-            <span className="text-sm text-jet-text-muted line-through">&#8377;{product.mrp.toLocaleString()}</span>
-          </div>
-          <span className="text-xs text-jet-success font-semibold bg-jet-success/10 px-2 py-1 rounded-full border border-jet-success/20">{discount}% off</span>
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>{product.speed}</span>
         </div>
 
-        <div className="flex gap-3 pt-2">
-          <Link
-            href={`/products/${product.id}/`}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-bg-elevated text-jet-text border border-jet-border rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white hover:border-jet-primary transition-all"
-          >
-            View Details
-            <ChevronRight className="w-4 h-4" />
-          </Link>
-          <button
-            onClick={handleAddToCart}
-            className="flex items-center justify-center gap-2 px-4 py-3 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
-            title="Add to Cart"
-          >
-            <ShoppingCart className="w-4 h-4" />
-          </button>
+        <div className="flex items-baseline gap-2">
+          <span className="text-xl font-bold text-gray-900">₹{product.price.toLocaleString()}</span>
+          <span className="text-sm text-gray-400 line-through">₹{product.mrp.toLocaleString()}</span>
+        </div>
+
+        <div className="flex gap-2 pt-2">
           <a
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-jet-whatsapp/10 text-jet-whatsapp border border-jet-whatsapp/20 rounded-xl font-semibold text-sm hover:bg-jet-whatsapp hover:text-white transition-all"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-cyan-600 border border-cyan-200 rounded-xl font-semibold text-sm hover:bg-cyan-600 hover:text-white transition-all"
           >
             <MessageCircle className="w-4 h-4" />
-            WhatsApp
+            Get Quote
           </a>
+          <button
+            onClick={handleAddToCart}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-cyan-50 text-cyan-600 border border-cyan-200 rounded-xl font-semibold text-sm hover:bg-cyan-600 hover:text-white transition-all"
+            title="Add to Cart"
+          >
+            <ShoppingCart className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>
