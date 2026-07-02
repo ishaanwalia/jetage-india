@@ -130,8 +130,7 @@ export default function Home() {
           <div className="horizontal-scroll-container flex gap-8 px-6 lg:px-8 will-change-transform">
             {featuredProducts.map((product) => (
               <div key={product.id} className="flex-shrink-0 w-[400px] lg:w-[500px]">
-                <ProductCard product={product} featured />
-              </div>
+                <ProductCard product={product} />              </div>
             ))}
             
             <div className="flex-shrink-0 w-[400px] lg:w-[500px] flex items-center justify-center">
