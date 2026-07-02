@@ -21,17 +21,35 @@ interface BlogDetailClientProps {
   blog: Blog;
 }
 
-// ✅ FIX: Clean escaped Markdown from blog content
+// ✅ FOOLPROOF: No regex, just simple string splits and joins
 function cleanMarkdown(content: string): string {
-  return content
-    .replace(/\\\\\\\*\\\*/g, '**')
-    .replace(/\\\\\\*/g, '*')
-    .replace(/\\\\\\\|/g, '|')
-    .replace(/\\\\\\-/g, '-')
-    .replace(/\\\\\\\[/g, '[')
-    .replace(/\\\\\\\]/g, ']')
-    .replace(/\\\\\\\(/g, '(')
-    .replace(/\\\\\\\)/g, ')');
+  let cleaned = content;
+  
+  // Replace escaped double asterisks
+  cleaned = cleaned.split('\\*\\*').join('**');
+  
+  // Replace escaped single asterisks (but not the ones we just made)
+  // We handle this by replacing remaining \* patterns
+  cleaned = cleaned.split('\\*').join('*');
+  
+  // Replace escaped pipes
+  cleaned = cleaned.split('\\|').join('|');
+  
+  // Replace escaped dashes
+  cleaned = cleaned.split('\\-').join('-');
+  
+  // Replace escaped brackets
+  cleaned = cleaned.split('\\[').join('[');
+  cleaned = cleaned.split('\\]').join(']');
+  
+  // Replace escaped parentheses
+  cleaned = cleaned.split('\\(').join('(');
+  cleaned = cleaned.split('\\)').join(')');
+  
+  // Replace escaped backticks
+  cleaned = cleaned.split('\\`').join('`');
+  
+  return cleaned;
 }
 
 export default function BlogDetailClient({ blog }: BlogDetailClientProps) {

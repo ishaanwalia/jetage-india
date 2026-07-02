@@ -3,14 +3,12 @@ import { notFound } from "next/navigation";
 import BlogDetailClient from "./BlogDetailClient";
 import type { Metadata } from "next";
 
-// ✅ SYNCHRONOUS (not async) — required for static export
 export function generateStaticParams() {
   return blogPosts.map((post) => ({
     slug: post.slug,
   }));
 }
 
-// ✅ SYNCHRONOUS metadata generation
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const post = blogPosts.find((b) => b.slug === params.slug);
   if (!post) {
@@ -23,29 +21,11 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return {
     title: `${post.title} | Jetage Blog`,
     description: post.metaDescription,
-    keywords: post.tags.join(", "),
-    alternates: {
-      canonical: `https://www.jetageindia.in/blogs/${post.slug}/`,
-    },
-    openGraph: {
-      title: post.title,
-      description: post.metaDescription,
-      url: `https://www.jetageindia.in/blogs/${post.slug}/`,
-      type: "article",
-      publishedTime: post.date,
-      authors: [post.author],
-      tags: post.tags,
-    },
   };
 }
 
-// ✅ Server component — renders client component
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = blogPosts.find((b) => b.slug === params.slug);
-  
-  if (!post) {
-    notFound();
-  }
-
+  if (!post) notFound();
   return <BlogDetailClient blog={post} />;
 }
