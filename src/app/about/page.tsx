@@ -40,8 +40,8 @@ export default function AboutPage() {
           <StaggerReveal className="grid grid-cols-2 lg:grid-cols-4 gap-6" direction="up" stagger={0.15}>
             {[
               { icon: Clock, value: 35, suffix: "+", label: "Years of Trust" },
-              { icon: TrendingUp, value: 10000, suffix: "+", label: "Products Sold" },
-              { icon: Globe, value: 25, suffix: "+", label: "Cities Served" },
+              { icon: TrendingUp, value: 50000, suffix: "+", label: "Products Sold" },
+              { icon: Globe, value: 50, suffix: "+", label: "Cities Served" },
               { icon: Star, value: 4.5, suffix: "", label: "Customer Rating", decimals: 1 },
             ].map((stat, i) => (
               <div key={i} className="text-center space-y-3 p-6 rounded-2xl bg-jet-bg-card border border-jet-border">
