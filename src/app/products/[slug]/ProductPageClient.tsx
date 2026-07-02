@@ -465,7 +465,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             <div className="grid md:grid-cols-3 gap-8">
               {relatedProducts.map((p) => (
                 <div key={p.id} className="related-card">
-                  <ProductCard product={p} compact />
+                  <ProductCard product={p} />
                 </div>
               ))}
             </div>
@@ -491,7 +491,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             <div className="grid md:grid-cols-3 gap-8">
               {bundleProducts.map((p) => (
                 <div key={p.id} className="related-card">
-                  <ProductCard product={p} compact />
+                  <ProductCard product={p} />
                 </div>
               ))}
             </div>
