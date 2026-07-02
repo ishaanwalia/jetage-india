@@ -38,7 +38,7 @@ export function Hero3D() {
   return (
     <section 
       ref={containerRef}
-      className="relative min-h-screen flex items-center overflow-hidden pt-36 lg:pt-12"
+      className="relative min-h-screen flex items-center overflow-visible pt-36 lg:pt-12"
       style={{ perspective: "1200px" }}
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ transformStyle: "preserve-3d" }}>
@@ -72,7 +72,7 @@ export function Hero3D() {
         className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-0 w-full"
         style={{ y, opacity, scale }}
       >
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
           <div className="space-y-8" style={{ transform: "translateZ(50px)" }}>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -140,7 +140,7 @@ export function Hero3D() {
           </div>
 
           <motion.div 
-            className="relative flex items-center justify-center"
+            className="relative flex items-center justify-center overflow-visible"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 1.2, type: "spring" }}
