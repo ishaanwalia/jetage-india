@@ -2,7 +2,6 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
-import { ShowroomMap } from "@/components/ShowroomMap";
 import {
   MapPin, Clock, Phone, MessageCircle, Landmark, TreePine,
   Coffee, Film, Star, Navigation, Car, Train
@@ -33,7 +32,7 @@ export default function ShowroomPage() {
         </div>
       </div>
 
-      {/* Location Info */}
+      {/* Location Info + Map */}
       <section className="py-16 bg-jet-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
@@ -99,48 +98,56 @@ export default function ShowroomPage() {
               </div>
             </Reveal>
 
-            {/* === EMBEDDED MAP (replaces the old placeholder card) === */}
+            {/* === EMBEDDED MAP (exact same as homepage) === */}
             <Reveal direction="right">
-              <div className="space-y-8">
-                <div className="bg-jet-bg-card rounded-3xl border border-jet-border p-2 shadow-premium">
-                  <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden">
+              <div className="relative">
+                <div className="absolute -inset-4 bg-gradient-to-br from-jet-primary/10 to-transparent rounded-3xl blur-2xl" />
+                <div className="relative bg-jet-bg-card rounded-3xl shadow-premium border border-jet-border overflow-hidden">
+                  <div className="aspect-[4/3] relative bg-jet-bg-elevated">
                     <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.1234!2d76.8031!3d30.7353!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fed0e0e0e0e0e%3A0x0!2sSCO-12%2C+Sector+17+E%2C+Chandigarh!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430!2d76.780592!3d30.7401467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fed0a8f6e1ac9%3A0xfd75de97e90ec3f0!2sHP%20World%20-%20Sector%2017E!5e0!3m2!1sen!2sin!4v1700000000000"
                       width="100%"
                       height="100%"
-                      style={{ border: 0 }}
+                      style={{ border: 0, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                       allowFullScreen
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
-                      title="Jetage Showroom Location - SCO-12, Sector-17-E, Chandigarh"
-                      className="absolute inset-0 w-full h-full"
+                      title="Jetage India Showroom Location - SCO-12, Sector-17-E, Chandigarh"
                     />
                   </div>
-                  <div className="flex items-center justify-between p-4">
-                    <div>
-                      <p className="font-bold text-jet-text">Jetage Computer Traders</p>
-                      <p className="text-sm text-jet-text-muted">Authorized HP World Partner</p>
+                  <div className="p-6 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-bold text-jet-text">Jetage Computer Traders</p>
+                        <p className="text-sm text-jet-text-muted">Authorized HP World Partner</p>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 text-jet-primary fill-jet-primary" />
+                        <span className="text-sm font-bold text-jet-text">4.5</span>
+                        <span className="text-xs text-jet-text-muted">(232 reviews)</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-jet-primary fill-jet-primary" />
-                      <span className="text-sm font-bold text-jet-text">4.5</span>
+                    <div className="flex flex-wrap gap-2">
+                      {["HP Printers", "Laptops", "Desktops", "Monitors", "Accessories"].map((tag) => (
+                        <span key={tag} className="px-3 py-1 bg-jet-bg-elevated text-jet-text-dim text-xs rounded-full font-medium border border-jet-border">
+                          {tag}
+                        </span>
+                      ))}
                     </div>
+                    <a
+                      href="https://www.google.com/maps/dir/HP+World+-+Sector+17E,+1st+Floor,+SCO+12,+Shopping+Plaza,+17E,+Sector+17,+Chandigarh,+160017/HP+World+-+Sector+17E,+1st+Floor,+SCO+12,+Shopping+Plaza,+17E,+Sector+17,+Chandigarh,+160017/@30.8959353,77.0679584,15z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x390fed0a8f6e1ac9:0xfd75de97e90ec3f0!2m2!1d76.780592!2d30.7401467!1m5!1m1!1s0x390fed0a8f6e1ac9:0xfd75de97e90ec3f0!2m2!1d76.780592!2d30.7401467?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 bg-jet-primary text-jet-bg rounded-xl text-sm font-bold hover:bg-jet-accent transition-all shadow-glow"
+                    >
+                      <MapPin className="w-4 h-4" />
+                      Get Directions on Google Maps
+                    </a>
                   </div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { icon: Landmark, label: "Heritage Location", desc: "UNESCO City of Design" },
-                    { icon: TreePine, label: "Tree-Lined Plaza", desc: "Pedestrian-friendly" },
-                    { icon: Coffee, label: "Indian Coffee House", desc: "Historic landmark below" },
-                    { icon: Film, label: "Neelam Cinema", desc: "Chandigarh's first theatre" },
-                  ].map((item, i) => (
-                    <div key={i} className="p-4 rounded-2xl bg-jet-bg-card border border-jet-border hover:border-jet-border-strong transition-all">
-                      <item.icon className="w-5 h-5 text-jet-primary mb-2" />
-                      <p className="text-sm font-bold text-jet-text">{item.label}</p>
-                      <p className="text-xs text-jet-text-muted">{item.desc}</p>
-                    </div>
-                  ))}
+                <div className="absolute -bottom-4 -left-4 bg-jet-bg-card text-jet-text rounded-2xl p-4 shadow-premium border border-jet-border">
+                  <p className="text-xs text-jet-text-muted">Established</p>
+                  <p className="text-2xl font-bold text-jet-primary">1989</p>
                 </div>
               </div>
             </Reveal>
@@ -189,7 +196,7 @@ export default function ShowroomPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4 pt-4">
             <a
-              href="https://www.google.com/maps/dir//SCO-12,+1st+Floor,+Sector-17-E,+Chandigarh,+160017"
+              href="https://www.google.com/maps/dir/HP+World+-+Sector+17E,+1st+Floor,+SCO+12,+Shopping+Plaza,+17E,+Sector+17,+Chandigarh,+160017/HP+World+-+Sector+17E,+1st+Floor,+SCO+12,+Shopping+Plaza,+17E,+Sector+17,+Chandigarh,+160017/@30.8959353,77.0679584,15z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x390fed0a8f6e1ac9:0xfd75de97e90ec3f0!2m2!1d76.780592!2d30.7401467!1m5!1m1!1s0x390fed0a8f6e1ac9:0xfd75de97e90ec3f0!2m2!1d76.780592!2d30.7401467?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-jet-primary text-white rounded-full font-bold hover:bg-jet-primary-dim transition-all shadow-glow"
