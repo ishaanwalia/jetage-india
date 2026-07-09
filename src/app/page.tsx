@@ -155,8 +155,8 @@ export default function Home() {
 
       {/* ==================== HORIZONTAL SCROLL SECTION ==================== */}
       <section ref={horizontalRef} className="relative bg-jet-bg-elevated overflow-hidden">
-        <div className="h-screen flex flex-col justify-center pt-24 pb-8">
-          <div className="px-6 lg:px-8 mb-10">
+        <div className="h-screen flex flex-col pt-32 pb-8">
+          <div className="px-6 lg:px-8 mb-8 mt-auto">
             <div className="max-w-7xl mx-auto">
               <Reveal direction="left">
                 <span className="inline-block px-4 py-1.5 bg-jet-primary/10 text-jet-primary text-sm font-semibold rounded-full border border-jet-primary/20 mb-4">
@@ -164,23 +164,23 @@ export default function Home() {
                 </span>
               </Reveal>
               <Reveal direction="left" delay={0.1}>
-                <h2 className="text-4xl lg:text-6xl font-bold text-jet-text">
+                <h2 className="text-3xl lg:text-5xl font-bold text-jet-text">
                   Scroll to <span className="text-gradient-gold">Explore</span>
                 </h2>
               </Reveal>
               <Reveal direction="left" delay={0.2}>
-                <p className="text-jet-text-dim mt-4 text-lg">Drag or scroll to browse our handpicked selection</p>
+                <p className="text-jet-text-dim mt-3">Drag or scroll to browse our handpicked selection</p>
               </Reveal>
             </div>
           </div>
           
-          <div className="horizontal-scroll-container flex gap-8 px-6 lg:px-8 will-change-transform">
+          <div className="horizontal-scroll-container flex gap-6 px-6 lg:px-8 will-change-transform mb-auto">
             {featuredProducts.map((product) => (
-              <div key={product.id} className="flex-shrink-0 w-[82vw] sm:w-[400px] lg:w-[500px]">
+              <div key={product.id} className="flex-shrink-0 w-[70vw] sm:w-[300px] xl:w-[280px] 2xl:w-[320px]">
                 <ProductCard product={product} />              </div>
             ))}
-            
-            <div className="flex-shrink-0 w-[82vw] sm:w-[400px] lg:w-[500px] flex items-center justify-center">
+
+            <div className="flex-shrink-0 w-[70vw] sm:w-[300px] xl:w-[280px] 2xl:w-[320px] flex items-center justify-center">
               <TiltCard tiltAmount={5}>
                 <Link 
                   href="/products/"
