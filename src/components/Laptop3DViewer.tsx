@@ -2,7 +2,7 @@
 
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, useGLTF } from '@react-three/drei';
-import { Suspense, useMemo } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 const MODEL_URL = '/models/hp_omen_laptop.glb';
@@ -37,13 +37,26 @@ function Model() {
 }
 
 export function Laptop3DViewer() {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(true);
+
+  // Stop the render loop entirely once the hero is scrolled out of view.
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="w-full h-[380px] sm:h-[480px] lg:h-[640px] relative flex items-center justify-center">
+    <div ref={wrapperRef} className="w-full h-[380px] sm:h-[480px] lg:h-[640px] relative flex items-center justify-center">
       <Canvas
         camera={{ position: [0, 1.2, 9.5], fov: 38 }}
         style={{ background: 'transparent' }}
         gl={{ alpha: true, antialias: true }}
-        dpr={[1, 2]}
+        dpr={[1, 1.5]}
+        frameloop={inView ? 'always' : 'never'}
         className="w-full h-full"
       >
         <Suspense fallback={null}>

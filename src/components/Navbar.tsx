@@ -54,6 +54,7 @@ export function Navbar() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/products/", label: "Products" },
+    { href: "/finder/", label: "Printer Finder" },
     { href: "/about/", label: "About" },
     { href: "/showroom/", label: "Showroom" },
     { href: "/blogs/", label: "Blogs" },

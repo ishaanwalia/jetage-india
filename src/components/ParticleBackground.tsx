@@ -9,8 +9,30 @@ interface Particle {
   vy: number;
   radius: number;
   opacity: number;
-  color: string;
+  colorIndex: number;
   glow: number;
+}
+
+const COLORS = ["#0891b2", "#22d3ee", "#0e7490", "#67e8f9", "#06b6d4", "#a5f3fc"];
+const CONNECT_DIST = 70;
+const CONNECT_DIST_SQ = CONNECT_DIST * CONNECT_DIST;
+
+// Pre-render one glow sprite per color so the animation loop only does cheap
+// drawImage calls instead of building a radial gradient per particle per frame.
+function createGlowSprites(size: number): HTMLCanvasElement[] {
+  return COLORS.map((color) => {
+    const sprite = document.createElement("canvas");
+    sprite.width = size;
+    sprite.height = size;
+    const sctx = sprite.getContext("2d")!;
+    const half = size / 2;
+    const gradient = sctx.createRadialGradient(half, half, 0, half, half, half);
+    gradient.addColorStop(0, color);
+    gradient.addColorStop(1, "transparent");
+    sctx.fillStyle = gradient;
+    sctx.fillRect(0, 0, size, size);
+    return sprite;
+  });
 }
 
 export function ParticleBackground() {
@@ -26,6 +48,8 @@ export function ParticleBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -33,9 +57,10 @@ export function ParticleBackground() {
     resize();
     window.addEventListener("resize", resize);
 
-    // 100x more particles (8000 vs 80) - spread across entire viewport
-    const particleCount = Math.min(2000, Math.floor((window.innerWidth * window.innerHeight) / 6000));
-    const colors = ["#0891b2", "#22d3ee", "#0e7490", "#67e8f9", "#06b6d4", "#a5f3fc"];
+    // Keep the count low: the connection pass below compares every pair of
+    // particles, so cost grows with the square of this number.
+    const particleCount = Math.min(140, Math.floor((window.innerWidth * window.innerHeight) / 14000));
+    const glowSprites = createGlowSprites(48);
 
     particlesRef.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
@@ -44,38 +69,35 @@ export function ParticleBackground() {
       vy: (Math.random() - 0.5) * 1.2,
       radius: Math.random() * 3 + 0.5,
       opacity: Math.random() * 0.8 + 0.2,
-      color: colors[Math.floor(Math.random() * colors.length)],
+      colorIndex: Math.floor(Math.random() * COLORS.length),
       glow: Math.random() * 12 + 6,
     }));
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
-      // Update custom cursor
       if (cursorRef.current) {
-        cursorRef.current.style.left = e.clientX + "px";
-        cursorRef.current.style.top = e.clientY + "px";
+        cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
       }
     };
     window.addEventListener("mousemove", handleMouseMove);
 
-    let frameCount = 0;
     const animate = () => {
-      frameCount++;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const particles = particlesRef.current;
+      const mouse = mouseRef.current;
 
-      particles.forEach((p, i) => {
-        // Mouse interaction - stronger attraction
-        if (frameCount % 2 === 0) {
-          const dx = mouseRef.current.x - p.x;
-          const dy = mouseRef.current.y - p.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 300) {
-            const force = (300 - dist) / 300;
-            p.vx += (dx / dist) * force * 0.05;
-            p.vy += (dy / dist) * force * 0.05;
-          }
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        const mdx = mouse.x - p.x;
+        const mdy = mouse.y - p.y;
+        const mDistSq = mdx * mdx + mdy * mdy;
+        if (mDistSq < 90000 && mDistSq > 1) {
+          const mDist = Math.sqrt(mDistSq);
+          const force = (300 - mDist) / 300;
+          p.vx += (mdx / mDist) * force * 0.05;
+          p.vy += (mdy / mDist) * force * 0.05;
         }
 
         p.x += p.vx;
@@ -89,51 +111,55 @@ export function ParticleBackground() {
         if (p.y < -50) p.y = canvas.height + 50;
         if (p.y > canvas.height + 50) p.y = -50;
 
-        // Draw glow
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.glow);
-        gradient.addColorStop(0, p.color);
-        gradient.addColorStop(1, "transparent");
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.glow, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
+        // Glow (pre-rendered sprite)
         ctx.globalAlpha = p.opacity * 0.15;
-        ctx.fill();
+        ctx.drawImage(glowSprites[p.colorIndex], p.x - p.glow, p.y - p.glow, p.glow * 2, p.glow * 2);
 
-        // Draw core particle
+        // Core particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
+        ctx.fillStyle = COLORS[p.colorIndex];
         ctx.globalAlpha = p.opacity;
         ctx.fill();
 
-        // Connect nearby particles with glowing lines
+        // Connect nearby particles
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
           const dy = p.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (dist < 60) {
+          if (distSq < CONNECT_DIST_SQ) {
+            const dist = Math.sqrt(distSq);
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = p.color;
-            ctx.globalAlpha = (1 - dist / 80) * 0.3;
+            ctx.strokeStyle = COLORS[p.colorIndex];
+            ctx.globalAlpha = (1 - dist / CONNECT_DIST) * 0.3;
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }
         }
-      });
+      }
 
       ctx.globalAlpha = 1;
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    animate();
+    const handleVisibility = () => {
+      cancelAnimationFrame(animationRef.current);
+      if (!document.hidden && !reducedMotion) {
+        animationRef.current = requestAnimationFrame(animate);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    if (!reducedMotion) animate();
 
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("visibilitychange", handleVisibility);
       cancelAnimationFrame(animationRef.current);
     };
   }, []);
@@ -145,25 +171,14 @@ export function ParticleBackground() {
         className="fixed inset-0 pointer-events-none z-0"
         style={{ opacity: 0.9 }}
       />
-      {/* Custom cursor glow */}
+      {/* Custom cursor glow — moved via transform so it never triggers layout */}
       <div
         ref={cursorRef}
-        className="fixed pointer-events-none z-[9999] w-8 h-8 rounded-full border-2 border-jet-primary/50 hidden lg:block"
+        className="fixed top-0 left-0 pointer-events-none z-[9999] w-8 h-8 rounded-full border-2 border-jet-primary/50 hidden lg:block"
         style={{
-          transform: "translate(-50%, -50%)",
-          transition: "left 0.1s ease-out, top 0.1s ease-out, width 0.2s, height 0.2s",
+          transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)",
+          transition: "transform 0.08s linear",
           boxShadow: "0 0 20px rgba(8, 145, 178, 0.4), 0 0 40px rgba(8, 145, 178, 0.2)",
-        }}
-      />
-      {/* Cursor trail dot */}
-      <div
-        className="fixed pointer-events-none z-[9998] w-2 h-2 rounded-full bg-jet-primary hidden lg:block"
-        style={{
-          left: "var(--cursor-x, -100px)",
-          top: "var(--cursor-y, -100px)",
-          transform: "translate(-50%, -50%)",
-          transition: "left 0.05s ease-out, top 0.05s ease-out",
-          boxShadow: "0 0 10px rgba(8, 145, 178, 0.8)",
         }}
       />
     </>

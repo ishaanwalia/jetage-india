@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { MessageCircle, ShoppingCart, Eye } from "lucide-react";
+import { MessageCircle, ShoppingCart, Eye, Scale, Check } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useCompare } from "@/context/CompareContext";
 
 export interface Product {
   id: string;
@@ -34,6 +35,8 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { addItem } = useCart();
+  const { toggle, has, isFull } = useCompare();
+  const inCompare = has(product.id);
 
   const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
   const whatsappLink = `https://wa.me/919814958295?text=Hi%20Jetage%2C%20I'm%20interested%20in%20${encodeURIComponent(product.name)}%20(SKU%3A%20${product.sku})`;
@@ -102,6 +105,20 @@ export function ProductCard({ product }: ProductCardProps) {
             -{discount}%
           </div>
         )}
+
+        <button
+          onClick={() => toggle(product.id)}
+          disabled={!inCompare && isFull}
+          title={inCompare ? "Remove from comparison" : isFull ? "Comparison is full (3 max)" : "Add to comparison"}
+          className={`absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+            inCompare
+              ? "bg-cyan-600 text-white border-cyan-600"
+              : "bg-white/90 text-gray-500 border-gray-200 hover:text-cyan-600 hover:border-cyan-300 disabled:opacity-40"
+          }`}
+        >
+          {inCompare ? <Check className="w-3.5 h-3.5" /> : <Scale className="w-3.5 h-3.5" />}
+          Compare
+        </button>
         
         <img
           src={product.image}

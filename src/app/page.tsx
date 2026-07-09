@@ -108,6 +108,51 @@ export default function Home() {
       {/* ==================== 3D CATEGORIES SECTION ==================== */}
       <CategoryGrid3D />
 
+      {/* ==================== DECISION TOOLS ==================== */}
+      <section className="py-16 px-6 lg:px-8 bg-jet-bg">
+        <div className="max-w-7xl mx-auto">
+          <Reveal>
+            <div className="grid md:grid-cols-2 gap-6">
+              <Link
+                href="/finder/"
+                className="group relative overflow-hidden p-8 bg-jet-bg-card rounded-2xl border border-jet-border hover:border-jet-primary/40 hover:shadow-premium-hover transition-all duration-300 hover:-translate-y-1"
+              >
+                <Sparkles className="w-8 h-8 text-jet-primary mb-4" />
+                <h3 className="text-xl font-bold text-jet-text mb-2 group-hover:text-jet-primary transition-colors">
+                  Not sure which printer? Answer 5 questions.
+                </h3>
+                <p className="text-sm text-jet-text-dim mb-4 max-w-md">
+                  The Printer Finder matches your usage, volume and budget to the right
+                  machine — with honest reasons why.
+                </p>
+                <span className="inline-flex items-center gap-2 text-sm font-bold text-jet-primary">
+                  Find my printer
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </Link>
+
+              <Link
+                href="/cost-calculator/"
+                className="group relative overflow-hidden p-8 bg-jet-bg-card rounded-2xl border border-jet-border hover:border-jet-primary/40 hover:shadow-premium-hover transition-all duration-300 hover:-translate-y-1"
+              >
+                <TrendingUp className="w-8 h-8 text-jet-primary mb-4" />
+                <h3 className="text-xl font-bold text-jet-text mb-2 group-hover:text-jet-primary transition-colors">
+                  The sticker price is half the story.
+                </h3>
+                <p className="text-sm text-jet-text-dim mb-4 max-w-md">
+                  Ink decides what a printer really costs. Compare the true 3-year cost of
+                  Smart Tank vs InkJet vs Laser for your usage.
+                </p>
+                <span className="inline-flex items-center gap-2 text-sm font-bold text-jet-primary">
+                  Calculate my real cost
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ==================== HORIZONTAL SCROLL SECTION ==================== */}
       <section ref={horizontalRef} className="relative bg-jet-bg-elevated overflow-hidden">
         <div className="h-screen flex flex-col justify-center pt-24 pb-8">

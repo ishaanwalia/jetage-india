@@ -41,7 +41,7 @@ export function Hero3D() {
       className="relative min-h-screen flex items-center overflow-visible pt-36 lg:pt-12"
       style={{ perspective: "1200px" }}
     >
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ transformStyle: "preserve-3d" }}>
+      <motion.div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ transformStyle: "preserve-3d", opacity }}>
         <motion.div 
           className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full"
           style={{
@@ -66,7 +66,7 @@ export function Hero3D() {
           animate={{ scale: [1, 1.3, 1] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
-      </div>
+      </motion.div>
 
       <motion.div 
         className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-0 w-full"
