@@ -63,13 +63,28 @@ export function Footer() {
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.label}>
-                  <Link 
+                  <Link
                     href={link.href}
                     className="text-jet-text-dim hover:text-jet-primary transition-colors text-sm inline-flex items-center gap-1 group"
                   >
                     {link.label}
-                    <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Link>
+                </li>
+              ))}
+            </ul>
+            <h4 className="font-bold text-lg mt-8 mb-4 text-jet-text">HP Resources</h4>
+            <ul className="space-y-3">
+              {externalLinks.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-jet-text-dim hover:text-jet-primary transition-colors text-sm inline-flex items-center gap-1 group"
+                  >
+                    {link.label}
+                    <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
                 </li>
               ))}
             </ul>

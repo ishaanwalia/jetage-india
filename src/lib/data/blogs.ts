@@ -111,7 +111,7 @@ Visit our showroom at **SCO-12, 1st Floor, Sector-17-E, Chandigarh**, or WhatsAp
     tags: ["HP Printers", "Laser 303d", "Laser 303dw", "Comparison", "2026"],
     content: `The HP Laser 303d and HP Laser 303dw are two of the most popular monochrome laser printers for Indian small businesses in 2026. They look nearly identical, print at the same speed, and even use the same toner cartridge. Yet the 303dw costs approximately ₹1,500 more. Is the wireless upgrade worth it?
 
-At Jetage India, we sell both models daily. This guide answers the question based on real customer feedback and use cases from our 35+ years of experience.
+At Jetage India, we sell both models daily. This guide answers the question based on real customer feedback and use cases from our 37+ years of experience.
 
 ## Quick Comparison Table
 
@@ -412,7 +412,7 @@ At Jetage India, all three models are in stock with genuine HP warranty. We offe
     tags: ["HP Printers", "Inkjet", "Laser", "InkTank", "Buying Guide", "India"],
     content: `Buying a printer in India is not just about the purchase price. You are committing to a technology that will determine your running costs, print quality, and maintenance headaches for the next 5-7 years. HP offers three distinct printer technologies in India — Inkjet, Laser, and InkTank — and choosing the wrong one can cost you thousands in the long run.
 
-At Jetage India, we have sold and serviced thousands of HP printers across Chandigarh, Punjab, and Haryana since 1989. This guide distills 35+ years of experience into a clear decision framework.
+At Jetage India, we have sold and serviced thousands of HP printers across Chandigarh, Punjab, and Haryana since 1989. This guide distills 37+ years of experience into a clear decision framework.
 
 ## The Three Technologies Explained
 
@@ -653,7 +653,7 @@ Visit our service center at **SCO-12, 1st Floor, Sector-17-E, Chandigarh**, or W
     tags: ["HP Laptops", "Students", "Under 50000", "India", "Buying Guide", "2026"],
     content: `Every July, hundreds of parents walk into our Chandigarh showroom asking the same question: "Which HP laptop should I buy for my child's college?" The budget is almost always under ₹50,000. The confusion is always the same — Intel vs. AMD, 8GB vs. 16GB RAM, SSD vs. HDD.
 
-At Jetage India, we have equipped students from PU, PEC, CCET, Chitkara, and dozens of coaching centers across Chandigarh, Mohali, and Panchkula. This guide is based on 35+ years of watching students succeed (and fail) with their laptop choices.
+At Jetage India, we have equipped students from PU, PEC, CCET, Chitkara, and dozens of coaching centers across Chandigarh, Mohali, and Panchkula. This guide is based on 37+ years of watching students succeed (and fail) with their laptop choices.
 
 ## What Students Actually Need
 

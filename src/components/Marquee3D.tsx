@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 const items = [
   "HP World Authorized",
   "Genuine Products",
-  "35+ Years Trust",
+  "37+ Years Trust",
   "All India Delivery",
   "WhatsApp Support",
   "Best Price Guarantee",

@@ -85,8 +85,8 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div 
-      className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+    <div
+      className="group card-glow bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-premium-hover transition-all duration-300 hover:-translate-y-1"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -103,10 +103,11 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         )}
         
-        <img 
-          src={product.image} 
+        <img
+          src={product.image}
           alt={product.name}
-          className="object-contain max-h-[200px] w-auto"
+          loading="lazy"
+          className="object-contain max-h-[200px] w-auto transition-transform duration-500 ease-out group-hover:scale-105"
           onError={(e) => {
             (e.target as HTMLImageElement).src = `https://placehold.co/300x200/e2e8f0/64748b?text=${encodeURIComponent(product.shortName)}`;
           }}
@@ -146,9 +147,11 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.name}
         </h3>
 
-        <div className="flex items-center gap-2 text-xs text-gray-500">
-          <span>{product.speed}</span>
-        </div>
+        {product.speed && product.speed !== "N/A" && (
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <span>{product.speed}</span>
+          </div>
+        )}
 
         <div className="flex items-baseline gap-2">
           <span className="text-xl font-bold text-gray-900">₹{product.price.toLocaleString()}</span>

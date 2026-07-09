@@ -894,7 +894,7 @@ export const products: Product[] = [
     description: "Quiet chiclet-style keyboard with accurate 1600 DPI mouse. One USB receiver connects both. 16-month battery life. Full-size with numeric keypad.",
     features: ["Chiclet Keyboard", "1600 DPI Mouse", "Single USB Receiver", "16-month battery", "Full-size with numpad"],
     image: "/products/hp-km260-wireless-combo.png",
-    images: ["/products/hp-km260-wireless-combo.png", "/products/hp-km260-wireless-combo-2.png"],
+    images: ["/products/hp-km260-wireless-combo.png"],
     badge: "Popular",
     specs: {
       "Keyboard Type": "Chiclet (Full Size 104 keys)",
@@ -1474,7 +1474,7 @@ export const products: Product[] = [
   description: "HP 46 Black Original Ink Advantage Cartridge. Print more, spend less — produce up to 1,500 black pages with long-lasting, low-priced Original HP ink cartridges. Virtually maintenance-free printing. Fade resistant prints with low-ink alerts.",
   features: ["~1,500 pages high yield", "Pigment-based ink", "Low-ink alerts", "Virtually maintenance-free", "Fade resistant", "Affordable value"],
   image: "/products/hp-46-black.png",
-  images: ["/products/hp-46-black.png", "/products/hp-46-black-2.png"],
+  images: ["/products/hp-46-black.png"],
   badge: "High Yield",
   specs: {
     "Print Technology": "HP Thermal Inkjet",
@@ -1485,38 +1485,6 @@ export const products: Product[] = [
     "Compatible With": "HP DeskJet Ink Advantage Ultra 4729, 2520, 4729, 5738, 5739, 6525"
   },
   warranty: "1 year"
-},
-{
-  id: "hp-805-tri-color-alt",
-  name: "HP 805 Tri-color Original Ink Cartridge",
-  shortName: "HP 805 Tri-color",
-  category: "accessory",
-  subCategory: "inkjet",
-  price: 913,
-  mrp: 913,
-  sku: "3YM72AA-ALT",
-  speed: "~100 pages",
-  connectivity: ["N/A"],
-  duplex: false,
-  dutyCycle: "N/A",
-  idealFor: "Home",
-  description: "HP 805 Tri-color Original Ink Cartridge. Designed to work the first time, every time. Get the most from your ink with high-quality documents and store-quality photos. Crisp, sharp text and vivid colors. Optional high-yield cartridges available. HP Smart app integration.",
-  features: ["~100 pages yield", "Tri-color (Cyan/Magenta/Yellow)", "HP Smart app compatible", "Fade resistant", "High-yield option available", "Recyclable content"],
-  image: "/products/hp-805-tri-color.png",
-  images: ["/products/hp-805-tri-color.png"],
-  specs: {
-    "Print Technology": "HP Thermal Inkjet",
-    "Color": "Tri-color (C/M/Y)",
-    "Page Yield": "~100 pages",
-    "Ink Type": "Dye-based",
-    "Ink Volume": "2 ml",
-    "Ink Drop Size": "6.3 pl",
-    "Weight": "59.57g",
-    "Dimensions": "11.63 x 3.65 x 10.09 cm"
-  },
-  warranty: "1 year",
-  weight: "59.57g",
-  dimensions: "11.63 x 3.65 x 10.09 cm"
 },
 {
   id: "hp-678-tri-color",
@@ -1535,7 +1503,7 @@ export const products: Product[] = [
   description: "HP 678 Tri-color Original Ink Advantage Cartridge. Designed for reliable quality and consistent performance. Fade resistant prints that last. Low-ink alerts to ensure you never run out unexpectedly. Engineered for security to protect your printer and data.",
   features: ["~150 pages yield", "Tri-color (Cyan/Magenta/Yellow)", "Fade resistant prints", "Low-ink alerts", "Engineered for security", "Active Ink Balancing"],
   image: "/products/hp-678-tri-color.png",
-  images: ["/products/hp-678-tri-color.png", "/products/hp-678-tri-color-2.png"],
+  images: ["/products/hp-678-tri-color.png"],
   specs: {
     "Print Technology": "HP Thermal Inkjet",
     "Color": "Tri-color (C/M/Y)",

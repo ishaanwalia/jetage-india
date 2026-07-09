@@ -2,48 +2,74 @@
 
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, useGLTF } from '@react-three/drei';
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
+import * as THREE from 'three';
+
+const MODEL_URL = '/models/hp_omen_laptop.glb';
+
+// Start downloading the model as soon as this module loads,
+// instead of waiting for the Canvas to mount.
+useGLTF.preload(MODEL_URL);
 
 function Model() {
-  const { scene } = useGLTF('/models/hp_omen_laptop.glb');
-  return <primitive object={scene} scale={5.25} position={[0, -0.85, 0]} rotation={[0, -Math.PI / 6, 0]} />;
+  const { scene } = useGLTF(MODEL_URL);
+
+  // The source asset uses KHR_materials_transmission, which three.js renders
+  // as glass-like translucency. Force every material fully opaque.
+  useMemo(() => {
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        materials.forEach((mat) => {
+          const m = mat as THREE.MeshPhysicalMaterial;
+          if (m.transmission !== undefined) m.transmission = 0;
+          m.transparent = false;
+          m.opacity = 1;
+          m.depthWrite = true;
+          m.needsUpdate = true;
+        });
+      }
+    });
+  }, [scene]);
+
+  return <primitive object={scene} scale={6.5} position={[0, -1.05, 0]} rotation={[0, -Math.PI / 6, 0]} />;
 }
 
 export function Laptop3DViewer() {
   return (
-    <div className="w-full h-[700px] lg:h-[800px] relative flex items-center justify-center overflow-visible">
-      <div className="w-full h-full relative">
-        <Canvas
-          camera={{ position: [0, 1.2, 9.5], fov: 38 }}
-          style={{ background: 'transparent' }}
-          gl={{ alpha: true, antialias: true }}
-          className="w-full h-full"
-        >
-          <Suspense fallback={null}>
-            <ambientLight intensity={1.0} />
-            <directionalLight position={[5, 8, 5]} intensity={1.3} castShadow />
-            <directionalLight position={[-5, 3, -5]} intensity={0.7} />
-            <pointLight position={[0, 5, 0]} intensity={0.5} />
+    <div className="w-full h-[380px] sm:h-[480px] lg:h-[640px] relative flex items-center justify-center">
+      <Canvas
+        camera={{ position: [0, 1.2, 9.5], fov: 38 }}
+        style={{ background: 'transparent' }}
+        gl={{ alpha: true, antialias: true }}
+        dpr={[1, 2]}
+        className="w-full h-full"
+      >
+        <Suspense fallback={null}>
+          <ambientLight intensity={1.0} />
+          <directionalLight position={[5, 8, 5]} intensity={1.3} castShadow />
+          <directionalLight position={[-5, 3, -5]} intensity={0.7} />
+          <pointLight position={[0, 5, 0]} intensity={0.5} />
 
-            <Model />
+          <Model />
 
-            <OrbitControls
-              enableZoom={false}
-              autoRotate={true}
-              autoRotateSpeed={1.2}
-              minPolarAngle={Math.PI / 3}
-              maxPolarAngle={Math.PI / 2}
-              enablePan={false}
-              target={[0, 0, 0]}
-            />
+          <OrbitControls
+            enableZoom={false}
+            autoRotate={true}
+            autoRotateSpeed={1.2}
+            minPolarAngle={Math.PI / 3}
+            maxPolarAngle={Math.PI / 2}
+            enablePan={false}
+            target={[0, 0, 0]}
+          />
 
-            <Environment preset="studio" />
-          </Suspense>
-        </Canvas>
-      </div>
+          <Environment preset="studio" />
+        </Suspense>
+      </Canvas>
 
-      <div className="absolute bottom-[42px] left-1/2 -translate-x-1/2 bg-jet-primary/20 text-jet-primary px-6 py-2 rounded-full text-sm backdrop-blur-md border border-jet-primary/30 font-medium whitespace-nowrap">
-        Check out our exclusive range of HP products
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-jet-primary/10 text-jet-primary px-5 py-2 rounded-full text-xs sm:text-sm backdrop-blur-md border border-jet-primary/30 font-medium whitespace-nowrap">
+        Drag to rotate — explore in 3D
       </div>
     </div>
   );

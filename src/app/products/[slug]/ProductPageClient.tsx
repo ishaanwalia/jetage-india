@@ -352,7 +352,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 {[
                   { icon: Shield, label: "HP Warranty", desc: "Genuine product" },
                   { icon: Truck, label: "Fast Delivery", desc: "All India shipping" },
-                  { icon: Award, label: "Since 1989", desc: "35+ years trust" },
+                  { icon: Award, label: "Since 1989", desc: "37+ years trust" },
                 ].map((item, i) => (
                   <div key={i} className="text-center p-4 bg-jet-bg-card rounded-xl border border-jet-border hover:border-jet-border-strong transition-all">
                     <item.icon className="w-6 h-6 text-jet-primary mx-auto mb-2" />

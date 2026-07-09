@@ -56,7 +56,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <StaggerReveal className="grid grid-cols-2 lg:grid-cols-4 gap-6" direction="up" stagger={0.15}>
             {[
-              { icon: Clock, value: 35, suffix: "+", label: "Years of Trust" },
+              { icon: Clock, value: 37, suffix: "+", label: "Years of Trust" },
               { icon: TrendingUp, value: 50000, suffix: "+", label: "Products Sold" },
               { icon: Globe, value: 50, suffix: "+", label: "Cities Served" },
               { icon: Star, value: 4.5, suffix: "", label: "Customer Rating", decimals: 1 },
@@ -153,7 +153,7 @@ export default function AboutPage() {
             {[
               { icon: Shield, title: "Genuine Products Only", desc: "We never sell grey market or refurbished items as new. Every product comes with authentic HP warranty." },
               { icon: Zap, title: "Best Price Guarantee", desc: "We match and beat competitor prices. Our direct HP partnership allows us to offer exclusive deals." },
-              { icon: Users, title: "Expert Guidance", desc: "Our team has 35+ years of combined experience. We help you choose the right product, not the most expensive one." },
+              { icon: Users, title: "Expert Guidance", desc: "Our team has 37+ years of combined experience. We help you choose the right product, not the most expensive one." },
               { icon: Truck, title: "All India Delivery", desc: "Fast, insured shipping to every corner of India. Special handling for fragile components." },
               { icon: MessageCircle, title: "WhatsApp Support", desc: "Get instant quotes, place orders, and track delivery — all through WhatsApp. No app downloads needed." },
               { icon: Clock, title: "After-Sales Care", desc: "We don't disappear after the sale. Installation help, troubleshooting, and warranty assistance included." },

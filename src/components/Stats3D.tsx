@@ -116,7 +116,7 @@ function StatCard3D({ icon: Icon, value, suffix, label, sub = "", decimals = 0, 
 
 export function Stats3D() {
   const stats = [
-    { icon: Clock, value: 35, suffix: "+", label: "Years Experience", sub: "yrs" },
+    { icon: Clock, value: 37, suffix: "+", label: "Years Experience", sub: "yrs" },
     { icon: Printer, value: 50000, suffix: "+", label: "Products Sold", sub: "" },
     { icon: Globe, value: 50, suffix: "+", label: "Cities Served", sub: "" },
     { icon: Star, value: 4.5, suffix: "", label: "Customer Rating", sub: "/5", decimals: 1 },

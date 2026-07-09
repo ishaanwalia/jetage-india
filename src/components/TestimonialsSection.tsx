@@ -33,7 +33,7 @@ const testimonials: Testimonial[] = [
     rating: 5,
     date: "November 2025",
     product: "HP Pavilion 15 Laptop",
-    text: "Purchased HP Pavilion 15 for my brother's architecture course. Jetage gave us student pricing that was even better than HP's education store. The team helped us choose between Ryzen 5 and Intel i5 variants — very patient. Laptop was unboxed in front of us, serial number verified on HP's website. Trustworthy dealer after 35+ years!",
+    text: "Purchased HP Pavilion 15 for my brother's architecture course. Jetage gave us student pricing that was even better than HP's education store. The team helped us choose between Ryzen 5 and Intel i5 variants — very patient. Laptop was unboxed in front of us, serial number verified on HP's website. Trustworthy dealer after 37+ years!",
     location: "Mohali",
     verified: true,
   },

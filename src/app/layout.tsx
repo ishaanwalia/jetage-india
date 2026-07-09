@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Jetage India | Authorized HP Dealer Since 1989",
-    description: "Genuine HP products with best prices. 35+ years of trust. Visit our Sector 17 showroom or order via WhatsApp.",
+    description: "Genuine HP products with best prices. 37+ years of trust. Visit our Sector 17 showroom or order via WhatsApp.",
     url: "https://www.jetageindia.in/",
     siteName: "Jetage India",
     locale: "en_IN",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Jetage India | Authorized HP Dealer Since 1989",
-    description: "Genuine HP products with best prices. 35+ years of trust. Visit our Sector 17 showroom.",
+    description: "Genuine HP products with best prices. 37+ years of trust. Visit our Sector 17 showroom.",
     images: ["https://www.jetageindia.in/og-image.jpg"],
   },
   verification: {

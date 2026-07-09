@@ -106,7 +106,7 @@ export function Hero3D() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
-              Authorized HP World Partner with 35+ years of expertise. Experience premium HP products in stunning 3D.
+              Authorized HP World Partner with 37+ years of expertise. Experience premium HP products in stunning 3D.
             </motion.p>
 
             <motion.div 
@@ -118,7 +118,7 @@ export function Hero3D() {
               <MagneticButton strength={0.2}>
                 <Link 
                   href="#products"
-                  className="group inline-flex items-center gap-3 px-8 py-4 bg-jet-primary text-jet-bg rounded-full font-bold hover:bg-jet-accent transition-all duration-300 shadow-glow hover:shadow-premium-hover text-lg relative overflow-hidden"
+                  className="group btn-sheen inline-flex items-center gap-3 px-8 py-4 bg-jet-primary text-jet-bg rounded-full font-bold hover:bg-jet-accent transition-all duration-300 shadow-glow hover:shadow-premium-hover text-lg relative overflow-hidden"
                 >
                   Explore Products
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

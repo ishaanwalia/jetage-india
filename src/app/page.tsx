@@ -54,6 +54,7 @@ import { Marquee3D } from "@/components/Marquee3D";
 import { ProcessSteps3D } from "@/components/ProcessSteps3D";
 import { ProductShowcase3D } from "@/components/ProductShowcase3D";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { CinematicLoader } from "@/components/CinematicLoader";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -94,6 +95,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-jet-bg noise-bg relative">
+      <CinematicLoader />
       <ParticleBackground />
       <Navbar />
 
@@ -129,11 +131,11 @@ export default function Home() {
           
           <div className="horizontal-scroll-container flex gap-8 px-6 lg:px-8 will-change-transform">
             {featuredProducts.map((product) => (
-              <div key={product.id} className="flex-shrink-0 w-[400px] lg:w-[500px]">
+              <div key={product.id} className="flex-shrink-0 w-[82vw] sm:w-[400px] lg:w-[500px]">
                 <ProductCard product={product} />              </div>
             ))}
             
-            <div className="flex-shrink-0 w-[400px] lg:w-[500px] flex items-center justify-center">
+            <div className="flex-shrink-0 w-[82vw] sm:w-[400px] lg:w-[500px] flex items-center justify-center">
               <TiltCard tiltAmount={5}>
                 <Link 
                   href="/products/"
@@ -235,7 +237,7 @@ export default function Home() {
               { icon: Award, title: "Authorized HP World", description: "Genuine HP products with full manufacturer warranty and official support. No grey market risks." },
               { icon: Phone, title: "WhatsApp Ordering", description: "Order instantly via WhatsApp. Get quotes, place orders, and track delivery — all on your phone." },
               { icon: Zap, title: "Best Price Guarantee", description: "We match and beat competitor prices. Exclusive deals you won't find on Amazon or Flipkart." },
-              { icon: Shield, title: "Expert Consultation", description: "35+ years of tech expertise. We help you choose the right product for your exact needs." },
+              { icon: Shield, title: "Expert Consultation", description: "37+ years of tech expertise. We help you choose the right product for your exact needs." },
               { icon: Truck, title: "All India Delivery", description: "Fast, insured shipping across India. Special handling for fragile components." },
               { icon: Clock, title: "After-Sales Support", description: "Dedicated support for installation, setup, and troubleshooting. We're just a message away." }
             ].map((item, i) => (
@@ -287,7 +289,7 @@ export default function Home() {
                   href="https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20need%20help%20choosing%20an%20HP%20product"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-jet-whatsapp text-white rounded-full font-bold hover:bg-[#128C7E] transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:shadow-jet-whatsapp/20"
+                  className="btn-sheen inline-flex items-center gap-3 px-8 py-4 bg-jet-whatsapp text-white rounded-full font-bold hover:bg-[#128C7E] transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:shadow-jet-whatsapp/20"
                 >
                   <MessageCircle className="w-6 h-6" />
                   Chat on WhatsApp
