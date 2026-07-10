@@ -11,7 +11,9 @@ const letters = "JETAGE".split("");
 
 export function CinematicLoader() {
   const { progress, active } = useProgress();
-  const [visible, setVisible] = useState(false);
+  // Rendered visible from the server so the page never flashes before the intro.
+  const [visible, setVisible] = useState(true);
+  const [skipped, setSkipped] = useState(false);
   const [minTimeElapsed, setMinTimeElapsed] = useState(false);
   const [displayProgress, setDisplayProgress] = useState(0);
 
@@ -19,8 +21,11 @@ export function CinematicLoader() {
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const alreadyShown = sessionStorage.getItem(SESSION_KEY) === "1";
-    if (reducedMotion || alreadyShown) return;
-    setVisible(true);
+    if (reducedMotion || alreadyShown) {
+      setSkipped(true);
+      setVisible(false);
+      return;
+    }
     document.documentElement.style.overflow = "hidden";
     const timer = setTimeout(() => setMinTimeElapsed(true), MIN_DISPLAY_MS);
     return () => {
@@ -55,12 +60,18 @@ export function CinematicLoader() {
   }, [done]);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence custom={skipped}>
       {visible && (
         <motion.div
           className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-jet-bg"
-          exit={{ y: "-100%" }}
-          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+          custom={skipped}
+          variants={{
+            exit: (skip: boolean) =>
+              skip
+                ? { opacity: 0, transition: { duration: 0 } }
+                : { y: "-100%", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } },
+          }}
+          exit="exit"
           aria-hidden="true"
         >
           <div className="absolute inset-0 grid-pattern opacity-40" />

@@ -76,8 +76,11 @@ export function Laptop3DViewer() {
             enablePan={false}
             target={[0, 0, 0]}
           />
+        </Suspense>
 
-          <Environment preset="studio" />
+        {/* Own Suspense so the HDR never blocks the model from appearing */}
+        <Suspense fallback={null}>
+          <Environment files="/hdri/studio_small_03_1k.hdr" />
         </Suspense>
       </Canvas>
 

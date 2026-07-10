@@ -4,10 +4,13 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Laptop, Monitor, Printer, Mouse, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { products } from "@/lib/data/products";
+
+const countFor = (id: string) => products.filter((p) => p.category === id).length;
 
 const categories = [
-  { id: "printer", name: "Printers", icon: Printer, description: "Laser, Color Laser, InkJet, Smart Tank & OfficeJet", count: 20, color: "#0891b2" },
-  { id: "accessory", name: "Accessories", icon: Mouse, description: "Keyboards, Mice & Combos", count: 6, color: "#06b6d4" },
+  { id: "printer", name: "Printers", icon: Printer, description: "Laser, Color Laser, InkJet, Smart Tank & OfficeJet", count: countFor("printer"), color: "#0891b2" },
+  { id: "accessory", name: "Accessories", icon: Mouse, description: "Keyboards, Mice & Combos", count: countFor("accessory"), color: "#06b6d4" },
 ];
 
 function CategoryCard3D({ category, index }: { category: typeof categories[0]; index: number }) {
