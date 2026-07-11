@@ -124,7 +124,7 @@ export default function RootLayout({
               },
               "telephone": "+91-98149-58295",
               "email": "info@jetageindia.in",
-              "openingHours": ["Mo-Sa 10:00-20:00"],
+              "openingHours": ["Mo-Sa 10:00-19:00"],
               "priceRange": "₹₹",
               "currenciesAccepted": "INR",
               "paymentAccepted": "Cash, Credit Card, UPI, Bank Transfer",

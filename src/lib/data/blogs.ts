@@ -292,7 +292,7 @@ Example: A ₹52,699 HP Pavilion 15 becomes approximately ₹5,867/month over 9 
 - Address: SCO-12, 1st Floor, Sector-17-E, Chandigarh
 - Phone: +91 98149 58295
 - WhatsApp: +91 98149 58295 (instant quotes)
-- Timings: Mon-Sat, 10:00 AM – 8:00 PM
+- Timings: Mon-Sat, 10:00 AM – 7:00 PM
 
 We serve Chandigarh, Mohali, Panchkula, Zirakpur, Ludhiana, Jalandhar, and offer all-India shipping with insurance.
 

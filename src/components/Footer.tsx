@@ -51,7 +51,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2 text-sm text-jet-text-muted group">
                 <Clock className="w-4 h-4 text-jet-primary group-hover:scale-110 transition-transform" />
-                <span>Mon-Sat: 10AM - 8PM</span>
+                <span>Mon-Sat: 10AM - 7PM</span>
               </div>
             </div>
           </div>

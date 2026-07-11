@@ -46,7 +46,7 @@ export function ShowroomSection() {
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <div className="flex items-center gap-3">
                   <Clock className="w-4 h-4 text-jet-text-muted" />
-                  <span className="text-sm text-jet-text-dim">Mon-Sat: 10AM - 8PM</span>
+                  <span className="text-sm text-jet-text-dim">Mon-Sat: 10AM - 7PM</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-jet-text-muted" />

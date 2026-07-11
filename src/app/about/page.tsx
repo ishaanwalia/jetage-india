@@ -143,7 +143,7 @@ export default function AboutPage() {
                       </div>
                       <div>
                         <p className="font-bold text-jet-text">+91 98149 58295</p>
-                        <p className="text-sm text-jet-text-muted">Mon-Sat: 10AM - 8PM</p>
+                        <p className="text-sm text-jet-text-muted">Mon-Sat: 10AM - 7PM</p>
                       </div>
                     </div>
                   </div>

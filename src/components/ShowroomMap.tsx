@@ -53,7 +53,7 @@ export function ShowroomMap({ variant = "about" }: ShowroomMapProps) {
                   </div>
                   <div>
                     <p className="font-bold text-jet-text">Business Hours</p>
-                    <p className="text-jet-text-dim text-sm">Monday - Saturday: 10:00 AM - 8:00 PM</p>
+                    <p className="text-jet-text-dim text-sm">Monday - Saturday: 10:00 AM - 7:00 PM</p>
                     <p className="text-jet-text-dim text-sm">Sunday: Closed</p>
                   </div>
                 </div>

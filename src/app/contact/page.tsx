@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Phone, Mail, MapPin, Clock, MessageCircle, Globe, Navigation, Car, Train } from "lucide-react";
+import { CinematicMap } from "@/components/CinematicMap";
 
 export default function ContactPage() {
   const contactMethods = [
@@ -11,7 +12,7 @@ export default function ContactPage() {
       title: "Phone",
       value: "+91 98149 58295",
       href: "tel:+919814958295",
-      desc: "Mon-Sat, 10AM - 8PM",
+      desc: "Mon-Sat, 10AM - 7PM",
       color: "text-jet-primary"
     },
     {
@@ -71,7 +72,7 @@ export default function ContactPage() {
               href={method.href}
               target={method.href.startsWith("http") ? "_blank" : undefined}
               rel={method.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="group bg-jet-bg-card rounded-3xl border border-jet-border p-6 hover:border-jet-border-strong hover:shadow-premium transition-all"
+              className="group block h-full bg-jet-bg-card rounded-3xl border border-jet-border p-6 hover:border-jet-border-strong hover:shadow-premium transition-all"
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-jet-primary/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-jet-primary/20 group-hover:bg-jet-primary group-hover:scale-110 transition-all">
@@ -97,7 +98,7 @@ export default function ContactPage() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="p-4 bg-jet-bg-elevated rounded-xl border border-jet-border">
                 <p className="font-bold text-jet-text">Monday - Saturday</p>
-                <p className="text-jet-text-dim">10:00 AM - 8:00 PM</p>
+                <p className="text-jet-text-dim">10:00 AM - 7:00 PM</p>
               </div>
               <div className="p-4 bg-jet-bg-elevated rounded-xl border border-jet-border">
                 <p className="font-bold text-jet-text">Sunday</p>
@@ -116,12 +117,8 @@ export default function ContactPage() {
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
-                <div className="aspect-video bg-gradient-to-br from-jet-bg-elevated to-jet-bg rounded-2xl flex items-center justify-center border border-jet-border">
-                  <div className="text-center space-y-2">
-                    <MapPin className="w-12 h-12 text-jet-primary mx-auto" />
-                    <p className="font-bold text-jet-text">SCO-12, Sector-17-E</p>
-                    <p className="text-sm text-jet-text-muted">Chandigarh - 160017</p>
-                  </div>
+                <div className="rounded-2xl overflow-hidden border border-jet-border">
+                  <CinematicMap className="aspect-video" />
                 </div>
                 <a 
                   href="https://maps.google.com/?q=SCO-12+Sector-17-E+Chandigarh"
