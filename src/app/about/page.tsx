@@ -168,13 +168,13 @@ export default function AboutPage() {
             </div>
           </Reveal>
 
-          <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
-            <div className="lg:col-span-2 space-y-6">
-              <TiltCard tiltAmount={6} className="rounded-3xl">
+          <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
+            <div className="lg:col-span-2 flex flex-col gap-6">
+              <TiltCard tiltAmount={6} className="rounded-3xl lg:flex-1 lg:min-h-0">
                 <CinematicImage
                   src="/showroom/founder1.jpeg"
                   alt="Sanjeev Walia, Founder and Owner of Jetage Computer Traders, at the HP World showroom in Sector 17 Chandigarh"
-                  className="aspect-[3/4]"
+                  className="aspect-[3/4] lg:aspect-auto lg:h-full"
                   imgClassName="object-top"
                   caption="Sanjeev Walia"
                   subcaption="Founder & Owner · Since 1989"
