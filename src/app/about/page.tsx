@@ -3,9 +3,12 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Counter } from "@/components/Counter";
+import { CinematicImage } from "@/components/CinematicImage";
+import { CinematicMap } from "@/components/CinematicMap";
+import { TiltCard } from "@/components/TiltCard";
 import {
   Award, Clock, MapPin, Phone, MessageCircle, Shield,
-  Truck, Zap, Users, Star, TrendingUp, Globe, Check
+  Truck, Zap, Users, Star, TrendingUp, Globe, Check, Quote
 } from "lucide-react";
 import Link from "next/link";
 
@@ -31,18 +34,28 @@ export default function AboutPage() {
     <main className="min-h-screen bg-jet-bg">
       <Navbar />
 
-      {/* Hero */}
-      <div className="pt-28 pb-16 bg-jet-bg-elevated border-b border-jet-border">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      {/* Hero — cinematic showroom backdrop */}
+      <div className="relative pt-36 pb-24 overflow-hidden border-b border-jet-border noise-bg">
+        <div className="absolute inset-0">
+          <img
+            src="/showroom/showroom3.jpeg"
+            alt=""
+            className="w-full h-full object-cover img-grade animate-kenburns"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-jet-navy/85 via-jet-navy/75 to-jet-navy/90" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(8,145,178,0.20),transparent_65%)]" />
+          <div className="absolute inset-0 shadow-[inset_0_0_160px_rgba(2,6,23,0.75)]" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <Reveal direction="up">
             <div className="text-center space-y-4">
-              <span className="inline-block px-4 py-1.5 bg-jet-primary/10 text-jet-primary text-sm font-semibold rounded-full border border-jet-primary/20">
+              <span className="inline-block px-4 py-1.5 bg-white/10 text-jet-accent text-sm font-semibold rounded-full border border-jet-accent/30 backdrop-blur-sm">
                 Since 1989
               </span>
-              <h1 className="text-4xl lg:text-7xl font-bold text-jet-text">
+              <h1 className="text-4xl lg:text-7xl font-bold text-white glow-text">
                 The Jetage <span className="text-gradient-gold">Story</span>
               </h1>
-              <p className="text-jet-text-dim max-w-3xl mx-auto text-xl leading-relaxed">
+              <p className="text-slate-300 max-w-3xl mx-auto text-xl leading-relaxed">
                 For over three decades, Jetage Computer Traders has been Chandigarh's most trusted destination
                 for HP products. From a small shop in Sector 17 to an Authorized HP World Partner serving all of India.
               </p>
@@ -141,8 +154,95 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Values */}
+      {/* Founder's Message */}
       <section className="py-16 bg-jet-bg">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <Reveal direction="up" className="text-center mb-12">
+            <div className="space-y-4">
+              <span className="inline-block px-4 py-1.5 bg-jet-primary/10 text-jet-primary text-sm font-semibold rounded-full border border-jet-primary/20">
+                Founder's Message
+              </span>
+              <h2 className="text-3xl lg:text-5xl font-bold text-jet-text">
+                A Message from Our <span className="text-gradient-gold">Founder</span>
+              </h2>
+            </div>
+          </Reveal>
+
+          <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
+            <div className="lg:col-span-2 space-y-6">
+              <TiltCard tiltAmount={6} className="rounded-3xl">
+                <CinematicImage
+                  src="/showroom/founder1.jpeg"
+                  alt="Sanjeev Walia, Founder and Owner of Jetage Computer Traders, at the HP World showroom in Sector 17 Chandigarh"
+                  className="aspect-[3/4]"
+                  imgClassName="object-top"
+                  caption="Sanjeev Walia"
+                  subcaption="Founder & Owner · Since 1989"
+                />
+              </TiltCard>
+              <TiltCard tiltAmount={6} className="rounded-3xl">
+                <CinematicImage
+                  src="/showroom/founder2.jpeg"
+                  alt="Sanjeev Walia inside the Jetage HP World showroom, Chandigarh"
+                  className="aspect-[4/3]"
+                  imgClassName="object-top"
+                  caption="At the Sector 17 showroom"
+                  subcaption="HP World – Authorized Partner"
+                  delay={0.15}
+                />
+              </TiltCard>
+            </div>
+
+            <Reveal direction="up" className="lg:col-span-3">
+              <div className="relative bg-jet-bg-card rounded-3xl border border-jet-border p-8 lg:p-10 shadow-premium card-glow">
+                <Quote className="w-10 h-10 text-jet-primary/25 mb-4" />
+                <div className="space-y-4 text-jet-text-dim leading-relaxed">
+                  <p className="font-semibold text-jet-text">Dear Valued Customers, Partners & Friends,</p>
+                  <p>
+                    It is with immense pride and gratitude that I welcome you to Jetage India.
+                  </p>
+                  <p>
+                    Since establishing Jetage Computer Traders in 1989, our journey has been defined by one
+                    simple promise — to deliver trustworthy technology solutions with honesty, expertise, and
+                    genuine care. What began as a small showroom in Chandigarh has now grown into a trusted
+                    name across the nation, thanks to the confidence you have placed in us for over three and
+                    a half decades.
+                  </p>
+                  <p>
+                    At Jetage, we don't just sell computers and printers — we help individuals, businesses,
+                    and institutions make the right technology choices for their needs. Whether it's a
+                    student's first laptop, a professional's powerful workstation, or a business's complete
+                    IT setup, our mission has always been to provide quality products, honest advice, and
+                    lifelong support.
+                  </p>
+                  <p>
+                    As we step into a new era of technology with AI-powered devices, high-performance laptops,
+                    and advanced printing solutions, our commitment remains unchanged: to be your reliable
+                    technology partner for generations to come.
+                  </p>
+                  <p>
+                    Thank you for being part of our journey. We look forward to serving you with the same
+                    passion, integrity, and dedication for many more years.
+                  </p>
+                </div>
+                <div className="mt-8 pt-6 border-t border-jet-border">
+                  <p className="text-jet-text-dim text-sm">Warm regards,</p>
+                  <p className="text-2xl lg:text-3xl font-bold text-gradient-gold italic mt-1">Sanjeev Walia</p>
+                  <p className="text-jet-text font-semibold mt-1">Founder & Owner</p>
+                  <p className="text-jet-text-muted text-sm">Jetage Computer Traders (Since 1989)</p>
+                  <span className="inline-flex items-center gap-2 mt-3 px-3 py-1 bg-jet-primary/10 text-jet-primary text-xs font-semibold rounded-full border border-jet-primary/20">
+                    <Award className="w-3.5 h-3.5" />
+                    HP World – Authorized Partner
+                  </span>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="py-16 bg-jet-bg-elevated">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <Reveal direction="up" className="text-center mb-12">
             <h2 className="text-3xl lg:text-5xl font-bold text-jet-text">
@@ -171,7 +271,7 @@ export default function AboutPage() {
       </section>
 
       {/* Why Choose Us + Map */}
-      <section className="py-16 bg-jet-bg-elevated">
+      <section className="py-16 bg-jet-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <Reveal direction="left">
@@ -204,18 +304,7 @@ export default function AboutPage() {
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-br from-jet-primary/10 to-transparent rounded-3xl blur-2xl" />
                 <div className="relative bg-jet-bg-card rounded-3xl shadow-premium border border-jet-border overflow-hidden">
-                  <div className="aspect-[4/3] relative bg-jet-bg-elevated">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430!2d76.780592!3d30.7401467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fed0a8f6e1ac9%3A0xfd75de97e90ec3f0!2sHP%20World%20-%20Sector%2017E!5e0!3m2!1sen!2sin!4v1700000000000"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Jetage India Showroom Location - SCO-12, Sector-17-E, Chandigarh"
-                    />
-                  </div>
+                  <CinematicMap className="aspect-[4/3]" />
                   <div className="p-6 space-y-4">
                     <div className="flex items-center justify-between">
                       <div>

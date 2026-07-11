@@ -2,6 +2,8 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
+import { CinematicImage } from "@/components/CinematicImage";
+import { CinematicMap } from "@/components/CinematicMap";
 import {
   MapPin, Clock, Phone, MessageCircle, Landmark, TreePine,
   Coffee, Film, Star, Navigation, Car, Train
@@ -29,18 +31,28 @@ export default function ShowroomPage() {
     <main className="min-h-screen bg-jet-bg">
       <Navbar />
 
-      {/* Hero */}
-      <div className="pt-28 pb-16 bg-jet-bg-elevated border-b border-jet-border">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      {/* Hero — cinematic showroom backdrop */}
+      <div className="relative pt-36 pb-24 overflow-hidden border-b border-jet-border noise-bg">
+        <div className="absolute inset-0">
+          <img
+            src="/showroom/showroom4.jpeg"
+            alt=""
+            className="w-full h-full object-cover img-grade animate-kenburns"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-jet-navy/85 via-jet-navy/75 to-jet-navy/90" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(8,145,178,0.20),transparent_65%)]" />
+          <div className="absolute inset-0 shadow-[inset_0_0_160px_rgba(2,6,23,0.75)]" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <Reveal direction="up">
             <div className="text-center space-y-4">
-              <span className="inline-block px-4 py-1.5 bg-jet-primary/10 text-jet-primary text-sm font-semibold rounded-full border border-jet-primary/20">
+              <span className="inline-block px-4 py-1.5 bg-white/10 text-jet-accent text-sm font-semibold rounded-full border border-jet-accent/30 backdrop-blur-sm">
                 Visit Us
               </span>
-              <h1 className="text-4xl lg:text-7xl font-bold text-jet-text">
+              <h1 className="text-4xl lg:text-7xl font-bold text-white glow-text">
                 Experience HP at <span className="text-gradient-gold">Sector 17</span>
               </h1>
-              <p className="text-jet-text-dim max-w-3xl mx-auto text-xl leading-relaxed">
+              <p className="text-slate-300 max-w-3xl mx-auto text-xl leading-relaxed">
                 Step into our showroom at the heart of Chandigarh — right above the iconic Indian Coffee House.
                 Since 1989, we've been the city's trusted destination for HP products.
               </p>
@@ -120,18 +132,7 @@ export default function ShowroomPage() {
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-br from-jet-primary/10 to-transparent rounded-3xl blur-2xl" />
                 <div className="relative bg-jet-bg-card rounded-3xl shadow-premium border border-jet-border overflow-hidden">
-                  <div className="aspect-[4/3] relative bg-jet-bg-elevated">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430!2d76.780592!3d30.7401467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fed0a8f6e1ac9%3A0xfd75de97e90ec3f0!2sHP%20World%20-%20Sector%2017E!5e0!3m2!1sen!2sin!4v1700000000000"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Jetage India Showroom Location - SCO-12, Sector-17-E, Chandigarh"
-                    />
-                  </div>
+                  <CinematicMap className="aspect-[4/3]" />
                   <div className="p-6 space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
@@ -172,8 +173,57 @@ export default function ShowroomPage() {
         </div>
       </section>
 
-      {/* What to Expect */}
+      {/* Step Inside — showroom gallery */}
       <section className="py-16 bg-jet-bg-elevated">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <Reveal direction="up" className="text-center mb-4">
+            <h2 className="text-3xl lg:text-5xl font-bold text-jet-text">
+              Step <span className="text-gradient-gold">Inside</span>
+            </h2>
+          </Reveal>
+          <Reveal direction="up" delay={0.1} className="text-center mb-12">
+            <p className="text-jet-text-dim max-w-2xl mx-auto text-lg">
+              A look around our HP World showroom — every product on display is live and ready to demo.
+            </p>
+          </Reveal>
+          <div className="grid md:grid-cols-3 gap-4 lg:gap-6">
+            <CinematicImage
+              src="/showroom/showroom3.jpeg"
+              alt="HP accessories and product display wall at Jetage HP World showroom, Sector 17 Chandigarh"
+              className="md:col-span-2 aspect-[16/10]"
+              caption="The accessories wall"
+              subcaption="Printers, ink, and genuine HP accessories"
+            />
+            <CinematicImage
+              src="/showroom/entrance2.jpeg"
+              alt="Entrance signage for Jetage HP World laptops and printers showroom, Sector 17 Chandigarh"
+              className="md:row-span-2 aspect-[3/4] md:aspect-auto md:h-full"
+              caption="Find us on the plaza"
+              subcaption="1st floor, above Indian Coffee House"
+              delay={0.15}
+            />
+            <CinematicImage
+              src="/showroom/showroom1.jpeg"
+              alt="HP laptop demo zone with live display units at Jetage showroom Chandigarh"
+              className="aspect-[16/10]"
+              caption="Laptop demo zone"
+              subcaption="Touch, type, and test before you buy"
+              delay={0.1}
+            />
+            <CinematicImage
+              src="/showroom/showroom2.jpeg"
+              alt="HP workstation and design laptop corner at Jetage HP World showroom Chandigarh"
+              className="aspect-[16/10]"
+              caption="Design & workstation corner"
+              subcaption="High-performance HP machines on display"
+              delay={0.2}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* What to Expect */}
+      <section className="py-16 bg-jet-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <Reveal direction="up" className="text-center mb-12">
             <h2 className="text-3xl lg:text-5xl font-bold text-jet-text">
@@ -202,7 +252,7 @@ export default function ShowroomPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-jet-bg">
+      <section className="py-16 bg-jet-bg-elevated">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center space-y-6">
           <h2 className="text-3xl lg:text-5xl font-bold text-jet-text">
             Plan Your <span className="text-gradient-gold">Visit</span>
