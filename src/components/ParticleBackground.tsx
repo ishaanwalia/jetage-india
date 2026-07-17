@@ -13,7 +13,8 @@ interface Particle {
   glow: number;
 }
 
-const COLORS = ["#0891b2", "#22d3ee", "#0e7490", "#67e8f9", "#06b6d4", "#a5f3fc"];
+// Two-tone cyan only — one calm color family instead of six competing brights.
+const COLORS = ["#0891b2", "#22d3ee"];
 const CONNECT_DIST = 70;
 const CONNECT_DIST_SQ = CONNECT_DIST * CONNECT_DIST;
 
@@ -40,7 +41,6 @@ export function ParticleBackground() {
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animationRef = useRef<number>(0);
-  const cursorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -59,29 +59,40 @@ export function ParticleBackground() {
 
     // Keep the count low: the connection pass below compares every pair of
     // particles, so cost grows with the square of this number.
-    const particleCount = Math.min(140, Math.floor((window.innerWidth * window.innerHeight) / 14000));
+    const particleCount = Math.min(70, Math.floor((window.innerWidth * window.innerHeight) / 20000));
     const glowSprites = createGlowSprites(48);
 
     particlesRef.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 1.2,
-      vy: (Math.random() - 0.5) * 1.2,
-      radius: Math.random() * 3 + 0.5,
-      opacity: Math.random() * 0.8 + 0.2,
+      vx: (Math.random() - 0.5) * 0.7,
+      vy: (Math.random() - 0.5) * 0.7,
+      radius: Math.random() * 2.5 + 0.5,
+      opacity: Math.random() * 0.6 + 0.15,
       colorIndex: Math.floor(Math.random() * COLORS.length),
-      glow: Math.random() * 12 + 6,
+      glow: Math.random() * 10 + 5,
     }));
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
-      }
     };
     window.addEventListener("mousemove", handleMouseMove);
 
+    // Only run while the hero is on screen: fade out over the first viewport
+    // of scroll and stop the loop entirely once fully faded.
+    let running = false;
+
+    const heroFade = () =>
+      Math.max(0, 1 - window.scrollY / (window.innerHeight * 0.9));
+
     const animate = () => {
+      const fade = heroFade();
+      if (fade <= 0) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        running = false;
+        return;
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const particles = particlesRef.current;
@@ -96,8 +107,8 @@ export function ParticleBackground() {
         if (mDistSq < 90000 && mDistSq > 1) {
           const mDist = Math.sqrt(mDistSq);
           const force = (300 - mDist) / 300;
-          p.vx += (mdx / mDist) * force * 0.05;
-          p.vy += (mdy / mDist) * force * 0.05;
+          p.vx += (mdx / mDist) * force * 0.03;
+          p.vy += (mdy / mDist) * force * 0.03;
         }
 
         p.x += p.vx;
@@ -112,14 +123,14 @@ export function ParticleBackground() {
         if (p.y > canvas.height + 50) p.y = -50;
 
         // Glow (pre-rendered sprite)
-        ctx.globalAlpha = p.opacity * 0.15;
+        ctx.globalAlpha = p.opacity * 0.12 * fade;
         ctx.drawImage(glowSprites[p.colorIndex], p.x - p.glow, p.y - p.glow, p.glow * 2, p.glow * 2);
 
         // Core particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = COLORS[p.colorIndex];
-        ctx.globalAlpha = p.opacity;
+        ctx.globalAlpha = p.opacity * fade;
         ctx.fill();
 
         // Connect nearby particles
@@ -135,7 +146,7 @@ export function ParticleBackground() {
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.strokeStyle = COLORS[p.colorIndex];
-            ctx.globalAlpha = (1 - dist / CONNECT_DIST) * 0.3;
+            ctx.globalAlpha = (1 - dist / CONNECT_DIST) * 0.15 * fade;
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }
@@ -146,41 +157,42 @@ export function ParticleBackground() {
       animationRef.current = requestAnimationFrame(animate);
     };
 
+    const start = () => {
+      if (running || reducedMotion || document.hidden) return;
+      running = true;
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    const handleScroll = () => {
+      // Restart the loop when the user scrolls back up into the hero.
+      if (heroFade() > 0) start();
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     const handleVisibility = () => {
       cancelAnimationFrame(animationRef.current);
-      if (!document.hidden && !reducedMotion) {
-        animationRef.current = requestAnimationFrame(animate);
-      }
+      running = false;
+      if (!document.hidden) start();
     };
     document.addEventListener("visibilitychange", handleVisibility);
 
-    if (!reducedMotion) animate();
+    start();
 
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("visibilitychange", handleVisibility);
       cancelAnimationFrame(animationRef.current);
+      running = false;
     };
   }, []);
 
   return (
-    <>
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{ opacity: 0.9 }}
-      />
-      {/* Custom cursor glow — moved via transform so it never triggers layout */}
-      <div
-        ref={cursorRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9999] w-8 h-8 rounded-full border-2 border-jet-primary/50 hidden lg:block"
-        style={{
-          transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)",
-          transition: "transform 0.08s linear",
-          boxShadow: "0 0 20px rgba(8, 145, 178, 0.4), 0 0 40px rgba(8, 145, 178, 0.2)",
-        }}
-      />
-    </>
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none z-0"
+      style={{ opacity: 0.55 }}
+    />
   );
 }

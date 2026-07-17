@@ -78,31 +78,10 @@ function CategoryCard3D({ category, index }: { category: typeof categories[0]; i
               scale: 1.1,
             }}
           >
-            <Icon 
-              className="w-10 h-10 transition-colors duration-500" 
+            <Icon
+              className="w-10 h-10 transition-colors duration-500"
               style={{ color: category.color }}
             />
-            
-            {/* Floating particles around icon */}
-            {isHovered && (
-              <>
-                {[...Array(4)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-2 h-2 rounded-full"
-                    style={{ backgroundColor: category.color }}
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{
-                      opacity: [0, 1, 0],
-                      scale: [0, 1, 0],
-                      x: [0, (i - 1.5) * 30],
-                      y: [0, -30 - i * 10],
-                    }}
-                    transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
-                  />
-                ))}
-              </>
-            )}
           </motion.div>
 
           <div style={{ transform: "translateZ(30px)" }}>

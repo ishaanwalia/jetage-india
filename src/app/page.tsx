@@ -309,8 +309,8 @@ export default function Home() {
       {/* ==================== CTA SECTION ==================== */}
       <section className="py-20 relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-jet-primary/10 rounded-full blur-[120px] animate-pulse-slow" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-jet-primary/5 rounded-full blur-[120px] animate-pulse-slow" style={{ animationDelay: "1s" }} />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-jet-primary/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-jet-primary/5 rounded-full blur-[120px]" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center space-y-8">

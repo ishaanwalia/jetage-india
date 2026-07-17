@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Sparkles, ChevronRight, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { Typewriter } from "./Typewriter";
@@ -20,51 +20,27 @@ export function Hero3D() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
 
-  const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
-  const mouseX = useSpring(0, springConfig);
-  const mouseY = useSpring(0, springConfig);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const { innerWidth, innerHeight } = window;
-      mouseX.set((clientX - innerWidth / 2) / innerWidth);
-      mouseY.set((clientY - innerHeight / 2) / innerHeight);
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
   return (
     <section 
       ref={containerRef}
       className="relative min-h-screen flex items-center overflow-visible pt-36 lg:pt-12"
       style={{ perspective: "1200px" }}
     >
-      <motion.div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ transformStyle: "preserve-3d", opacity }}>
-        <motion.div 
+      <motion.div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity }}>
+        {/* Static ambient glows — no per-frame animation cost */}
+        <div
           className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full"
           style={{
             background: "radial-gradient(circle, rgba(8,145,178,0.15) 0%, transparent 70%)",
             filter: "blur(60px)",
-            x: useTransform(mouseX, [-0.5, 0.5], [-30, 30]),
-            y: useTransform(mouseY, [-0.5, 0.5], [-30, 30]),
-            transform: "translateZ(-100px)",
           }}
-          animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         />
-        <motion.div 
+        <div
           className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] rounded-full"
           style={{
             background: "radial-gradient(circle, rgba(234,179,8,0.1) 0%, transparent 70%)",
             filter: "blur(50px)",
-            x: useTransform(mouseX, [-0.5, 0.5], [20, -20]),
-            y: useTransform(mouseY, [-0.5, 0.5], [20, -20]),
-            transform: "translateZ(-80px)",
           }}
-          animate={{ scale: [1, 1.3, 1] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
       </motion.div>
 
