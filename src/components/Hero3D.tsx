@@ -21,9 +21,9 @@ export function Hero3D() {
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
 
   return (
-    <section 
+    <section
       ref={containerRef}
-      className="relative min-h-screen flex items-center overflow-visible pt-36 lg:pt-12"
+      className="relative min-h-screen flex items-center overflow-visible pt-24 lg:pt-12"
       style={{ perspective: "1200px" }}
     >
       <motion.div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity }}>
@@ -44,12 +44,12 @@ export function Hero3D() {
         />
       </motion.div>
 
-      <motion.div 
-        className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-0 w-full"
+      <motion.div
+        className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pb-12 lg:py-0 w-full"
         style={{ y, opacity, scale }}
       >
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
-          <div className="space-y-8 order-2 lg:order-none" style={{ transform: "translateZ(50px)" }}>
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center">
+          <div className="space-y-8" style={{ transform: "translateZ(50px)" }}>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -116,7 +116,7 @@ export function Hero3D() {
           </div>
 
           <motion.div
-            className="relative flex items-center justify-center overflow-visible order-1 lg:order-none"
+            className="relative flex items-center justify-center overflow-visible"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 1.2, type: "spring" }}
