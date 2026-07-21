@@ -71,7 +71,7 @@ function StatCard3D({ icon: Icon, value, suffix, label, sub = "", decimals = 0, 
   return (
     <motion.div
       ref={cardRef}
-      className="relative"
+      className="relative h-full"
       initial={{ opacity: 0, y: 50, rotateX: 15 }}
       whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
       viewport={{ once: true }}
@@ -82,7 +82,7 @@ function StatCard3D({ icon: Icon, value, suffix, label, sub = "", decimals = 0, 
       style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
     >
       <motion.div
-        className="text-center space-y-4 p-6 rounded-2xl bg-jet-bg-card border border-jet-border hover:border-jet-border-strong transition-all duration-500 hover:shadow-premium group cursor-default relative overflow-hidden"
+        className="text-center space-y-4 p-4 sm:p-6 rounded-2xl bg-jet-bg-card border border-jet-border hover:border-jet-border-strong transition-all duration-500 hover:shadow-premium group cursor-default relative overflow-hidden h-full flex flex-col justify-center"
         animate={{
           rotateY: isHovered ? mousePos.x * 20 : 0,
           rotateX: isHovered ? -mousePos.y * 20 : 0,
@@ -104,7 +104,7 @@ function StatCard3D({ icon: Icon, value, suffix, label, sub = "", decimals = 0, 
         >
           <Icon className="w-7 h-7 text-jet-primary group-hover:text-jet-bg transition-colors" />
         </motion.div>
-        <div className="text-4xl lg:text-5xl font-bold text-jet-text" style={{ transform: "translateZ(20px)" }}>
+        <div className="text-2xl sm:text-3xl lg:text-5xl font-bold text-jet-text break-words" style={{ transform: "translateZ(20px)" }}>
           <AnimatedCounter3D value={value} suffix={suffix} decimals={decimals} />
           <span className="text-jet-primary">{sub}</span>
         </div>

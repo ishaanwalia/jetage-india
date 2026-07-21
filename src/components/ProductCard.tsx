@@ -89,7 +89,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div
-      className="group card-glow bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-premium-hover transition-all duration-300 hover:-translate-y-1"
+      className="group card-glow bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-premium-hover transition-all duration-300 hover:-translate-y-1 h-full flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -153,29 +153,31 @@ export function ProductCard({ product }: ProductCardProps) {
         )}
       </div>
 
-      <div className="p-5 space-y-3">
-        <div className="flex items-center gap-2">
-          <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${categoryColors[product.subCategory] || "bg-gray-50 text-gray-600 border-gray-200"}`}>
-            {categoryLabelMap[product.subCategory] || product.subCategory}
-          </span>
-        </div>
-
-        <h3 className="font-bold text-gray-900 group-hover:text-cyan-600 transition-colors line-clamp-2 text-sm leading-snug">
-          {product.name}
-        </h3>
-
-        {product.speed && product.speed !== "N/A" && (
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <span>{product.speed}</span>
+      <div className="p-5 flex flex-col flex-1">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${categoryColors[product.subCategory] || "bg-gray-50 text-gray-600 border-gray-200"}`}>
+              {categoryLabelMap[product.subCategory] || product.subCategory}
+            </span>
           </div>
-        )}
 
-        <div className="flex items-baseline gap-2">
-          <span className="text-xl font-bold text-gray-900">₹{product.price.toLocaleString()}</span>
-          <span className="text-sm text-gray-400 line-through">₹{product.mrp.toLocaleString()}</span>
+          <h3 className="font-bold text-gray-900 group-hover:text-cyan-600 transition-colors line-clamp-2 text-sm leading-snug">
+            {product.name}
+          </h3>
+
+          {product.speed && product.speed !== "N/A" && (
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+              <span>{product.speed}</span>
+            </div>
+          )}
+
+          <div className="flex items-baseline gap-2">
+            <span className="text-xl font-bold text-gray-900">₹{product.price.toLocaleString()}</span>
+            <span className="text-sm text-gray-400 line-through">₹{product.mrp.toLocaleString()}</span>
+          </div>
         </div>
 
-        <div className="flex gap-2 pt-2">
+        <div className="flex gap-2 pt-4 mt-auto">
           <a
             href={whatsappLink}
             target="_blank"

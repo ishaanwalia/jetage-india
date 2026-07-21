@@ -74,9 +74,9 @@ export default function AboutPage() {
               { icon: Globe, value: 50, suffix: "+", label: "Cities Served" },
               { icon: Star, value: 4.5, suffix: "", label: "Customer Rating", decimals: 1 },
             ].map((stat, i) => (
-              <div key={i} className="text-center space-y-3 p-6 rounded-2xl bg-jet-bg-card border border-jet-border">
+              <div key={i} className="h-full flex flex-col items-center justify-center text-center space-y-3 p-4 sm:p-6 rounded-2xl bg-jet-bg-card border border-jet-border">
                 <stat.icon className="w-8 h-8 text-jet-primary mx-auto" />
-                <div className="text-4xl font-bold text-jet-text">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-jet-text break-words">
                   <Counter end={stat.value} suffix={stat.suffix} decimals={stat.decimals || 0} />
                 </div>
                 <p className="text-jet-text-muted text-sm">{stat.label}</p>
