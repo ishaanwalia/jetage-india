@@ -3,6 +3,15 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Truck, Package, Clock, MapPin, Shield, RotateCcw, Phone, MessageCircle } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Shipping & Returns",
+  description: "Delivery zones, timelines, and return policy for HP printers and accessories ordered from Jetage India — all-India shipping with insured delivery.",
+  alternates: {
+    canonical: "/shipping/",
+  },
+};
 
 export default function ShippingPage() {
   const deliveryZones = [

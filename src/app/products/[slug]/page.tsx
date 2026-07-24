@@ -13,10 +13,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const product = products.find((p) => p.id === slug);
-  if (!product) return { title: "Product Not Found | Jetage India" };
+  if (!product) return { title: "Product Not Found" };
 
   return {
-    title: `${product.name} | Jetage India`,
+    title: product.name,
     description: `${product.description} Buy at ₹${product.price.toLocaleString()}. SKU: ${product.sku}.`,
     alternates: {
       canonical: `${BASE_URL}/products/${product.id}/`,

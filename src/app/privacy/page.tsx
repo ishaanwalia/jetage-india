@@ -3,6 +3,15 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal } from "@/components/Reveal";
 import { Shield, Lock, Eye, Server, UserCheck, Mail } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "Jetage India's privacy policy — how we collect, use, and protect the personal information you share when contacting us via WhatsApp, phone, or email.",
+  alternates: {
+    canonical: "/privacy/",
+  },
+};
 
 export default function PrivacyPage() {
   const sections = [

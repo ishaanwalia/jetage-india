@@ -1,11 +1,13 @@
 "use client";
 
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment, useGLTF } from '@react-three/drei';
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 const MODEL_URL = '/models/hp_omen_laptop.glb';
+const CAMERA_RADIUS = 9.5;
+const CAMERA_HEIGHT = 1.2;
 
 // Start downloading the model as soon as this module loads,
 // instead of waiting for the Canvas to mount.
@@ -36,9 +38,28 @@ function Model() {
   return <primitive object={scene} scale={6.5} position={[0, -1.05, 0]} rotation={[0, -Math.PI / 6, 0]} />;
 }
 
+// Keyboard-driven alternative to the mouse-only OrbitControls drag.
+// Takes over the camera position for a couple of seconds after an
+// arrow-key press, then hands control back to OrbitControls.
+function KeyboardOrbit({ angleRef, active }: { angleRef: React.MutableRefObject<number>; active: boolean }) {
+  const { camera } = useThree();
+  useFrame(() => {
+    if (!active) return;
+    const a = angleRef.current;
+    camera.position.x = CAMERA_RADIUS * Math.sin(a);
+    camera.position.z = CAMERA_RADIUS * Math.cos(a);
+    camera.position.y = CAMERA_HEIGHT;
+    camera.lookAt(0, 0, 0);
+  });
+  return null;
+}
+
 export function Laptop3DViewer() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(true);
+  const [keyboardActive, setKeyboardActive] = useState(false);
+  const angleRef = useRef(0);
+  const idleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   // Stop the render loop entirely once the hero is scrolled out of view.
   useEffect(() => {
@@ -49,8 +70,26 @@ export function Laptop3DViewer() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => () => { if (idleTimer.current) clearTimeout(idleTimer.current); }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    angleRef.current += e.key === "ArrowLeft" ? -0.2 : 0.2;
+    setKeyboardActive(true);
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    idleTimer.current = setTimeout(() => setKeyboardActive(false), 2000);
+  };
+
   return (
-    <div ref={wrapperRef} className="w-full h-[380px] sm:h-[480px] lg:h-[640px] relative flex items-center justify-center">
+    <div
+      ref={wrapperRef}
+      className="w-full h-[380px] sm:h-[480px] lg:h-[640px] relative flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-jet-primary rounded-2xl"
+      role="group"
+      aria-label="Interactive 3D model of an HP Omen gaming laptop. Use the left and right arrow keys to rotate, or drag with a mouse."
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+    >
       <Canvas
         camera={{ position: [0, 1.2, 9.5], fov: 38 }}
         style={{ background: 'transparent' }}
@@ -58,6 +97,7 @@ export function Laptop3DViewer() {
         dpr={[1, 1.5]}
         frameloop={inView ? 'always' : 'never'}
         className="w-full h-full"
+        aria-hidden="true"
       >
         <Suspense fallback={null}>
           <ambientLight intensity={1.0} />
@@ -69,13 +109,15 @@ export function Laptop3DViewer() {
 
           <OrbitControls
             enableZoom={false}
-            autoRotate={true}
+            autoRotate={!keyboardActive}
             autoRotateSpeed={1.2}
+            enabled={!keyboardActive}
             minPolarAngle={Math.PI / 3}
             maxPolarAngle={Math.PI / 2}
             enablePan={false}
             target={[0, 0, 0]}
           />
+          <KeyboardOrbit angleRef={angleRef} active={keyboardActive} />
         </Suspense>
 
         {/* Own Suspense so the HDR never blocks the model from appearing */}
@@ -85,7 +127,7 @@ export function Laptop3DViewer() {
       </Canvas>
 
       <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-jet-primary/10 text-jet-primary px-5 py-2 rounded-full text-xs sm:text-sm backdrop-blur-md border border-jet-primary/30 font-medium whitespace-nowrap">
-        Drag to rotate — explore in 3D
+        Drag or use ← → keys to rotate
       </div>
     </div>
   );

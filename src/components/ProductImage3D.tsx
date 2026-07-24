@@ -152,6 +152,7 @@ export function ProductImage3D({
           <>
             <button
               onClick={(e) => { e.stopPropagation(); prevImage(); }}
+              aria-label="Previous image"
               className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-white transition-all z-20"
               style={{ opacity: isHovered ? 1 : 0 }}
             >
@@ -159,6 +160,7 @@ export function ProductImage3D({
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); nextImage(); }}
+              aria-label="Next image"
               className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-white transition-all z-20"
               style={{ opacity: isHovered ? 1 : 0 }}
             >
@@ -173,6 +175,8 @@ export function ProductImage3D({
               <button
                 key={i}
                 onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(i); }}
+                aria-label={`View image ${i + 1} of ${images.length}`}
+                aria-current={i === currentImageIndex}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   i === currentImageIndex ? "bg-jet-primary w-4" : "bg-jet-text-muted/40 hover:bg-jet-text-muted/60"
                 }`}
@@ -213,6 +217,7 @@ export function ProductImage3D({
         >
           <button
             onClick={() => setIsFullscreen(false)}
+            aria-label="Close fullscreen image"
             className="absolute top-4 right-4 w-10 h-10 rounded-full bg-jet-bg-card border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-white transition-all"
           >
             ✕
@@ -242,12 +247,14 @@ export function ProductImage3D({
             <>
               <button
                 onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                aria-label="Previous image"
                 className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-white transition-all"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                aria-label="Next image"
                 className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-white transition-all"
               >
                 <ChevronRight className="w-6 h-6" />
@@ -257,6 +264,8 @@ export function ProductImage3D({
                   <button
                     key={i}
                     onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(i); }}
+                    aria-label={`View image ${i + 1} of ${images.length}`}
+                    aria-current={i === currentImageIndex}
                     className={`w-3 h-3 rounded-full transition-all ${
                       i === currentImageIndex ? "bg-jet-primary w-6" : "bg-jet-text-muted/40"
                     }`}

@@ -16,13 +16,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = blogPosts.find((b) => b.slug === slug);
   if (!post) {
     return {
-      title: "Not Found | Jetage Blog",
+      title: "Not Found",
       description: "Blog post not found.",
     };
   }
 
   return {
-    title: `${post.title} | Jetage Blog`,
+    title: post.title,
     description: post.metaDescription,
     alternates: {
       canonical: `${BASE_URL}/blogs/${post.slug}/`,

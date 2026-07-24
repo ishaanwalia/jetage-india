@@ -4,6 +4,17 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Phone, Mail, MapPin, Clock, MessageCircle, Globe, Navigation, Car, Train } from "lucide-react";
 import { CinematicMap } from "@/components/CinematicMap";
+import { QuickQuoteForm } from "@/components/QuickQuoteForm";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact Us",
+  description: "Contact Jetage India — Authorized HP dealer in Chandigarh. Call, WhatsApp, or email for quotes on HP printers and accessories. Visit SCO-12, Sector-17-E, Chandigarh, Mon-Sat 10AM-7PM.",
+  keywords: "contact Jetage India, HP dealer contact Chandigarh, Jetage phone number, Jetage WhatsApp",
+  alternates: {
+    canonical: "/contact/",
+  },
+};
 
 export default function ContactPage() {
   const contactMethods = [
@@ -87,6 +98,11 @@ export default function ContactPage() {
             </a>
           ))}
         </StaggerReveal>
+
+        {/* Quick Quote */}
+        <Reveal direction="up" className="mb-12">
+          <QuickQuoteForm />
+        </Reveal>
 
         {/* Business Hours */}
         <Reveal direction="up" className="mb-12">

@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const name = categoryNames[id] || id;
 
   return {
-    title: `${name} | Jetage India — Authorized HP World Partner`,
+    title: name,
     description: `Buy genuine ${name} at best prices. Authorized HP dealer since 1989. All India delivery. Visit SCO-12, Sector-17-E, Chandigarh.`,
   };
 }

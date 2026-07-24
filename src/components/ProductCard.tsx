@@ -124,6 +124,8 @@ export function ProductCard({ product }: ProductCardProps) {
           src={product.image}
           alt={product.name}
           loading="lazy"
+          width={300}
+          height={200}
           className="object-contain max-h-[200px] w-auto transition-transform duration-500 ease-out group-hover:scale-105"
           onError={(e) => {
             (e.target as HTMLImageElement).src = `https://placehold.co/300x200/e2e8f0/64748b?text=${encodeURIComponent(product.shortName)}`;

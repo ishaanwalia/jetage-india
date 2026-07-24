@@ -3,6 +3,16 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Shield, Wrench, Clock, FileCheck, AlertCircle, Phone, MessageCircle, Check } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Warranty Info",
+  description: "HP manufacturer warranty coverage, extended warranty options, and how to claim warranty support through Jetage India in Chandigarh.",
+  keywords: "HP warranty check, HP printer warranty India, Jetage warranty claim, HP extended warranty",
+  alternates: {
+    canonical: "/warranty/",
+  },
+};
 
 export default function WarrantyPage() {
   const warrantyTypes = [

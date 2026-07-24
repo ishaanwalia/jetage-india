@@ -12,7 +12,7 @@ import {
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Visit Our Showroom | Jetage India",
+  title: "Visit Our Showroom",
   description: "Visit our HP World showroom at SCO-12, Sector-17-E, Chandigarh. Experience HP products hands-on. Open Mon-Sat 10AM-7PM. Get directions and plan your visit.",
   keywords: "HP showroom Chandigarh, Jetage showroom, HP World Sector 17, visit HP dealer Chandigarh, HP products showroom, SCO-12 Sector 17",
   alternates: {

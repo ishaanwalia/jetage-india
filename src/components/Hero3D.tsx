@@ -1,12 +1,26 @@
 "use client";
 
 import { useRef } from "react";
+import dynamic from "next/dynamic";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Sparkles, ChevronRight, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { Typewriter } from "./Typewriter";
 import { MagneticButton } from "./MagneticButton";
-import { Laptop3DViewer } from "./Laptop3DViewer";
+
+// three.js + @react-three/fiber/drei are a ~300KB gzip chunk — keep them
+// out of the initial homepage bundle and stream in only once this mounts.
+const Laptop3DViewer = dynamic(
+  () => import("./Laptop3DViewer").then((m) => m.Laptop3DViewer),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[380px] sm:h-[480px] lg:h-[640px] relative flex items-center justify-center">
+        <div className="w-3/4 h-3/4 rounded-2xl bg-jet-bg-elevated animate-pulse-slow border border-jet-border" />
+      </div>
+    ),
+  }
+);
 
 export function Hero3D() {
   const containerRef = useRef<HTMLDivElement>(null);

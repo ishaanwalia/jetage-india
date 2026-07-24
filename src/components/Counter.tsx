@@ -12,7 +12,10 @@ interface CounterProps {
 }
 
 export function Counter({ end, duration = 2000, suffix = "", prefix = "", className = "", decimals = 0 }: CounterProps) {
-  const [count, setCount] = useState(0);
+  // Start at the real value, not 0 — if the observer never fires (JS glitch,
+  // an ancestor with unusual overflow/visibility, etc.) this is what's shown,
+  // instead of a permanently stuck "0".
+  const [count, setCount] = useState(end);
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
   const hasAnimated = useRef(false);
@@ -21,6 +24,7 @@ export function Counter({ end, duration = 2000, suffix = "", prefix = "", classN
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasAnimated.current) {
+          setCount(0);
           setIsVisible(true);
           hasAnimated.current = true;
         }

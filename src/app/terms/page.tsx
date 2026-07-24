@@ -3,6 +3,15 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal } from "@/components/Reveal";
 import { FileText, ShoppingCart, RotateCcw, Truck, CreditCard, AlertTriangle } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: "Terms of service for purchasing HP printers and accessories from Jetage India — orders, payments, delivery, and returns.",
+  alternates: {
+    canonical: "/terms/",
+  },
+};
 
 export default function TermsPage() {
   const sections = [
