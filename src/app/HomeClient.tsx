@@ -10,8 +10,7 @@ import {
   Shield, 
   Truck, 
   Phone, 
-  MessageCircle, 
-  ChevronRight,
+  MessageCircle,
   Star,
   Award,
   Clock,
@@ -31,7 +30,7 @@ import {
   Eye
 } from "lucide-react";
 import Link from "next/link";
-import { products, categories, getFeaturedProducts } from "@/lib/data/products";
+import { products, getFeaturedProducts } from "@/lib/data/products";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ProductCard } from "@/components/ProductCard";
 import { Navbar } from "@/components/Navbar";
@@ -53,7 +52,6 @@ import { Stats3D } from "@/components/Stats3D";
 import { CategoryGrid3D } from "@/components/CategoryGrid3D";
 import { Marquee3D } from "@/components/Marquee3D";
 import { ProcessSteps3D } from "@/components/ProcessSteps3D";
-import { ProductShowcase3D } from "@/components/ProductShowcase3D";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 // Tied to @react-three/drei's useProgress, so it shares the same heavy
@@ -67,13 +65,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function HomeClient() {
   const horizontalRef = useRef<HTMLDivElement>(null);
-  const [activeCategory, setActiveCategory] = useState("all");
 
   const featuredProducts = getFeaturedProducts().slice(0, 6);
-
-  const filteredProducts = activeCategory === "all" 
-    ? products.slice(0, 8) 
-    : products.filter(p => p.category === activeCategory).slice(0, 8);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -162,11 +155,11 @@ export function HomeClient() {
 
       {/* ==================== HORIZONTAL SCROLL SECTION ==================== */}
       <section ref={horizontalRef} className="relative bg-jet-bg-elevated overflow-hidden">
-        <div className="h-screen flex flex-col pt-32 pb-8">
-          <div className="px-6 lg:px-8 mb-8 mt-auto">
+        <div className="h-screen flex flex-col justify-center gap-6 pt-24 pb-10">
+          <div className="px-6 lg:px-8 flex-shrink-0">
             <div className="max-w-7xl mx-auto">
               <Reveal direction="left">
-                <span className="inline-block px-4 py-1.5 bg-jet-primary/10 text-jet-primary text-sm font-semibold rounded-full border border-jet-primary/20 mb-4">
+                <span className="inline-block px-4 py-1.5 bg-jet-primary/10 text-jet-primary text-sm font-semibold rounded-full border border-jet-primary/20 mb-3">
                   Featured Collection
                 </span>
               </Reveal>
@@ -176,94 +169,35 @@ export function HomeClient() {
                 </h2>
               </Reveal>
               <Reveal direction="left" delay={0.2}>
-                <p className="text-jet-text-dim mt-3">Drag or scroll to browse our handpicked selection</p>
+                <p className="text-jet-text-dim mt-2">Drag or scroll to browse our handpicked selection</p>
               </Reveal>
             </div>
           </div>
-          
-          <div className="horizontal-scroll-container flex gap-6 px-6 lg:px-8 will-change-transform mb-auto">
+
+          <div className="horizontal-scroll-container flex gap-6 px-6 lg:px-8 will-change-transform flex-shrink-0">
             {featuredProducts.map((product) => (
               <div key={product.id} className="flex-shrink-0 w-[70vw] sm:w-[300px] xl:w-[280px] 2xl:w-[320px]">
-                <ProductCard product={product} />              </div>
+                <ProductCard product={product} compact />
+              </div>
             ))}
 
             <div className="flex-shrink-0 w-[70vw] sm:w-[300px] xl:w-[280px] 2xl:w-[320px] flex items-center justify-center">
               <TiltCard tiltAmount={5}>
-                <Link 
+                <Link
                   href="/products/"
-                  className="group flex flex-col items-center justify-center gap-4 p-12 rounded-3xl bg-jet-bg-card border border-jet-border hover:border-jet-primary/40 transition-all duration-500 hover:shadow-premium h-full w-full"
+                  className="group flex flex-col items-center justify-center gap-3 p-8 rounded-3xl bg-jet-bg-card border border-jet-border hover:border-jet-primary/40 transition-all duration-500 hover:shadow-premium h-full w-full"
                 >
-                  <div className="w-20 h-20 rounded-full bg-jet-primary/10 flex items-center justify-center group-hover:bg-jet-primary group-hover:scale-110 transition-all duration-500 border border-jet-primary/20">
-                    <ArrowRight className="w-8 h-8 text-jet-primary group-hover:text-jet-bg transition-colors" />
+                  <div className="w-14 h-14 rounded-full bg-jet-primary/10 flex items-center justify-center group-hover:bg-jet-primary group-hover:scale-110 transition-all duration-500 border border-jet-primary/20">
+                    <ArrowRight className="w-6 h-6 text-jet-primary group-hover:text-jet-bg transition-colors" />
                   </div>
                   <div className="text-center">
-                    <h3 className="text-2xl font-bold text-jet-text group-hover:text-jet-primary transition-colors">View All</h3>
-                    <p className="text-jet-text-muted mt-2">{products.length}+ Products</p>
+                    <h3 className="text-xl font-bold text-jet-text group-hover:text-jet-primary transition-colors">View All</h3>
+                    <p className="text-jet-text-muted mt-1 text-sm">{products.length}+ Products</p>
                   </div>
                 </Link>
               </TiltCard>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ==================== 3D PRODUCT SHOWCASE ==================== */}
-      <ProductShowcase3D />
-
-      {/* ==================== PRODUCT GRID WITH FILTER ==================== */}
-      <section id="products" className="py-20 relative">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <Reveal direction="up" className="text-center mb-12 space-y-4">
-            <span className="inline-block px-4 py-1.5 bg-jet-primary/10 text-jet-primary text-sm font-semibold rounded-full border border-jet-primary/20">
-              Our Collection
-            </span>
-            <h2 className="text-4xl lg:text-6xl font-bold text-jet-text">
-              All <span className="text-gradient-gold">Products</span>
-            </h2>
-            <p className="text-jet-text-dim max-w-2xl mx-auto text-lg">
-              Handpicked selection with exclusive Jetage pricing. Filter by category below.
-            </p>
-          </Reveal>
-
-          <Reveal direction="up" delay={0.2} className="flex justify-center gap-3 mb-10 flex-wrap">
-            {[
-              { id: "all", label: "All" },
-              { id: "printer", label: "Printers" },
-              { id: "accessory", label: "Accessories" },
-            ].map((cat) => (
-              <MagneticButton key={cat.id} strength={0.15}>
-                <button
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 border ${
-                    activeCategory === cat.id 
-                      ? "bg-jet-primary text-jet-bg border-jet-primary shadow-glow scale-105" 
-                      : "bg-jet-bg-card text-jet-text-dim border-jet-border hover:border-jet-primary/40 hover:text-jet-primary"
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              </MagneticButton>
-            ))}
-          </Reveal>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product, i) => (
-              <Reveal key={product.id} direction="up" delay={i * 0.05}>
-                <ProductCard product={product} />              </Reveal>
-            ))}
-          </div>
-
-          <Reveal direction="up" delay={0.3} className="text-center mt-12">
-            <MagneticButton strength={0.2}>
-              <Link 
-                href="/products/"
-                className="group inline-flex items-center gap-3 px-8 py-4 bg-jet-bg-card text-jet-primary border-2 border-jet-primary/30 rounded-full font-bold hover:bg-jet-primary hover:text-jet-bg transition-all duration-300"
-              >
-                View All Products
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </MagneticButton>
-          </Reveal>
         </div>
       </section>
 

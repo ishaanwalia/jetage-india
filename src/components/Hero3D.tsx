@@ -96,7 +96,7 @@ export function Hero3D() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
-              Authorized HP World Partner with 37+ years of expertise. Experience premium HP products in stunning 3D.
+              Authorized HP World Partner with 37+ years of expertise. Explore our featured laptop in interactive 3D, right here on the homepage.
             </motion.p>
 
             <motion.div 
@@ -106,8 +106,8 @@ export function Hero3D() {
               transition={{ delay: 0.8, duration: 0.8 }}
             >
               <MagneticButton strength={0.2}>
-                <Link 
-                  href="#products"
+                <Link
+                  href="/products/"
                   className="group btn-sheen inline-flex items-center gap-3 px-8 py-4 bg-jet-primary text-jet-bg rounded-full font-bold hover:bg-jet-accent transition-all duration-300 shadow-glow hover:shadow-premium-hover text-lg relative overflow-hidden"
                 >
                   Explore Products

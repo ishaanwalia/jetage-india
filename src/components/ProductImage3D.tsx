@@ -195,16 +195,6 @@ export function ProductImage3D({
           </button>
         )}
 
-        {enableRotation && (
-          <motion.div
-            className="absolute top-3 left-3 px-2 py-1 bg-jet-primary/10 text-jet-primary text-[10px] font-bold rounded-full border border-jet-primary/20 z-20 backdrop-blur-sm"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : -10 }}
-            transition={{ duration: 0.2 }}
-          >
-            3D View
-          </motion.div>
-        )}
       </motion.div>
 
       {isFullscreen && (

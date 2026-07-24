@@ -30,9 +30,11 @@ export interface Product {
 
 interface ProductCardProps {
   product: Product;
+  /** Shorter image area — for rows with a fixed viewport-height budget (e.g. the horizontal scroll section). */
+  compact?: boolean;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, compact = false }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { addItem } = useCart();
   const { toggle, has, isFull } = useCompare();
@@ -94,7 +96,7 @@ export function ProductCard({ product }: ProductCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image Area */}
-      <div className="relative aspect-square bg-gray-50 p-4 flex items-center justify-center">
+      <div className={`relative ${compact ? "h-[130px]" : "aspect-square"} bg-gray-50 p-4 flex items-center justify-center`}>
         {product.badge && (
           <div className="absolute top-3 left-3 px-3 py-1 bg-cyan-600 text-white text-xs font-bold rounded-full z-10">
             {product.badge}
@@ -126,7 +128,7 @@ export function ProductCard({ product }: ProductCardProps) {
           loading="lazy"
           width={300}
           height={200}
-          className="object-contain max-h-[200px] w-auto transition-transform duration-500 ease-out group-hover:scale-105"
+          className={`object-contain ${compact ? "max-h-[100px]" : "max-h-[200px]"} w-auto transition-transform duration-500 ease-out group-hover:scale-105`}
           onError={(e) => {
             (e.target as HTMLImageElement).src = `https://placehold.co/300x200/e2e8f0/64748b?text=${encodeURIComponent(product.shortName)}`;
           }}

@@ -6,15 +6,18 @@ import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 const MODEL_URL = '/models/hp_omen_laptop.glb';
+// Self-hosted so the draco decoder isn't blocked by CSP script-src/worker-src
+// and doesn't depend on Google's CDN being reachable.
+const DRACO_DECODER_PATH = '/draco/';
 const CAMERA_RADIUS = 9.5;
 const CAMERA_HEIGHT = 1.2;
 
 // Start downloading the model as soon as this module loads,
 // instead of waiting for the Canvas to mount.
-useGLTF.preload(MODEL_URL);
+useGLTF.preload(MODEL_URL, DRACO_DECODER_PATH);
 
 function Model() {
-  const { scene } = useGLTF(MODEL_URL);
+  const { scene } = useGLTF(MODEL_URL, DRACO_DECODER_PATH);
 
   // The source asset uses KHR_materials_transmission, which three.js renders
   // as glass-like translucency. Force every material fully opaque.
