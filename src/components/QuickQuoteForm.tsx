@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { MessageCircle, CheckCircle2 } from "lucide-react";
 
 const WHATSAPP_NUMBER = "919814958295";
+const EMAIL_TO = "info@jetageindia.in";
 
 export function QuickQuoteForm() {
   const [name, setName] = useState("");
@@ -32,9 +33,19 @@ export function QuickQuoteForm() {
       `Interested in: ${interest}`,
       message.trim() ? `Notes: ${message.trim()}` : null,
     ].filter(Boolean);
+    const body = lines.join("\n");
 
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(body)}`;
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+
+    // mailto: hands off to the visitor's own mail app rather than leaving this
+    // page — no backend involved, so this is a best-effort second channel,
+    // not a guaranteed delivery (a visitor with no configured mail app won't
+    // see anything happen).
+    const subject = `Quote Request - ${name.trim()}`;
+    const mailtoUrl = `mailto:${EMAIL_TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+
     setSent(true);
   };
 
@@ -42,9 +53,10 @@ export function QuickQuoteForm() {
     return (
       <div className="bg-jet-bg-card rounded-3xl border border-jet-border p-8 text-center space-y-3">
         <CheckCircle2 className="w-10 h-10 text-jet-success mx-auto" />
-        <h3 className="text-xl font-bold text-jet-text">Opening WhatsApp…</h3>
+        <h3 className="text-xl font-bold text-jet-text">Opening WhatsApp &amp; Email…</h3>
         <p className="text-jet-text-dim">
-          We've pre-filled your details in WhatsApp — just hit send and our team will reply during business hours.
+          We've pre-filled your details in WhatsApp, and started an email to info@jetageindia.in in your mail app.
+          Just hit send on whichever opened for you — our team replies during business hours.
         </p>
         <button
           onClick={() => setSent(false)}
@@ -61,7 +73,7 @@ export function QuickQuoteForm() {
       <div>
         <h2 className="text-2xl font-bold text-jet-text">Get a Quick Quote</h2>
         <p className="text-jet-text-dim mt-1 text-sm">
-          Share your details once — we'll hand it straight to WhatsApp so you don't have to type it all out there.
+          Share your details once — we'll hand them straight to WhatsApp and email so you don't have to type them out twice.
         </p>
       </div>
 
