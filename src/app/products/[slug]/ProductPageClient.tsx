@@ -114,13 +114,19 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     .filter(p => p.category === product.category && p.id !== product.id)
     .slice(0, 3);
 
-  // Bundle recommendations: suggest accessories with printers, or related items
+  // Bundle recommendations: pair each category with the category a buyer
+  // naturally needs alongside it (a printer needs ink, a desktop needs
+  // accessories, and so on).
+  const BUNDLE_CATEGORIES: Record<string, string[]> = {
+    printer: ["ink-toner", "accessory"],
+    "ink-toner": ["printer"],
+    laptop: ["accessory"],
+    desktop: ["accessory", "monitor"],
+    monitor: ["desktop", "accessory"],
+    accessory: ["printer", "laptop", "desktop", "monitor"],
+  };
   const bundleProducts = products
-    .filter(p => {
-      if (product.category === "printer") return p.category === "accessory";
-      if (product.category === "accessory") return p.category === "printer";
-      return false;
-    })
+    .filter((p) => (BUNDLE_CATEGORIES[product.category] ?? []).includes(p.category))
     .slice(0, 3);
 
   const categoryLabelMap: Record<string, string> = {

@@ -2,6 +2,16 @@ import { getProducts } from "@/lib/cms";
 
 const BASE_URL = "https://www.jetageindia.in";
 
+// https://support.google.com/merchants/answer/6324436 category taxonomy.
+const GOOGLE_PRODUCT_CATEGORY: Record<string, string> = {
+  printer: "Electronics > Print, Copy, Scan & Fax > Printers, Copiers & Fax Machines",
+  laptop: "Electronics > Computers > Laptops",
+  desktop: "Electronics > Computers > Desktop Computers",
+  monitor: "Electronics > Computers > Computer Monitors",
+  "ink-toner": "Electronics > Print, Copy, Scan & Fax > Printer Ink & Toner",
+  accessory: "Electronics > Electronics Accessories",
+};
+
 function escapeXml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
@@ -18,10 +28,7 @@ export async function GET() {
   const items = products
     .map((product) => {
       const brand = product.id.startsWith("hyperx") ? "HyperX" : "HP";
-      const category =
-        product.category === "printer"
-          ? "Electronics > Print, Copy, Scan & Fax > Printers, Copiers & Fax Machines"
-          : "Electronics > Electronics Accessories";
+      const category = GOOGLE_PRODUCT_CATEGORY[product.category] ?? "Electronics > Electronics Accessories";
       return `    <item>
       <g:id>${escapeXml(product.id)}</g:id>
       <g:title>${escapeXml(product.name)}</g:title>
@@ -44,7 +51,7 @@ export async function GET() {
   <channel>
     <title>Jetage India Product Feed</title>
     <link>${BASE_URL}</link>
-    <description>Genuine HP printers and accessories from Jetage India, Authorized HP World Partner in Chandigarh since 1989.</description>
+    <description>Genuine HP laptops, desktops, monitors, printers, ink/toner and accessories from Jetage India, Authorized HP World Partner in Chandigarh since 1989.</description>
 ${items}
   </channel>
 </rss>`;

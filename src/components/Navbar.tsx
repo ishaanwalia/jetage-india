@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, MessageCircle, ChevronDown, Laptop, Monitor, Printer, Mouse, ShoppingCart } from "lucide-react";
+import { Menu, X, MessageCircle, ChevronDown, Laptop, Monitor, Printer, Mouse, Droplet, PcCase, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -9,6 +9,10 @@ import { useCart } from "@/context/CartContext";
 
 const categories = [
   { id: "printer", name: "Printers", icon: Printer, href: "/category/printer/" },
+  { id: "laptop", name: "Laptops", icon: Laptop, href: "/category/laptop/" },
+  { id: "desktop", name: "Desktops", icon: PcCase, href: "/category/desktop/" },
+  { id: "monitor", name: "Monitors", icon: Monitor, href: "/category/monitor/" },
+  { id: "ink-toner", name: "Ink & Toner", icon: Droplet, href: "/category/ink-toner/" },
   { id: "accessory", name: "Accessories", icon: Mouse, href: "/category/accessory/" },
 ];
 

@@ -36,28 +36,32 @@ const subCategoryMap: Record<string, Record<string, string>> = {
     "smart-tank": "Smart Tank",
     deskjet: "DeskJet",
   },
+  laptop: {
+    pavilion: "Pavilion",
+    envy: "Envy",
+    omen: "OMEN Gaming",
+    victus: "Victus Gaming",
+    "probook": "ProBook (Business)",
+  },
+  desktop: {
+    aio: "All-in-One",
+    tower: "Tower",
+    mini: "Mini",
+  },
+  monitor: {
+    business: "Business",
+    gaming: "Gaming",
+    conferencing: "Conferencing",
+  },
+  "ink-toner": {
+    inkjet: "Ink Cartridges & Bottles",
+    toner: "Toner Cartridges",
+  },
   accessory: {
     mouse: "Mouse",
     keyboard: "Keyboard",
     combo: "Combos",
   },
-};
-
-const categoryNames: Record<string, string> = {
-  printer: "Printers",
-  accessory: "Accessories",
-};
-
-const categoryDescriptions: Record<string, string> = {
-  printer:
-    "High-quality HP printers for home, office, and enterprise — Laser, Color Laser, InkJet, Smart Tank & OfficeJet.",
-  accessory:
-    "Genuine HP keyboards, mice, and essential combos designed for comfort, precision, and durability.",
-};
-
-const categoryMeta: Record<string, { icon: string; tagline: string }> = {
-  printer: { icon: "Printer", tagline: "Print with confidence" },
-  accessory: { icon: "Mouse", tagline: "Precision in every click" },
 };
 
 // ─── Sort options ───
@@ -70,10 +74,13 @@ const sortOptions = [
 ];
 
 export default function CategoryPageClient({ id }: CategoryPageClientProps) {
-  const { products } = useCompare();
+  const { products, categories } = useCompare();
   const [sortBy, setSortBy] = useState("featured");
   const [activeSubCategory, setActiveSubCategory] = useState<string>("all");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  const category = categories.find((c) => c.id === id);
+  const categoryName = category?.name ?? id;
 
   // ─── Derived data ───
   const categoryProducts = useMemo(
@@ -183,13 +190,12 @@ export default function CategoryPageClient({ id }: CategoryPageClientProps) {
 
               {/* Title */}
               <h1 className="text-5xl lg:text-7xl font-bold text-jet-text tracking-tight leading-[0.95]">
-                {categoryNames[id] || id}
+                {categoryName}
               </h1>
 
               {/* Description */}
               <p className="text-jet-text-dim max-w-2xl mx-auto text-lg lg:text-xl leading-relaxed">
-                {categoryDescriptions[id] ||
-                  `Browse our ${categoryNames[id]} collection`}
+                {category?.description || `Browse our ${categoryName} collection`}
               </p>
 
               {/* Stats row */}
@@ -467,20 +473,20 @@ export default function CategoryPageClient({ id }: CategoryPageClientProps) {
           </Reveal>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {Object.entries(categoryNames)
-              .filter(([key]) => key !== id)
-              .map(([key, name], i) => (
-                <Reveal key={key} direction="up" delay={i * 0.08}>
+            {categories
+              .filter((c) => c.id !== id)
+              .map((c, i) => (
+                <Reveal key={c.id} direction="up" delay={i * 0.08}>
                   <Link
-                    href={`/category/${key}/`}
+                    href={`/category/${c.id}/`}
                     className="group block p-6 rounded-2xl bg-jet-bg-card border border-jet-border hover:border-jet-border-strong transition-all duration-500 hover:shadow-premium text-center"
                   >
                     <h3 className="font-bold text-jet-text group-hover:text-jet-primary transition-colors text-lg">
-                      {name}
+                      {c.name}
                     </h3>
                     <p className="text-sm text-jet-text-muted mt-1">
                       {
-                        products.filter((p) => p.category === key).length
+                        products.filter((p) => p.category === c.id).length
                       }{" "}
                       products
                     </p>

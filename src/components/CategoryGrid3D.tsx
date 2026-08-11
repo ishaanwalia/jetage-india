@@ -2,12 +2,16 @@
 
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Laptop, Monitor, Printer, Mouse, ArrowRight } from "lucide-react";
+import { Laptop, Monitor, Printer, Mouse, Droplet, PcCase, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useCompare } from "@/context/CompareContext";
 
 const CATEGORY_META: Record<string, { icon: typeof Printer; color: string }> = {
   printer: { icon: Printer, color: "#0891b2" },
+  laptop: { icon: Laptop, color: "#2563eb" },
+  desktop: { icon: PcCase, color: "#7c3aed" },
+  monitor: { icon: Monitor, color: "#d97706" },
+  "ink-toner": { icon: Droplet, color: "#059669" },
   accessory: { icon: Mouse, color: "#06b6d4" },
 };
 
@@ -152,11 +156,11 @@ export function CategoryGrid3D() {
             Everything <span className="text-gradient-gold">HP</span>
           </h2>
           <p className="text-jet-text-dim max-w-2xl mx-auto text-lg">
-            Genuine HP printers and accessories at the best prices. Find your perfect product today.
+            Genuine HP laptops, desktops, monitors, printers & accessories at the best prices. Find your perfect product today.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto" style={{ transformStyle: "preserve-3d" }}>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto" style={{ transformStyle: "preserve-3d" }}>
           {categories.map((cat, i) => (
             <CategoryCard3D key={cat.id} category={cat} index={i} />
           ))}

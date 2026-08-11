@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { CompareClient } from "./CompareClient";
 
 export const metadata: Metadata = {
-  title: "Compare HP Printers Side by Side",
+  title: "Compare HP Products Side by Side",
   description:
-    "Compare up to 3 HP printers side by side — price, speed, running costs, duplex, connectivity and more. Pick the right printer with Jetage India, authorized HP dealer in Chandigarh.",
+    "Compare up to 3 HP laptops, desktops, monitors, printers or accessories side by side — price, specs and more. Pick the right product with Jetage India, authorized HP dealer in Chandigarh.",
   alternates: { canonical: "/compare/" },
 };
 

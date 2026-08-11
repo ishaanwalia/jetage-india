@@ -8,6 +8,10 @@ export function Footer() {
   const quickLinks = [
     { label: "All Products", href: "/products/" },
     { label: "Printers", href: "/category/printer/" },
+    { label: "Laptops", href: "/category/laptop/" },
+    { label: "Desktops", href: "/category/desktop/" },
+    { label: "Monitors", href: "/category/monitor/" },
+    { label: "Ink & Toner", href: "/category/ink-toner/" },
     { label: "Accessories", href: "/category/accessory/" },
   ];
 

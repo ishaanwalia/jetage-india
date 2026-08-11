@@ -47,8 +47,13 @@ const ROWS: Row[] = [
     },
   },
   {
+    // Duplex is a boolean with no "not applicable" state of its own, so a
+    // non-printer would otherwise show a flat, meaningless "No" — only show
+    // it at all when a printer is actually in the comparison. (`speed`
+    // itself isn't a safe signal here: ink/accessory products repurpose it
+    // to show page yield / DPI as a headline stat.)
     label: "Auto duplex",
-    values: (p) => (p.duplex ? "Yes" : "No"),
+    values: (p) => (p.category === "printer" ? (p.duplex ? "Yes" : "No") : "—"),
     winners: (list) =>
       list.some((p) => p.duplex) && !list.every((p) => p.duplex)
         ? list.flatMap((p, i) => (p.duplex ? [i] : []))
@@ -72,6 +77,32 @@ const ROWS: Row[] = [
   { label: "Warranty", values: (p) => p.warranty || "—" },
   { label: "Ideal for", values: (p) => p.idealFor || "—" },
 ];
+
+/**
+ * The rows above are printer-shaped (duplex, duty cycle, resolution…), so a
+ * laptop/monitor comparison would otherwise be a wall of dashes. Rows with no
+ * data for any compared item are dropped, and every key from each product's
+ * freeform specs map — laptops' RAM/CPU, monitors' refresh rate, whatever —
+ * is appended as its own row, so the table always reflects what the products
+ * actually differ on instead of a fixed printer schema.
+ */
+function buildRows(items: Product[]): Row[] {
+  const fixed = ROWS.filter((row) => items.some((p) => row.values(p) !== "—"));
+
+  const knownLabels = new Set(ROWS.map((r) => r.label.toLowerCase()));
+  const specKeys: string[] = [];
+  for (const p of items) {
+    for (const key of Object.keys(p.specs ?? {})) {
+      if (!knownLabels.has(key.toLowerCase()) && !specKeys.includes(key)) specKeys.push(key);
+    }
+  }
+  const specRows: Row[] = specKeys.map((key) => ({
+    label: key,
+    values: (p) => p.specs?.[key] || "—",
+  }));
+
+  return [...fixed, ...specRows];
+}
 
 export function CompareClient() {
   const { ids, remove, clear, toggle, getProduct } = useCompare();
@@ -100,11 +131,12 @@ export function CompareClient() {
     () => ids.map((id) => getProduct(id)).filter((p): p is Product => Boolean(p)),
     [ids, getProduct]
   );
+  const rows = useMemo(() => buildRows(items), [items]);
 
   const shareUrl = `https://www.jetageindia.in/compare/?p=${ids.join(",")}`;
   const whatsappMessage = encodeURIComponent(
     [
-      "Hi Jetage, I'm comparing these printers on your website:",
+      "Hi Jetage, I'm comparing these products on your website:",
       "",
       ...items.map((p, i) => `${i + 1}. ${p.name} — ${inr(p.price)}`),
       "",
@@ -126,7 +158,7 @@ export function CompareClient() {
               Side-by-Side Comparison
             </span>
             <h1 className="text-3xl md:text-4xl font-bold text-jet-text">
-              {items.length >= 2 ? "Spec for spec, honestly" : "Compare printers"}
+              {items.length >= 2 ? "Spec for spec, honestly" : "Compare products"}
             </h1>
           </div>
 
@@ -136,7 +168,7 @@ export function CompareClient() {
                 <Scale className="w-7 h-7 text-jet-text-muted" />
               </div>
               <p className="text-jet-text font-semibold mb-2">
-                {items.length === 1 ? "Add one more printer to compare" : "Nothing to compare yet"}
+                {items.length === 1 ? "Add one more product to compare" : "Nothing to compare yet"}
               </p>
               <p className="text-jet-text-dim text-sm mb-6 max-w-sm mx-auto">
                 Tap the <Plus className="w-3.5 h-3.5 inline -mt-0.5" /> compare button on any
@@ -146,7 +178,7 @@ export function CompareClient() {
                 href="/products/"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-jet-text rounded-xl font-bold text-sm hover:bg-jet-primary-dim transition-all"
               >
-                Browse printers
+                Browse products
               </Link>
             </div>
           ) : items.length >= 2 ? (
@@ -194,7 +226,7 @@ export function CompareClient() {
                     </tr>
                   </thead>
                   <tbody>
-                    {ROWS.map((row) => {
+                    {rows.map((row) => {
                       const winners = row.winners ? row.winners(items) : [];
                       return (
                         <tr key={row.label} className="border-t border-jet-border">

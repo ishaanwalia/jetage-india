@@ -1,11 +1,24 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Save, Trash2 } from "lucide-react";
 import { saveProductAction, deleteProductAction } from "../../../actions";
 import { CheckboxField, Field, Fieldset, ImageField, ImageListField, SubmitBar, TextareaField } from "../../form-parts";
 import type { CategoryInfo, Product } from "@/lib/cms";
+
+// Printer-only fixed fields (speed, duty cycle, duplex, etc.) only make
+// sense for this category — every other category relies entirely on the
+// freeform Specifications box below, so its suggested keys are listed here
+// instead of adding a rigid column per category.
+const SPEC_HINTS: Record<string, string> = {
+  printer: "Functions, Paper Size, ADF, Display, Memory, Processor",
+  laptop: "Processor, RAM, Storage, Display, Graphics, Battery Life, OS, Ports, Webcam",
+  desktop: "Processor, RAM, Storage, Graphics, PSU, Ports, OS",
+  monitor: "Screen Size, Panel Type, Resolution, Refresh Rate, Response Time, Ports",
+  "ink-toner": "Print Technology, Ink/Toner Type, Page Yield, Cartridge Volume, Compatible With",
+  accessory: "Connection Type, Battery Life, Range, Compatibility",
+};
 
 export default function ProductForm({
   product,
@@ -16,6 +29,8 @@ export default function ProductForm({
 }) {
   const [state, formAction, pending] = useActionState(saveProductAction, null);
   const isNew = !product;
+  const [category, setCategory] = useState(product?.category ?? categories[0]?.id ?? "");
+  const isPrinter = category === "printer";
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -51,7 +66,8 @@ export default function ProductForm({
               <select
                 id="category"
                 name="category"
-                defaultValue={product?.category ?? categories[0]?.id}
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
                 className="w-full rounded-xl border border-jet-border px-4 py-2.5 text-sm focus:border-jet-primary focus:outline-none focus:ring-2 focus:ring-jet-primary/20"
               >
                 {categories.map((c) => (
@@ -76,10 +92,6 @@ export default function ProductForm({
 
         <Fieldset legend="Specs">
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Print speed" name="speed" defaultValue={product?.speed} hint="e.g. 22 ppm black / 18 ppm color" />
-            <Field label="Monthly duty cycle" name="dutyCycle" defaultValue={product?.dutyCycle} hint="e.g. 20,000 pages/month" />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Ideal for" name="idealFor" defaultValue={product?.idealFor} hint="e.g. Home, Business, Enterprise" />
             <Field label="Warranty" name="warranty" defaultValue={product?.warranty ?? ""} />
           </div>
@@ -88,9 +100,8 @@ export default function ProductForm({
             name="connectivity"
             rows={2}
             defaultValue={product?.connectivity?.join("\n")}
-            hint="One per line, e.g. Wi-Fi / Ethernet / USB"
+            hint="One per line, e.g. Wi-Fi / Ethernet / USB / Bluetooth"
           />
-          <CheckboxField label="Auto duplex (two-sided printing)" name="duplex" defaultChecked={product?.duplex} />
           <TextareaField
             label="Features"
             name="features"
@@ -105,24 +116,35 @@ export default function ProductForm({
             defaultValue={Object.entries(product?.specs ?? {})
               .map(([k, v]) => `${k}: ${v}`)
               .join("\n")}
-            hint="One per line, written as “Label: value”."
+            hint={`One per line, written as "Label: value". For this category, buyers expect: ${SPEC_HINTS[category] ?? "whatever specs matter for this product"}.`}
           />
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="First page out" name="firstPageOut" defaultValue={product?.firstPageOut ?? ""} />
-            <Field label="Resolution" name="resolution" defaultValue={product?.resolution ?? ""} />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Paper capacity" name="paperCapacity" defaultValue={product?.paperCapacity ?? ""} />
             <Field label="Weight" name="weight" defaultValue={product?.weight ?? ""} />
+            <Field label="Dimensions" name="dimensions" defaultValue={product?.dimensions ?? ""} />
           </div>
-          <Field label="Dimensions" name="dimensions" defaultValue={product?.dimensions ?? ""} />
-          <TextareaField
-            label="Mobile printing"
-            name="mobilePrinting"
-            rows={2}
-            defaultValue={product?.mobilePrinting?.join("\n")}
-            hint="One per line, e.g. HP Smart App"
-          />
+
+          {isPrinter && (
+            <div className="space-y-4 rounded-xl border border-dashed border-jet-border p-4">
+              <p className="text-xs font-medium uppercase tracking-wider text-jet-text-muted">Printer-specific</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Print speed" name="speed" defaultValue={product?.speed} hint="e.g. 22 ppm black / 18 ppm color" />
+                <Field label="Monthly duty cycle" name="dutyCycle" defaultValue={product?.dutyCycle} hint="e.g. 20,000 pages/month" />
+              </div>
+              <CheckboxField label="Auto duplex (two-sided printing)" name="duplex" defaultChecked={product?.duplex} />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="First page out" name="firstPageOut" defaultValue={product?.firstPageOut ?? ""} />
+                <Field label="Resolution" name="resolution" defaultValue={product?.resolution ?? ""} />
+              </div>
+              <Field label="Paper capacity" name="paperCapacity" defaultValue={product?.paperCapacity ?? ""} />
+              <TextareaField
+                label="Mobile printing"
+                name="mobilePrinting"
+                rows={2}
+                defaultValue={product?.mobilePrinting?.join("\n")}
+                hint="One per line, e.g. HP Smart App"
+              />
+            </div>
+          )}
         </Fieldset>
 
         <Fieldset legend="Images">

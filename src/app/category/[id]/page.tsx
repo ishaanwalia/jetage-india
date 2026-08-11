@@ -9,12 +9,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const categoryNames: Record<string, string> = {
-    printer: "HP Printers",
-    accessory: "HP Accessories",
-  };
-
-  const name = categoryNames[id] || id;
+  const categories = await getCategories();
+  const name = `HP ${categories.find((c) => c.id === id)?.name ?? id}`;
 
   return {
     title: name,

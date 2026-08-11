@@ -18,8 +18,8 @@ export const metadata: Metadata = {
     default: "Jetage India | Authorized HP Dealer in Chandigarh Since 1989",
     template: "%s | Jetage India",
   },
-  description: "Buy genuine HP printers, accessories & more at best prices. Authorized HP World Partner in Chandigarh since 1989. All India delivery. WhatsApp support. Visit SCO-12, Sector-17-E.",
-  keywords: "HP dealer Chandigarh, HP printer India, HP authorized dealer, Jetage Computer Traders, HP products India, HP World Partner, Sector 17 Chandigarh, HP laser printer, HP smart tank, HP accessories",
+  description: "Buy genuine HP laptops, desktops, monitors, printers, ink/toner & accessories at best prices. Authorized HP World Partner in Chandigarh since 1989. All India delivery. WhatsApp support. Visit SCO-12, Sector-17-E.",
+  keywords: "HP dealer Chandigarh, HP printer India, HP laptop India, HP desktop India, HP monitor India, HP authorized dealer, Jetage Computer Traders, HP products India, HP World Partner, Sector 17 Chandigarh, HP laser printer, HP smart tank, HP accessories",
   authors: [{ name: "Jetage Computer Traders" }],
   creator: "Jetage Computer Traders",
   publisher: "Jetage India",
@@ -108,7 +108,7 @@ export default async function RootLayout({
               "url": "https://www.jetageindia.in",
               "logo": "https://www.jetageindia.in/LogoJ.png",
               "image": "https://www.jetageindia.in/showroom.jpg",
-              "description": "Authorized HP World Partner in Chandigarh since 1989. Selling genuine HP printers, accessories and more. Best prices, all India delivery.",
+              "description": "Authorized HP World Partner in Chandigarh since 1989. Selling genuine HP laptops, desktops, monitors, printers, ink/toner and accessories. Best prices, all India delivery.",
               "foundingDate": "1989",
               "address": {
                 "@type": "PostalAddress",
@@ -146,19 +146,27 @@ export default async function RootLayout({
                 "itemListElement": [
                   {
                     "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Product",
-                      "name": "HP Printers",
-                      "brand": "HP",
-                    },
+                    "itemOffered": { "@type": "Product", "name": "HP Printers", "brand": "HP" },
                   },
                   {
                     "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Product",
-                      "name": "HP Accessories",
-                      "brand": "HP",
-                    },
+                    "itemOffered": { "@type": "Product", "name": "HP Laptops", "brand": "HP" },
+                  },
+                  {
+                    "@type": "Offer",
+                    "itemOffered": { "@type": "Product", "name": "HP Desktops", "brand": "HP" },
+                  },
+                  {
+                    "@type": "Offer",
+                    "itemOffered": { "@type": "Product", "name": "HP Monitors", "brand": "HP" },
+                  },
+                  {
+                    "@type": "Offer",
+                    "itemOffered": { "@type": "Product", "name": "HP Ink & Toner", "brand": "HP" },
+                  },
+                  {
+                    "@type": "Offer",
+                    "itemOffered": { "@type": "Product", "name": "HP Accessories", "brand": "HP" },
                   },
                 ],
               },
