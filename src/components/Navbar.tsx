@@ -64,9 +64,9 @@ export function Navbar() {
     <>
       <nav 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled 
-            ? "glass-strong py-3 shadow-lg shadow-black/5" 
-            : "bg-transparent py-5"
+          isScrolled
+            ? "glass-strong py-3 shadow-lg shadow-black/5"
+            : "bg-jet-bg/10 backdrop-blur-sm py-5"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -104,11 +104,12 @@ export function Navbar() {
               ))}
 
               <div className="relative category-dropdown">
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsCategoryOpen(!isCategoryOpen);
                   }}
+                  aria-expanded={isCategoryOpen}
                   className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-jet-text-dim hover:text-jet-primary transition-colors group relative"
                 >
                   Categories
@@ -149,7 +150,7 @@ export function Navbar() {
                 <ShoppingCart className="w-4 h-4" />
                 <span>Cart</span>
                 {totalItems > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-jet-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-jet-bg-card">
+                  <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-jet-primary text-jet-text text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-jet-bg-card">
                     {totalItems}
                   </span>
                 )}
@@ -159,7 +160,7 @@ export function Navbar() {
                 href="https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20want%20to%20inquire%20about%20HP%20products"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative inline-flex items-center gap-2 px-5 py-2.5 bg-jet-whatsapp/10 text-jet-whatsapp border border-jet-whatsapp/20 rounded-full text-sm font-semibold hover:bg-jet-whatsapp hover:text-white transition-all duration-300 overflow-hidden"
+                className="group relative inline-flex items-center gap-2 px-5 py-2.5 bg-jet-whatsapp/10 text-jet-whatsapp border border-jet-whatsapp/20 rounded-full text-sm font-semibold hover:bg-jet-whatsapp hover:text-jet-text transition-all duration-300 overflow-hidden"
               >
                 <span className="absolute inset-0 bg-jet-whatsapp translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 <MessageCircle className="w-4 h-4 relative z-10" />
@@ -169,6 +170,8 @@ export function Navbar() {
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileMenuOpen}
               className="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-jet-bg-card border border-jet-border hover:border-jet-primary/40 transition-all"
             >
               {isMobileMenuOpen ? (
@@ -217,7 +220,7 @@ export function Navbar() {
                     setIsCartOpen(true);
                     setIsMobileMenuOpen(false);
                   }}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-full text-sm font-semibold hover:bg-jet-primary hover:text-white transition-all w-full justify-center"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-full text-sm font-semibold hover:bg-jet-primary hover:text-jet-text transition-all w-full justify-center"
                 >
                   <ShoppingCart className="w-4 h-4" />
                   View Cart {totalItems > 0 && `(${totalItems})`}
@@ -226,7 +229,7 @@ export function Navbar() {
                   href="https://wa.me/919814958295"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-jet-whatsapp text-white rounded-full text-sm font-semibold w-full justify-center"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-jet-whatsapp text-jet-text rounded-full text-sm font-semibold w-full justify-center"
                 >
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp Order

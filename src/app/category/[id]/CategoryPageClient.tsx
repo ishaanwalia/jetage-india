@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { products } from "@/lib/data/products";
+import { useCompare } from "@/context/CompareContext";
 import { ProductCard } from "@/components/ProductCard";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -70,6 +70,7 @@ const sortOptions = [
 ];
 
 export default function CategoryPageClient({ id }: CategoryPageClientProps) {
+  const { products } = useCompare();
   const [sortBy, setSortBy] = useState("featured");
   const [activeSubCategory, setActiveSubCategory] = useState<string>("all");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -242,7 +243,7 @@ export default function CategoryPageClient({ id }: CategoryPageClientProps) {
                   onClick={() => setActiveSubCategory("all")}
                   className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border whitespace-nowrap ${
                     activeSubCategory === "all"
-                      ? "bg-jet-primary text-white border-jet-primary shadow-glow"
+                      ? "bg-jet-primary text-jet-text border-jet-primary shadow-glow"
                       : "bg-jet-bg-card text-jet-text-dim border-jet-border hover:border-jet-primary/40 hover:text-jet-primary"
                   }`}
                 >
@@ -264,7 +265,7 @@ export default function CategoryPageClient({ id }: CategoryPageClientProps) {
                       onClick={() => handleSubCategoryToggle(sub)}
                       className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border whitespace-nowrap flex items-center gap-2 ${
                         isActive
-                          ? "bg-jet-primary text-white border-jet-primary shadow-glow"
+                          ? "bg-jet-primary text-jet-text border-jet-primary shadow-glow"
                           : "bg-jet-bg-card text-jet-text-dim border-jet-border hover:border-jet-primary/40 hover:text-jet-primary"
                       }`}
                     >
@@ -334,7 +335,7 @@ export default function CategoryPageClient({ id }: CategoryPageClientProps) {
                     }}
                     className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border ${
                       activeSubCategory === "all"
-                        ? "bg-jet-primary text-white border-jet-primary"
+                        ? "bg-jet-primary text-jet-text border-jet-primary"
                         : "bg-jet-bg-card text-jet-text-dim border-jet-border"
                     }`}
                   >
@@ -352,7 +353,7 @@ export default function CategoryPageClient({ id }: CategoryPageClientProps) {
                         }}
                         className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border ${
                           activeSubCategory === sub
-                            ? "bg-jet-primary text-white border-jet-primary"
+                            ? "bg-jet-primary text-jet-text border-jet-primary"
                             : "bg-jet-bg-card text-jet-text-dim border-jet-border"
                         }`}
                       >
@@ -435,7 +436,7 @@ export default function CategoryPageClient({ id }: CategoryPageClientProps) {
               <div className="flex justify-center gap-3">
                 <button
                   onClick={clearFilters}
-                  className="px-6 py-3 bg-jet-primary text-white rounded-full font-bold hover:bg-jet-primary-dim transition-all shadow-glow"
+                  className="px-6 py-3 bg-jet-primary text-jet-text rounded-full font-bold hover:bg-jet-primary-dim transition-all shadow-glow"
                 >
                   Clear Filters
                 </button>

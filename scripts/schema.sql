@@ -1,0 +1,139 @@
+-- Jetage India CMS schema.
+--
+-- `products.id` is the human slug already used everywhere in the app
+-- (e.g. "hp-officejet-pro-9720") — kept as the primary key instead of adding
+-- a surrogate integer, so every existing getProductById(id) call site and
+-- every /products/[slug] URL keeps working unchanged.
+
+create table if not exists categories (
+  id          text primary key,
+  name        text        not null,
+  icon        text        not null default 'Package',
+  description text        not null default '',
+  sort_order  integer     not null default 0,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+
+create table if not exists products (
+  id               text        primary key,
+  name             text        not null,
+  short_name       text        not null default '',
+  category_id      text        not null references categories (id) on update cascade,
+  sub_category     text        not null default '',
+  price            integer     not null default 0,
+  mrp              integer     not null default 0,
+  sku              text        not null default '',
+  speed            text        not null default '',
+  connectivity     jsonb       not null default '[]'::jsonb,
+  duplex           boolean     not null default false,
+  duty_cycle       text        not null default '',
+  ideal_for        text        not null default '',
+  description      text        not null default '',
+  features         jsonb       not null default '[]'::jsonb,
+  image            text        not null default '',
+  images           jsonb       not null default '[]'::jsonb,
+  badge            text,
+  specs            jsonb       not null default '{}'::jsonb,
+  warranty         text,
+  weight           text,
+  dimensions       text,
+  first_page_out   text,
+  resolution       text,
+  paper_capacity   text,
+  mobile_printing  jsonb       not null default '[]'::jsonb,
+  -- Preserves the curated order the old static catalogue file had (the
+  -- homepage/category grids showed products in file order, not alphabetical).
+  sort_order       integer     not null default 0,
+  -- Was previously derived from a hardcoded badge list; a real column lets
+  -- an editor feature/unfeature a product without touching its marketing badge.
+  featured         boolean     not null default false,
+  status           text        not null default 'published'
+                     check (status in ('draft', 'published')),
+  created_at       timestamptz not null default now(),
+  updated_at       timestamptz not null default now()
+);
+
+create index if not exists products_category_idx on products (category_id);
+create index if not exists products_status_idx   on products (status);
+create index if not exists products_price_idx     on products (price);
+create index if not exists products_featured_idx  on products (featured) where featured;
+
+-- Full-text search over the fields a buyer actually types (model name, SKU,
+-- feature list). Generated and stored so the index can't go stale.
+alter table products drop column if exists search_vector;
+alter table products
+  add column search_vector tsvector
+  generated always as (
+    setweight(to_tsvector('english', coalesce(name, '')), 'A') ||
+    setweight(to_tsvector('english', coalesce(short_name, '')), 'A') ||
+    setweight(to_tsvector('english', coalesce(sku, '')), 'B') ||
+    setweight(to_tsvector('english', coalesce(sub_category, '')), 'B') ||
+    setweight(to_tsvector('english', coalesce(description, '')), 'C') ||
+    setweight(to_tsvector('english', coalesce(features::text, '')), 'D')
+  ) stored;
+
+create index if not exists products_search_idx on products using gin (search_vector);
+
+create table if not exists blogs (
+  slug             text        primary key,
+  title            text        not null,
+  meta_description text        not null default '',
+  excerpt          text        not null default '',
+  content          text        not null default '',
+  category         text        not null default '',
+  author           text        not null default 'Jetage Team',
+  published_at     date        not null default current_date,
+  read_time        text        not null default '',
+  tags             jsonb       not null default '[]'::jsonb,
+  featured         boolean     not null default false,
+  cover_image      text,
+  status           text        not null default 'published'
+                     check (status in ('draft', 'published')),
+  created_at       timestamptz not null default now(),
+  updated_at       timestamptz not null default now()
+);
+
+create index if not exists blogs_status_idx   on blogs (status, published_at desc);
+create index if not exists blogs_featured_idx on blogs (featured) where featured;
+
+-- Admin accounts. Password hashing uses node:crypto scrypt; the hash column
+-- stores "salt:derivedKey" hex, so no password ever lands here in the clear.
+create table if not exists admin_users (
+  id            integer primary key generated by default as identity,
+  email         text        not null unique,
+  password_hash text        not null,
+  name          text        not null default '',
+  created_at    timestamptz not null default now()
+);
+
+-- Opaque session tokens. Only the SHA-256 of the cookie value is stored, so a
+-- leaked database backup cannot be replayed as a live session.
+create table if not exists sessions (
+  token_hash text        primary key,
+  user_id    integer     not null references admin_users (id) on delete cascade,
+  expires_at timestamptz not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists sessions_expiry_idx on sessions (expires_at);
+
+-- Every create/update/delete made through the admin, newest first. Append-only
+-- from the app's side (nothing in src/lib ever updates or deletes a row here) —
+-- it exists so a mistake is traceable, not so it can be edited.
+create table if not exists audit_log (
+  id           integer primary key generated by default as identity,
+  actor_email  text        not null,
+  action       text        not null check (action in ('create', 'update', 'delete')),
+  resource     text        not null check (resource in ('product', 'blog')),
+  record_id    text        not null,
+  record_label text        not null,
+  changes      jsonb,
+  created_at   timestamptz not null default now()
+);
+
+create index if not exists audit_log_created_idx on audit_log (created_at desc);
+
+-- updated_at is set explicitly by the write helpers in src/lib/cms.ts rather
+-- than by a trigger — every write goes through those helpers, so a plpgsql
+-- function would only add a second place to look when a timestamp is wrong.

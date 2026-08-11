@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, useMemo } from "react";
+import type { CategoryInfo, Product } from "@/lib/cms";
 
 export const MAX_COMPARE = 3;
 
@@ -11,6 +12,12 @@ interface CompareContextType {
   clear: () => void;
   has: (productId: string) => boolean;
   isFull: boolean;
+  /** Full catalogue, fetched once server-side in the root layout — every
+   *  client component that needs product data reads it from here instead of
+   *  importing a static file or calling the (server-only) DB layer itself. */
+  products: Product[];
+  categories: CategoryInfo[];
+  getProduct: (id: string) => Product | undefined;
 }
 
 const CompareContext = createContext<CompareContextType | null>(null);
@@ -27,7 +34,15 @@ function loadFromStorage(): string[] {
   }
 }
 
-export function CompareProvider({ children }: { children: React.ReactNode }) {
+export function CompareProvider({
+  children,
+  products,
+  categories,
+}: {
+  children: React.ReactNode;
+  products: Product[];
+  categories: CategoryInfo[];
+}) {
   // Start empty and load after mount so server-rendered HTML always matches
   // the first client render (avoids hydration mismatches).
   const [ids, setIds] = useState<string[]>([]);
@@ -63,9 +78,22 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
 
   const has = useCallback((productId: string) => ids.includes(productId), [ids]);
 
+  const productMap = useMemo(() => new Map(products.map((p) => [p.id, p])), [products]);
+  const getProduct = useCallback((id: string) => productMap.get(id), [productMap]);
+
   return (
     <CompareContext.Provider
-      value={{ ids, toggle, remove, clear, has, isFull: ids.length >= MAX_COMPARE }}
+      value={{
+        ids,
+        toggle,
+        remove,
+        clear,
+        has,
+        isFull: ids.length >= MAX_COMPARE,
+        products,
+        categories,
+        getProduct,
+      }}
     >
       {children}
     </CompareContext.Provider>

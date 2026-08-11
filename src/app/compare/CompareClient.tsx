@@ -7,7 +7,7 @@ import { Scale, X, MessageCircle, Share2, Check, Minus, Plus } from "lucide-reac
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useCompare } from "@/context/CompareContext";
-import { getProductById, Product } from "@/lib/data/products";
+import type { Product } from "@/lib/cms";
 
 const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
@@ -74,15 +74,16 @@ const ROWS: Row[] = [
 ];
 
 export function CompareClient() {
-  const { ids, remove, clear, toggle } = useCompare();
-  const [hydrated, setHydrated] = useState(false);
+  const { ids, remove, clear, toggle, getProduct } = useCompare();
 
-  // Support deep links: /compare/?p=id1,id2,id3 seeds the selection.
+  // Support deep links: /compare/?p=id1,id2,id3 seeds the selection. The
+  // empty-state guidance below renders immediately regardless of whether
+  // this has run yet, so static/no-JS visitors never see a blank page.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const fromUrl = (params.get("p") || "")
       .split(",")
-      .filter((id) => id && getProductById(id));
+      .filter((id) => id && getProduct(id));
     if (fromUrl.length >= 2) {
       const current = new Set(ids);
       fromUrl.slice(0, 3).forEach((id) => {
@@ -92,13 +93,12 @@ export function CompareClient() {
         if (!fromUrl.includes(id)) remove(id);
       });
     }
-    setHydrated(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const items = useMemo(
-    () => ids.map((id) => getProductById(id)).filter((p): p is Product => Boolean(p)),
-    [ids]
+    () => ids.map((id) => getProduct(id)).filter((p): p is Product => Boolean(p)),
+    [ids, getProduct]
   );
 
   const shareUrl = `https://www.jetageindia.in/compare/?p=${ids.join(",")}`;
@@ -130,7 +130,7 @@ export function CompareClient() {
             </h1>
           </div>
 
-          {hydrated && items.length < 2 ? (
+          {items.length < 2 ? (
             <div className="text-center py-16 bg-jet-bg-card rounded-2xl border border-jet-border max-w-xl mx-auto">
               <div className="w-16 h-16 rounded-2xl bg-jet-bg-elevated flex items-center justify-center mx-auto border border-jet-border mb-4">
                 <Scale className="w-7 h-7 text-jet-text-muted" />
@@ -144,7 +144,7 @@ export function CompareClient() {
               </p>
               <Link
                 href="/products/"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-white rounded-xl font-bold text-sm hover:bg-jet-primary-dim transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-jet-text rounded-xl font-bold text-sm hover:bg-jet-primary-dim transition-all"
               >
                 Browse printers
               </Link>
@@ -228,7 +228,7 @@ export function CompareClient() {
                   href={`https://wa.me/919814958295?text=${whatsappMessage}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-whatsapp text-white rounded-xl font-bold text-sm hover:opacity-90 transition-all"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-whatsapp text-jet-text rounded-xl font-bold text-sm hover:opacity-90 transition-all"
                 >
                   <MessageCircle className="w-4 h-4" />
                   Ask which one suits me
@@ -241,7 +241,7 @@ export function CompareClient() {
                       navigator.clipboard?.writeText(shareUrl);
                     }
                   }}
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-bg-card text-jet-primary border border-jet-primary/30 rounded-xl font-bold text-sm hover:bg-jet-primary hover:text-white transition-all"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-bg-card text-jet-primary border border-jet-primary/30 rounded-xl font-bold text-sm hover:bg-jet-primary hover:text-jet-text transition-all"
                 >
                   <Share2 className="w-4 h-4" />
                   Share this comparison

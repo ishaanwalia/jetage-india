@@ -24,18 +24,21 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { products, type Product } from "@/lib/data/products";
+import type { Product } from "@/lib/cms";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ProductCard } from "@/components/ProductCard";
 import { useCart } from "@/context/CartContext";
+import { useCompare } from "@/context/CompareContext";
+import { YEARS_TRADING } from "@/lib/business";
 
 interface ProductPageClientProps {
   product: Product;
 }
 
 export default function ProductPageClient({ product }: ProductPageClientProps) {
+  const { products } = useCompare();
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState("specs");
@@ -81,7 +84,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 text-center">
           <h1 className="text-4xl font-bold text-jet-text mb-4">Product Not Found</h1>
           <p className="text-jet-text-dim mb-8">The product you are looking for does not exist.</p>
-          <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-white rounded-full font-bold hover:bg-jet-primary-dim transition-all">
+          <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-jet-text rounded-full font-bold hover:bg-jet-primary-dim transition-all">
             <ChevronLeft className="w-5 h-5" />
             Back to Home
           </Link>
@@ -206,7 +209,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 )}
 
                 {product.badge && (
-                  <div className="absolute top-6 left-6 px-4 py-2 bg-jet-primary text-white font-bold rounded-full z-10">
+                  <div className="absolute top-6 left-6 px-4 py-2 bg-jet-primary text-jet-text font-bold rounded-full z-10">
                     {product.badge}
                   </div>
                 )}
@@ -221,13 +224,13 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                   <>
                     <button 
                       onClick={prevImage}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center hover:bg-jet-primary hover:text-white hover:border-jet-primary transition-all z-20"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center hover:bg-jet-primary hover:text-jet-text hover:border-jet-primary transition-all z-20"
                     >
                       <ChevronLeftIcon className="w-5 h-5" />
                     </button>
                     <button 
                       onClick={nextImage}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center hover:bg-jet-primary hover:text-white hover:border-jet-primary transition-all z-20"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center hover:bg-jet-primary hover:text-jet-text hover:border-jet-primary transition-all z-20"
                     >
                       <ChevronRightIcon className="w-5 h-5" />
                     </button>
@@ -327,14 +330,14 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                   href={whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-3 px-8 py-4 bg-jet-whatsapp text-white rounded-xl font-bold text-lg hover:bg-[#128C7E] transition-all hover:scale-[1.02] shadow-lg"
+                  className="flex-1 flex items-center justify-center gap-3 px-8 py-4 bg-jet-whatsapp text-jet-text rounded-xl font-bold text-lg hover:bg-[#128C7E] transition-all hover:scale-[1.02] shadow-lg"
                 >
                   <MessageCircle className="w-6 h-6" />
                   Order on WhatsApp
                 </a>
                 <button
                   onClick={handleAddToCart}
-                  className="flex items-center justify-center gap-3 px-8 py-4 bg-jet-primary text-white rounded-xl font-bold text-lg hover:bg-jet-primary-dim transition-all hover:scale-[1.02] shadow-lg"
+                  className="flex items-center justify-center gap-3 px-8 py-4 bg-jet-primary text-jet-text rounded-xl font-bold text-lg hover:bg-jet-primary-dim transition-all hover:scale-[1.02] shadow-lg"
                 >
                   <ShoppingCart className="w-6 h-6" />
                   Add to Cart
@@ -352,7 +355,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 {[
                   { icon: Shield, label: "HP Warranty", desc: "Genuine product" },
                   { icon: Truck, label: "Fast Delivery", desc: "All India shipping" },
-                  { icon: Award, label: "Since 1989", desc: "37+ years trust" },
+                  { icon: Award, label: "Since 1989", desc: `${YEARS_TRADING}+ years trust` },
                 ].map((item, i) => (
                   <div key={i} className="text-center p-4 bg-jet-bg-card rounded-xl border border-jet-border hover:border-jet-border-strong transition-all">
                     <item.icon className="w-6 h-6 text-jet-primary mx-auto mb-2" />
@@ -381,7 +384,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-6 py-3 rounded-full text-sm font-semibold transition-all border ${
                   activeTab === tab.id
-                    ? "bg-jet-primary text-white border-jet-primary"
+                    ? "bg-jet-primary text-jet-text border-jet-primary"
                     : "bg-jet-bg-card text-jet-text-dim border-jet-border hover:border-jet-primary/40"
                 }`}
               >
@@ -512,7 +515,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               href="https://maps.google.com/?q=SCO-12+Sector-17-E+Chandigarh"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-white rounded-full font-bold hover:bg-jet-primary-dim transition-all shadow-glow"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-jet-text rounded-full font-bold hover:bg-jet-primary-dim transition-all shadow-glow"
             >
               <MapPin className="w-5 h-5" />
               Get Directions

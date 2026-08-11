@@ -1,8 +1,6 @@
-import { products } from "@/lib/data/products";
+import { getProducts } from "@/lib/cms";
 
 const BASE_URL = "https://www.jetageindia.in";
-
-export const dynamic = "force-static";
 
 function escapeXml(value: string): string {
   return value
@@ -16,6 +14,7 @@ function escapeXml(value: string): string {
 // Google Merchant Center product feed (RSS 2.0 with g: namespace).
 // Register at https://merchants.google.com and add this URL as a scheduled fetch feed.
 export async function GET() {
+  const products = await getProducts();
   const items = products
     .map((product) => {
       const brand = product.id.startsWith("hyperx") ? "HyperX" : "HP";

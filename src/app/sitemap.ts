@@ -1,12 +1,10 @@
 import type { MetadataRoute } from "next";
-import { products } from "@/lib/data/products";
-import { blogPosts } from "@/lib/data/blogs";
+import { getProducts, getBlogs } from "@/lib/cms";
 
 const BASE_URL = "https://www.jetageindia.in";
 
-export const dynamic = "force-static";
-
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [products, blogPosts] = await Promise.all([getProducts(), getBlogs()]);
   const lastModified = new Date();
 
   const staticPages: MetadataRoute.Sitemap = [

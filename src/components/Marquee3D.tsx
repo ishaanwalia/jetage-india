@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { YEARS_TRADING } from "@/lib/business";
 
 const items = [
   "HP World Authorized",
   "Genuine Products",
-  "37+ Years Trust",
+  `${YEARS_TRADING}+ Years Trust`,
   "All India Delivery",
   "WhatsApp Support",
   "Best Price Guarantee",

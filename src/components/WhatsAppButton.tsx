@@ -20,15 +20,15 @@ export function WhatsAppButton() {
           <div className="bg-jet-whatsapp p-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                  <Printer className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center">
+                  <Printer className="w-5 h-5 text-jet-text" />
                 </div>
                 <div>
-                  <p className="text-white font-bold">Jetage Support</p>
-                  <p className="text-green-100 text-xs">Typically replies in minutes</p>
+                  <p className="text-jet-text font-bold">Jetage Support</p>
+                  <p className="text-jet-text/70 text-xs">Typically replies in minutes</p>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="text-white/80 hover:text-white">
+              <button onClick={() => setIsOpen(false)} aria-label="Close quick contact" className="text-jet-text/70 hover:text-jet-text">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -41,15 +41,20 @@ export function WhatsAppButton() {
                 {msg}
               </a>
             ))}
-            <a href="https://wa.me/919814958295" target="_blank" rel="noopener noreferrer" className="block w-full text-center p-3 bg-jet-whatsapp text-white rounded-xl font-bold text-sm hover:bg-[#128C7E] transition-all mt-2">
+            <a href="https://wa.me/919814958295" target="_blank" rel="noopener noreferrer" className="block w-full text-center p-3 bg-jet-whatsapp text-jet-text rounded-xl font-bold text-sm hover:bg-[#128C7E] transition-all mt-2">
               Open WhatsApp
             </a>
           </div>
         </div>
       )}
 
-      <button onClick={() => setIsOpen(!isOpen)} className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 ${isOpen ? "bg-jet-text-muted rotate-90" : "bg-jet-whatsapp"}`}>
-        {isOpen ? <X className="w-6 h-6 text-white" /> : <MessageCircle className="w-6 h-6 text-white" />}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close WhatsApp quick contact" : "Open WhatsApp quick contact"}
+        aria-expanded={isOpen}
+        className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 ${isOpen ? "bg-jet-text-muted rotate-90" : "bg-jet-whatsapp"}`}
+      >
+        {isOpen ? <X className="w-6 h-6 text-white" /> : <MessageCircle className="w-6 h-6 text-jet-text" />}
       </button>
     </div>
   );

@@ -1,18 +1,17 @@
-import { products } from "@/lib/data/products";
+import { getProductBySlug, getProductIds } from "@/lib/cms";
 import { notFound } from "next/navigation";
 import ProductPageClient from "./ProductPageClient";
 
 const BASE_URL = "https://www.jetageindia.in";
 
 export async function generateStaticParams() {
-  return products.map((product) => ({
-    slug: product.id,
-  }));
+  const ids = await getProductIds();
+  return ids.map((id) => ({ slug: id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = products.find((p) => p.id === slug);
+  const product = await getProductBySlug(slug);
   if (!product) return { title: "Product Not Found" };
 
   return {
@@ -33,7 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = products.find((p) => p.id === slug);
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
 
   const productJsonLd = {

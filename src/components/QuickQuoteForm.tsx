@@ -38,13 +38,25 @@ export function QuickQuoteForm() {
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(body)}`;
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 
-    // mailto: hands off to the visitor's own mail app rather than leaving this
-    // page — no backend involved, so this is a best-effort second channel,
-    // not a guaranteed delivery (a visitor with no configured mail app won't
-    // see anything happen).
+    // mailto: hands off to the visitor's own mail app — best-effort, since a
+    // visitor with no configured mail app won't see anything happen. The
+    // fetch below is the real, guaranteed-delivery channel: it doesn't
+    // depend on the visitor's device having WhatsApp or a mail client.
     const subject = `Quote Request - ${name.trim()}`;
     const mailtoUrl = `mailto:${EMAIL_TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailtoUrl;
+
+    fetch("/api/lead/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name.trim(),
+        phone: phone.trim(),
+        interest,
+        message: message.trim(),
+        source: "quick-quote-form",
+      }),
+    }).catch(() => {});
 
     setSent(true);
   };
@@ -139,7 +151,7 @@ export function QuickQuoteForm() {
 
       <button
         type="submit"
-        className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-whatsapp text-white rounded-xl font-bold hover:bg-[#128C7E] transition-all"
+        className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-whatsapp text-jet-text rounded-xl font-bold hover:bg-[#128C7E] transition-all"
       >
         <MessageCircle className="w-5 h-5" />
         Continue on WhatsApp

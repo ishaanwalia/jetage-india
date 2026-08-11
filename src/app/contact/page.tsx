@@ -140,7 +140,7 @@ export default function ContactPage() {
                   href="https://maps.google.com/?q=SCO-12+Sector-17-E+Chandigarh"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-jet-primary text-white rounded-xl font-bold hover:bg-jet-primary-dim transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-jet-primary text-jet-text rounded-xl font-bold hover:bg-jet-primary-dim transition-all"
                 >
                   <Navigation className="w-5 h-5" />
                   Get Directions

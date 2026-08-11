@@ -197,7 +197,7 @@ export function TestimonialsSection() {
             href="https://www.justdial.com/Chandigarh/Jetage-Computer-Traders-Near-Neelam-Cinema-Chandigarh-Sector-17E/0172PX172-X172-130608174513-R4Q7_BZDET"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-jet-bg-card text-jet-primary border border-jet-primary/20 rounded-full font-semibold hover:bg-jet-primary hover:text-white transition-all group"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-jet-bg-card text-jet-primary border border-jet-primary/20 rounded-full font-semibold hover:bg-jet-primary hover:text-jet-text transition-all group"
           >
             Read More Reviews on JustDial
             <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

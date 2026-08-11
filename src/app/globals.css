@@ -6,6 +6,11 @@
   --color-jet-bg-elevated: #f0f2f5;
   --color-jet-bg-card: #ffffff;
   --color-jet-bg-glass: rgba(255, 255, 255, 0.85);
+  /* Kept bright/on-brand (WhatsApp green, brand blue) rather than darkened.
+     The old white-text-on-bright-fill combo measured 1.98:1 (WhatsApp) and
+     3.55-3.68:1 (blue) against the WCAG AA 4.5:1 floor — fixed instead by
+     using dark text (--color-jet-text) on these fills throughout, which
+     reads ~9:1 on both colors and looks sharper than washed-out white anyway. */
   --color-jet-primary: #0891b2;
   --color-jet-primary-dim: #0e7490;
   --color-jet-accent: #22d3ee;

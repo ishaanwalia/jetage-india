@@ -42,7 +42,7 @@ export default function NotFound() {
               href="https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20was%20looking%20for%20something%20on%20your%20site%20and%20hit%20a%20dead%20link"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-jet-whatsapp/10 text-jet-whatsapp border border-jet-whatsapp/20 rounded-full font-bold hover:bg-jet-whatsapp hover:text-white transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-jet-whatsapp/10 text-jet-whatsapp border border-jet-whatsapp/20 rounded-full font-bold hover:bg-jet-whatsapp hover:text-jet-text transition-all"
             >
               <MessageCircle className="w-4 h-4" />
               Ask on WhatsApp

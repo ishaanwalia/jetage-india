@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { GlobalShell } from "@/components/GlobalShell";
+import { YEARS_TRADING } from "@/lib/business";
+import { getCategories, getProducts } from "@/lib/cms";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -42,7 +44,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Jetage India | Authorized HP Dealer Since 1989",
-    description: "Genuine HP products with best prices. 37+ years of trust. Visit our Sector 17 showroom or order via WhatsApp.",
+    description: `Genuine HP products with best prices. ${YEARS_TRADING}+ years of trust. Visit our Sector 17 showroom or order via WhatsApp.`,
     url: "https://www.jetageindia.in/",
     siteName: "Jetage India",
     locale: "en_IN",
@@ -59,22 +61,21 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Jetage India | Authorized HP Dealer Since 1989",
-    description: "Genuine HP products with best prices. 37+ years of trust. Visit our Sector 17 showroom.",
+    description: `Genuine HP products with best prices. ${YEARS_TRADING}+ years of trust. Visit our Sector 17 showroom.`,
     images: ["https://www.jetageindia.in/og-image.jpg"],
   },
   verification: {
     google: "J7ndhmWvNH0vCWxCUU47KQPyBZsZ3sidauaZ3CUhdBc",
   },
-  other: {
-    "facebook-domain-verification": "", // Add if available
-  },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [products, categories] = await Promise.all([getProducts(), getCategories()]);
+
   return (
     <html lang="en" className={inter.variable}>
       <head>
@@ -161,6 +162,9 @@ export default function RootLayout({
                   },
                 ],
               },
+              // Sourced from Jetage's JustDial listing (4.5 / 232), not a
+              // Google review count — kept in sync manually with JustDial;
+              // update this when that listing's numbers change.
               "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "4.5",
@@ -218,7 +222,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <CartProvider>
-          <GlobalShell>{children}</GlobalShell>
+          <GlobalShell products={products} categories={categories}>{children}</GlobalShell>
         </CartProvider>
       </body>
     </html>

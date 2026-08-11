@@ -7,11 +7,12 @@ import { Calculator, MessageCircle, TrendingDown, ArrowRight } from "lucide-reac
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { threeYearTotals } from "@/lib/finder";
-import { getProductById } from "@/lib/data/products";
+import { useCompare } from "@/context/CompareContext";
 
 const inr = (n: number) => `₹${Math.round(n).toLocaleString("en-IN")}`;
 
 export function CostCalculatorClient() {
+  const { getProduct } = useCompare();
   const [pagesPerMonth, setPagesPerMonth] = useState(300);
   const [colorPercent, setColorPercent] = useState(20);
 
@@ -25,7 +26,7 @@ export function CostCalculatorClient() {
   const mostExpensive = sorted[sorted.length - 1];
   const savings = mostExpensive.total - cheapest.total;
   const maxTotal = mostExpensive.total;
-  const winnerProduct = getProductById(cheapest.tech.exampleProductId);
+  const winnerProduct = getProduct(cheapest.tech.exampleProductId);
 
   const whatsappMessage = encodeURIComponent(
     [
@@ -40,6 +41,20 @@ export function CostCalculatorClient() {
       .filter(Boolean)
       .join("\n")
   );
+
+  const reportLead = () => {
+    fetch("/api/lead/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: "Cost calculator visitor",
+        phone: "not provided",
+        interest: cheapest.tech.name,
+        message: `~${pagesPerMonth}/mo, ${colorPercent}% colour. Suggested: ${winnerProduct?.name ?? cheapest.tech.name}.`,
+        source: "cost-calculator",
+      }),
+    }).catch(() => {});
+  };
 
   return (
     <main className="min-h-screen bg-jet-bg flex flex-col">
@@ -150,7 +165,7 @@ export function CostCalculatorClient() {
                       <span className="font-bold text-jet-text">{t.tech.name}</span>
                       <span className="text-xs text-jet-text-muted ml-2">{t.tech.tagline}</span>
                       {isWinner && (
-                        <span className="ml-3 px-2.5 py-0.5 bg-jet-primary text-white text-xs font-bold rounded-full">
+                        <span className="ml-3 px-2.5 py-0.5 bg-jet-primary text-jet-text text-xs font-bold rounded-full">
                           Cheapest overall
                         </span>
                       )}
@@ -218,7 +233,7 @@ export function CostCalculatorClient() {
               </div>
               <Link
                 href={`/products/${winnerProduct.id}/`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-jet-bg-elevated text-jet-primary border border-jet-primary/30 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-white transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-jet-bg-elevated text-jet-primary border border-jet-primary/30 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-jet-text transition-all"
               >
                 View printer
                 <ArrowRight className="w-4 h-4" />
@@ -231,14 +246,15 @@ export function CostCalculatorClient() {
               href={`https://wa.me/919814958295?text=${whatsappMessage}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-whatsapp text-white rounded-xl font-bold text-sm hover:opacity-90 transition-all"
+              onClick={reportLead}
+              className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-whatsapp text-jet-text rounded-xl font-bold text-sm hover:opacity-90 transition-all"
             >
               <MessageCircle className="w-4 h-4" />
               Get my best price on WhatsApp
             </a>
             <Link
               href="/finder/"
-              className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-bg-card text-jet-primary border border-jet-primary/30 rounded-xl font-bold text-sm hover:bg-jet-primary hover:text-white transition-all"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-bg-card text-jet-primary border border-jet-primary/30 rounded-xl font-bold text-sm hover:bg-jet-primary hover:text-jet-text transition-all"
             >
               Not sure which model? Try the Finder
             </Link>

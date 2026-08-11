@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useInView, useSpring } from "framer-motion";
 import { Clock, Printer, Globe, Star } from "lucide-react";
+import { YEARS_TRADING } from "@/lib/business";
 
 // FIX 1: Use ComponentType instead of ElementType
 interface StatCard3DProps {
@@ -116,7 +117,7 @@ function StatCard3D({ icon: Icon, value, suffix, label, sub = "", decimals = 0, 
 
 export function Stats3D() {
   const stats = [
-    { icon: Clock, value: 37, suffix: "+", label: "Years Experience", sub: "yrs" },
+    { icon: Clock, value: YEARS_TRADING, suffix: "+", label: "Years Experience", sub: "yrs" },
     { icon: Printer, value: 50000, suffix: "+", label: "Products Sold", sub: "" },
     { icon: Globe, value: 50, suffix: "+", label: "Cities Served", sub: "" },
     { icon: Star, value: 4.5, suffix: "", label: "Customer Rating", sub: "/5", decimals: 1 },

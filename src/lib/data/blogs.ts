@@ -1,3 +1,5 @@
+import { YEARS_TRADING } from "@/lib/business";
+
 export interface BlogPost {
   id: string;
   title: string;
@@ -111,7 +113,7 @@ Visit our showroom at **SCO-12, 1st Floor, Sector-17-E, Chandigarh**, or WhatsAp
     tags: ["HP Printers", "Laser 303d", "Laser 303dw", "Comparison", "2026"],
     content: `The HP Laser 303d and HP Laser 303dw are two of the most popular monochrome laser printers for Indian small businesses in 2026. They look nearly identical, print at the same speed, and even use the same toner cartridge. Yet the 303dw costs approximately ₹1,500 more. Is the wireless upgrade worth it?
 
-At Jetage India, we sell both models daily. This guide answers the question based on real customer feedback and use cases from our 37+ years of experience.
+At Jetage India, we sell both models daily. This guide answers the question based on real customer feedback and use cases from our ${YEARS_TRADING}+ years of experience.
 
 ## Quick Comparison Table
 
@@ -412,7 +414,7 @@ At Jetage India, all three models are in stock with genuine HP warranty. We offe
     tags: ["HP Printers", "Inkjet", "Laser", "InkTank", "Buying Guide", "India"],
     content: `Buying a printer in India is not just about the purchase price. You are committing to a technology that will determine your running costs, print quality, and maintenance headaches for the next 5-7 years. HP offers three distinct printer technologies in India — Inkjet, Laser, and InkTank — and choosing the wrong one can cost you thousands in the long run.
 
-At Jetage India, we have sold and serviced thousands of HP printers across Chandigarh, Punjab, and Haryana since 1989. This guide distills 37+ years of experience into a clear decision framework.
+At Jetage India, we have sold and serviced thousands of HP printers across Chandigarh, Punjab, and Haryana since 1989. This guide distills ${YEARS_TRADING}+ years of experience into a clear decision framework.
 
 ## The Three Technologies Explained
 
@@ -516,7 +518,7 @@ Visit **SCO-12, 1st Floor, Sector-17-E, Chandigarh**, or message us on WhatsApp 
     slug: "hp-printer-maintenance-tips-indian-climate-dust-humidity-power",
     title: "HP Printer Maintenance Tips for Indian Climate: Dust, Humidity & Power Issues",
     metaDescription: "Keep your HP printer running smoothly in India's challenging climate. Learn expert maintenance tips for dust, humidity, power fluctuations, and monsoon season from Chandigarh's oldest HP dealer.",
-    excerpt: "Indian climate is tough on electronics — dust storms in summer, humidity in monsoon, and voltage fluctuations year-round. After servicing thousands of HP printers across North India for 35 years, we share the maintenance secrets that keep your printer running smoothly for 7+ years.",
+    excerpt: `Indian climate is tough on electronics — dust storms in summer, humidity in monsoon, and voltage fluctuations year-round. After servicing thousands of HP printers across North India for ${YEARS_TRADING}+ years, we share the maintenance secrets that keep your printer running smoothly for 7+ years.`,
     author: "Jetage Team",
     date: "July 10, 2026",
     readTime: "8 min read",
@@ -653,7 +655,7 @@ Visit our service center at **SCO-12, 1st Floor, Sector-17-E, Chandigarh**, or W
     tags: ["HP Laptops", "Students", "Under 50000", "India", "Buying Guide", "2026"],
     content: `Every July, hundreds of parents walk into our Chandigarh showroom asking the same question: "Which HP laptop should I buy for my child's college?" The budget is almost always under ₹50,000. The confusion is always the same — Intel vs. AMD, 8GB vs. 16GB RAM, SSD vs. HDD.
 
-At Jetage India, we have equipped students from PU, PEC, CCET, Chitkara, and dozens of coaching centers across Chandigarh, Mohali, and Panchkula. This guide is based on 37+ years of watching students succeed (and fail) with their laptop choices.
+At Jetage India, we have equipped students from PU, PEC, CCET, Chitkara, and dozens of coaching centers across Chandigarh, Mohali, and Panchkula. This guide is based on ${YEARS_TRADING}+ years of watching students succeed (and fail) with their laptop choices.
 
 ## What Students Actually Need
 
@@ -787,7 +789,7 @@ Visit **SCO-12, 1st Floor, Sector-17-E, Chandigarh**, or WhatsApp us at **+91 98
     slug: "how-to-setup-hp-wifi-printer-india-complete-step-by-step-guide",
     title: "How to Setup HP Wi-Fi Printer in India: Complete Step-by-Step Guide",
     metaDescription: "Step-by-step guide to setup HP Wi-Fi printer in India. Connect via HP Smart App, WPS, and manual methods. Troubleshoot common connection issues with expert tips from Chandigarh's HP dealer.",
-    excerpt: "Setting up a HP Wi-Fi printer in India can be frustrating — weak signals, router compatibility issues, and confusing setup wizards. We break down every setup method with screenshots, common errors, and solutions from our 35 years of printer installation experience across Chandigarh, Mohali, and Panchkula.",
+    excerpt: `Setting up a HP Wi-Fi printer in India can be frustrating — weak signals, router compatibility issues, and confusing setup wizards. We break down every setup method with screenshots, common errors, and solutions from our ${YEARS_TRADING}+ years of printer installation experience across Chandigarh, Mohali, and Panchkula.`,
     author: "Jetage Team",
     date: "July 14, 2026",
     readTime: "8 min read",

@@ -29,6 +29,7 @@ import {
   buildFinderWhatsAppMessage,
   VOLUME_PAGES,
 } from "@/lib/finder";
+import { useCompare } from "@/context/CompareContext";
 
 type Step = 0 | 1 | 2 | 3 | 4;
 
@@ -97,6 +98,7 @@ const QUESTIONS: { key: keyof FinderAnswers; title: string; subtitle: string; op
 ];
 
 export function FinderClient() {
+  const { products } = useCompare();
   const [step, setStep] = useState<Step>(0);
   const [answers, setAnswers] = useState<Partial<FinderAnswers>>({ needs: [] });
   const [showResults, setShowResults] = useState(false);
@@ -105,8 +107,8 @@ export function FinderClient() {
 
   const complete = showResults && answers.place && answers.color && answers.volume && answers.budget;
   const matches: FinderMatch[] = useMemo(
-    () => (complete ? findPrinters(answers as FinderAnswers) : []),
-    [complete, answers]
+    () => (complete ? findPrinters(products, answers as FinderAnswers) : []),
+    [complete, answers, products]
   );
 
   const select = (value: string) => {
@@ -211,7 +213,7 @@ export function FinderClient() {
                         }`}
                       >
                         {selected && (
-                          <span className="absolute top-3 right-3 w-6 h-6 rounded-full bg-jet-primary text-white flex items-center justify-center">
+                          <span className="absolute top-3 right-3 w-6 h-6 rounded-full bg-jet-primary text-jet-text flex items-center justify-center">
                             <Check className="w-3.5 h-3.5" />
                           </span>
                         )}
@@ -235,7 +237,7 @@ export function FinderClient() {
                   {question.multi && (
                     <button
                       onClick={advance}
-                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold bg-jet-primary text-white hover:bg-jet-primary-dim transition-all"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold bg-jet-primary text-jet-text hover:bg-jet-primary-dim transition-all"
                     >
                       {((answers.needs as string[]) || []).length ? "Continue" : "Skip — no must-haves"}
                     </button>
@@ -260,7 +262,7 @@ export function FinderClient() {
                       href={`https://wa.me/919814958295?text=${complete ? buildFinderWhatsAppMessage(answers as FinderAnswers, []) : ""}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-jet-whatsapp text-white rounded-xl font-bold text-sm hover:opacity-90 transition-all"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-jet-whatsapp text-jet-text rounded-xl font-bold text-sm hover:opacity-90 transition-all"
                     >
                       <MessageCircle className="w-4 h-4" />
                       Ask on WhatsApp
@@ -279,7 +281,7 @@ export function FinderClient() {
                         }`}
                       >
                         {i === 0 && (
-                          <span className="absolute -top-3 left-6 px-3 py-1 bg-jet-primary text-white text-xs font-bold rounded-full">
+                          <span className="absolute -top-3 left-6 px-3 py-1 bg-jet-primary text-jet-text text-xs font-bold rounded-full">
                             Best match
                           </span>
                         )}
@@ -333,14 +335,14 @@ export function FinderClient() {
                         href={whatsappHref}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-whatsapp text-white rounded-xl font-bold text-sm hover:opacity-90 transition-all"
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-whatsapp text-jet-text rounded-xl font-bold text-sm hover:opacity-90 transition-all"
                       >
                         <MessageCircle className="w-4 h-4" />
                         Send my matches on WhatsApp
                       </a>
                       <Link
                         href="/cost-calculator/"
-                        className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-bg-card text-jet-primary border border-jet-primary/30 rounded-xl font-bold text-sm hover:bg-jet-primary hover:text-white transition-all"
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-jet-bg-card text-jet-primary border border-jet-primary/30 rounded-xl font-bold text-sm hover:bg-jet-primary hover:text-jet-text transition-all"
                       >
                         See 3-year running costs
                       </Link>

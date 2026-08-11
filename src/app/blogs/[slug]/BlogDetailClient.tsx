@@ -236,7 +236,7 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                 href="https://wa.me/919814958295"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-jet-whatsapp text-white rounded-full font-bold hover:bg-[#128C7E] transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-jet-whatsapp text-jet-text rounded-full font-bold hover:bg-[#128C7E] transition-all"
               >
                 <MessageCircle className="w-5 h-5" />
                 Chat on WhatsApp

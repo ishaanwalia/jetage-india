@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -31,6 +32,15 @@ export function CartDrawer() {
   const discount = totalMrp - totalPrice;
   const whatsappUrl = `https://wa.me/919814958295?text=${buildWhatsAppMessage(items)}`;
 
+  useEffect(() => {
+    if (!isCartOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsCartOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isCartOpen, setIsCartOpen]);
+
   return (
     <>
       {/* Backdrop */}
@@ -55,6 +65,9 @@ export function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Shopping cart"
             className="fixed top-0 right-0 z-[70] h-full w-full max-w-md bg-jet-bg-card border-l border-jet-border shadow-2xl flex flex-col"
           >
             {/* Header */}
@@ -72,6 +85,7 @@ export function CartDrawer() {
               </div>
               <button
                 onClick={() => setIsCartOpen(false)}
+                aria-label="Close cart"
                 className="w-10 h-10 rounded-xl bg-jet-bg-elevated flex items-center justify-center border border-jet-border hover:border-jet-primary/40 transition-all"
               >
                 <X className="w-5 h-5 text-jet-text" />
@@ -91,7 +105,7 @@ export function CartDrawer() {
                   </p>
                   <button
                     onClick={() => setIsCartOpen(false)}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-white rounded-full font-semibold hover:bg-jet-primary-dim transition-all"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-jet-primary text-jet-text rounded-full font-semibold hover:bg-jet-primary-dim transition-all"
                   >
                     Browse Products
                     <ArrowRight className="w-4 h-4" />
@@ -132,6 +146,7 @@ export function CartDrawer() {
                           onClick={() => removeItem(item.productId)}
                           className="shrink-0 p-1.5 rounded-lg text-jet-text-muted hover:text-red-500 hover:bg-red-500/10 transition-all"
                           title="Remove item"
+                          aria-label={`Remove ${item.name} from cart`}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -146,6 +161,7 @@ export function CartDrawer() {
                             onClick={() =>
                               updateQuantity(item.productId, item.quantity - 1)
                             }
+                            aria-label={`Decrease quantity of ${item.name}`}
                             className="w-8 h-8 rounded-lg bg-jet-bg-elevated border border-jet-border flex items-center justify-center text-jet-text hover:border-jet-primary/40 transition-all"
                           >
                             <Minus className="w-3.5 h-3.5" />
@@ -157,6 +173,7 @@ export function CartDrawer() {
                             onClick={() =>
                               updateQuantity(item.productId, item.quantity + 1)
                             }
+                            aria-label={`Increase quantity of ${item.name}`}
                             className="w-8 h-8 rounded-lg bg-jet-bg-elevated border border-jet-border flex items-center justify-center text-jet-text hover:border-jet-primary/40 transition-all"
                           >
                             <Plus className="w-3.5 h-3.5" />
@@ -211,7 +228,7 @@ export function CartDrawer() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-jet-whatsapp text-white rounded-xl font-bold text-lg hover:bg-[#128C7E] transition-all hover:scale-[1.02] shadow-lg"
+                  className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-jet-whatsapp text-jet-text rounded-xl font-bold text-lg hover:bg-[#128C7E] transition-all hover:scale-[1.02] shadow-lg"
                 >
                   <MessageCircle className="w-6 h-6" />
                   Order All on WhatsApp
@@ -226,7 +243,7 @@ export function CartDrawer() {
                   </button>
                   <button
                     onClick={() => setIsCartOpen(false)}
-                    className="flex-1 px-4 py-3 bg-jet-bg-elevated text-jet-primary border border-jet-primary/20 rounded-xl font-semibold hover:bg-jet-primary hover:text-white transition-all text-sm"
+                    className="flex-1 px-4 py-3 bg-jet-bg-elevated text-jet-primary border border-jet-primary/20 rounded-xl font-semibold hover:bg-jet-primary hover:text-jet-text transition-all text-sm"
                   >
                     Continue Shopping
                   </button>

@@ -1,4 +1,4 @@
-import { Product, products } from "@/lib/data/products";
+import type { Product } from "@/lib/cms";
 
 // ==================== PRINTER FINDER ====================
 
@@ -30,8 +30,6 @@ export interface FinderMatch {
   reasons: string[];
 }
 
-const printers = () => products.filter((p) => p.category === "printer");
-
 function parseDutyCycle(dutyCycle: string): number {
   const match = dutyCycle.replace(/,/g, "").match(/(\d+)/);
   return match ? parseInt(match[1], 10) : 0;
@@ -51,11 +49,11 @@ function supportsA3(p: Product): boolean {
   return /A3/i.test(paper) || /wide format/i.test(p.name);
 }
 
-export function findPrinters(answers: FinderAnswers): FinderMatch[] {
+export function findPrinters(products: Product[], answers: FinderAnswers): FinderMatch[] {
   const monthlyPages = VOLUME_PAGES[answers.volume];
   const [minBudget, maxBudget] = BUDGET_RANGES[answers.budget];
 
-  const matches = printers().map((product) => {
+  const matches = products.filter((p) => p.category === "printer").map((product) => {
     let score = 0;
     const reasons: string[] = [];
 

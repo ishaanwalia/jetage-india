@@ -30,7 +30,7 @@ import {
   Eye
 } from "lucide-react";
 import Link from "next/link";
-import { products, getFeaturedProducts } from "@/lib/data/products";
+import { useCompare } from "@/context/CompareContext";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ProductCard } from "@/components/ProductCard";
 import { Navbar } from "@/components/Navbar";
@@ -45,6 +45,20 @@ import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Typewriter } from "@/components/Typewriter";
 import { ScrambleText } from "@/components/TextScramble";
 import { Marquee } from "@/components/Marquee";
+import { SectionNav } from "@/components/SectionNav";
+import { YEARS_TRADING } from "@/lib/business";
+
+const HOME_SECTIONS = [
+  { id: "hero", label: "Home" },
+  { id: "categories", label: "Categories" },
+  { id: "tools", label: "Finder & Calculator" },
+  { id: "featured", label: "Featured" },
+  { id: "process", label: "How It Works" },
+  { id: "showroom", label: "Showroom" },
+  { id: "advantage", label: "Why Jetage" },
+  { id: "testimonials", label: "Reviews" },
+  { id: "cta", label: "Get Started" },
+];
 
 // NEW 3D COMPONENTS
 import { Hero3D } from "@/components/Hero3D";
@@ -66,7 +80,8 @@ gsap.registerPlugin(ScrollTrigger);
 export function HomeClient() {
   const horizontalRef = useRef<HTMLDivElement>(null);
 
-  const featuredProducts = getFeaturedProducts().slice(0, 6);
+  const { products } = useCompare();
+  const featuredProducts = products.filter((p) => p.featured).slice(0, 6);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -98,18 +113,23 @@ export function HomeClient() {
       <CinematicLoader />
       <ParticleBackground />
       <Navbar />
+      <SectionNav sections={HOME_SECTIONS} />
 
       {/* ==================== 3D HERO SECTION ==================== */}
-      <Hero3D />
+      <div id="hero">
+        <Hero3D />
 
-      {/* ==================== 3D STATS SECTION ==================== */}
-      <Stats3D />
+        {/* ==================== 3D STATS SECTION ==================== */}
+        <Stats3D />
+      </div>
 
       {/* ==================== 3D CATEGORIES SECTION ==================== */}
-      <CategoryGrid3D />
+      <div id="categories">
+        <CategoryGrid3D />
+      </div>
 
       {/* ==================== DECISION TOOLS ==================== */}
-      <section className="py-16 px-6 lg:px-8 bg-jet-bg">
+      <section id="tools" className="py-16 px-6 lg:px-8 bg-jet-bg">
         <div className="max-w-7xl mx-auto">
           <Reveal>
             <div className="grid md:grid-cols-2 gap-6">
@@ -154,7 +174,7 @@ export function HomeClient() {
       </section>
 
       {/* ==================== HORIZONTAL SCROLL SECTION ==================== */}
-      <section ref={horizontalRef} className="relative bg-jet-bg-elevated overflow-hidden">
+      <section id="featured" ref={horizontalRef} className="relative bg-jet-bg-elevated overflow-hidden">
         <div className="h-screen flex flex-col justify-center gap-6 pt-24 pb-10">
           <div className="px-6 lg:px-8 flex-shrink-0">
             <div className="max-w-7xl mx-auto">
@@ -202,12 +222,16 @@ export function HomeClient() {
       </section>
 
       {/* ==================== 3D PROCESS STEPS ==================== */}
-      <ProcessSteps3D />
+      <div id="process">
+        <ProcessSteps3D />
+      </div>
 
-      <ShowroomSection />
+      <div id="showroom">
+        <ShowroomSection />
+      </div>
 
       {/* ==================== WHY JETAGE ==================== */}
-      <section id="about" className="py-20 relative">
+      <section id="advantage" className="py-20 relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <Reveal direction="up" className="text-center mb-12 space-y-4">
             <span className="inline-block px-4 py-1.5 bg-jet-primary/10 text-jet-primary text-sm font-semibold rounded-full border border-jet-primary/20">
@@ -223,7 +247,7 @@ export function HomeClient() {
               { icon: Award, title: "Authorized HP World", description: "Genuine HP products with full manufacturer warranty and official support. No grey market risks." },
               { icon: Phone, title: "WhatsApp Ordering", description: "Order instantly via WhatsApp. Get quotes, place orders, and track delivery — all on your phone." },
               { icon: Zap, title: "Best Price Guarantee", description: "We match and beat competitor prices. Exclusive deals you won't find on Amazon or Flipkart." },
-              { icon: Shield, title: "Expert Consultation", description: "37+ years of tech expertise. We help you choose the right product for your exact needs." },
+              { icon: Shield, title: "Expert Consultation", description: `${YEARS_TRADING}+ years of tech expertise. We help you choose the right product for your exact needs.` },
               { icon: Truck, title: "All India Delivery", description: "Fast, insured shipping across India. Special handling for fragile components." },
               { icon: Clock, title: "After-Sales Support", description: "Dedicated support for installation, setup, and troubleshooting. We're just a message away." }
             ].map((item, i) => (
@@ -242,13 +266,15 @@ export function HomeClient() {
       </section>
 
       {/* ==================== TESTIMONIALS ==================== */}
-      <TestimonialsSection />
+      <div id="testimonials">
+        <TestimonialsSection />
+      </div>
 
       {/* ==================== 3D MARQUEE ==================== */}
       <Marquee3D />
 
       {/* ==================== CTA SECTION ==================== */}
-      <section className="py-20 relative overflow-hidden">
+      <section id="cta" className="py-20 relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-jet-primary/10 rounded-full blur-[120px]" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-jet-primary/5 rounded-full blur-[120px]" />
@@ -275,7 +301,7 @@ export function HomeClient() {
                   href="https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20need%20help%20choosing%20an%20HP%20product"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-sheen inline-flex items-center gap-3 px-8 py-4 bg-jet-whatsapp text-white rounded-full font-bold hover:bg-[#128C7E] transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:shadow-jet-whatsapp/20"
+                  className="btn-sheen inline-flex items-center gap-3 px-8 py-4 bg-jet-whatsapp text-jet-text rounded-full font-bold hover:bg-[#128C7E] transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:shadow-jet-whatsapp/20"
                 >
                   <MessageCircle className="w-6 h-6" />
                   Chat on WhatsApp

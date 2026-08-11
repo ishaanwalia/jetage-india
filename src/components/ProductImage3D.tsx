@@ -153,7 +153,7 @@ export function ProductImage3D({
             <button
               onClick={(e) => { e.stopPropagation(); prevImage(); }}
               aria-label="Previous image"
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-white transition-all z-20"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-jet-text transition-all z-20"
               style={{ opacity: isHovered ? 1 : 0 }}
             >
               <ChevronLeft className="w-4 h-4" />
@@ -161,7 +161,7 @@ export function ProductImage3D({
             <button
               onClick={(e) => { e.stopPropagation(); nextImage(); }}
               aria-label="Next image"
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-white transition-all z-20"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-jet-text transition-all z-20"
               style={{ opacity: isHovered ? 1 : 0 }}
             >
               <ChevronRight className="w-4 h-4" />
@@ -188,7 +188,8 @@ export function ProductImage3D({
         {enableZoom && (
           <button
             onClick={(e) => { e.stopPropagation(); setIsFullscreen(true); }}
-            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-white transition-all z-20"
+            aria-label="View full-size image"
+            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-jet-text transition-all z-20"
             style={{ opacity: isHovered ? 1 : 0 }}
           >
             <Maximize2 className="w-4 h-4" />
@@ -208,7 +209,7 @@ export function ProductImage3D({
           <button
             onClick={() => setIsFullscreen(false)}
             aria-label="Close fullscreen image"
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-jet-bg-card border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-white transition-all"
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-jet-bg-card border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-jet-text transition-all"
           >
             ✕
           </button>
@@ -238,14 +239,14 @@ export function ProductImage3D({
               <button
                 onClick={(e) => { e.stopPropagation(); prevImage(); }}
                 aria-label="Previous image"
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-white transition-all"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-jet-text transition-all"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); nextImage(); }}
                 aria-label="Next image"
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-white transition-all"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-jet-bg-card/90 backdrop-blur-sm border border-jet-border flex items-center justify-center text-jet-text hover:bg-jet-primary hover:text-jet-text transition-all"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>

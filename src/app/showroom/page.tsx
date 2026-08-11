@@ -16,12 +16,12 @@ export const metadata: Metadata = {
   description: "Visit our HP World showroom at SCO-12, Sector-17-E, Chandigarh. Experience HP products hands-on. Open Mon-Sat 10AM-7PM. Get directions and plan your visit.",
   keywords: "HP showroom Chandigarh, Jetage showroom, HP World Sector 17, visit HP dealer Chandigarh, HP products showroom, SCO-12 Sector 17",
   alternates: {
-    canonical: "https://www.jetageindia.in/showroom",
+    canonical: "https://www.jetageindia.in/showroom/",
   },
   openGraph: {
     title: "Visit Our Showroom | Jetage India - HP World Sector 17",
     description: "Experience HP products at our Sector 17 showroom. SCO-12, 1st Floor, Chandigarh. Open Mon-Sat 10AM-7PM.",
-    url: "https://www.jetageindia.in/showroom",
+    url: "https://www.jetageindia.in/showroom/",
     type: "website",
   },
 };
@@ -266,7 +266,7 @@ export default function ShowroomPage() {
               href="https://www.google.com/maps/dir/HP+World+-+Sector+17E,+1st+Floor,+SCO+12,+Shopping+Plaza,+17E,+Sector+17,+Chandigarh,+160017/HP+World+-+Sector+17E,+1st+Floor,+SCO+12,+Shopping+Plaza,+17E,+Sector+17,+Chandigarh,+160017/@30.8959353,77.0679584,15z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x390fed0a8f6e1ac9:0xfd75de97e90ec3f0!2m2!1d76.780592!2d30.7401467!1m5!1m1!1s0x390fed0a8f6e1ac9:0xfd75de97e90ec3f0!2m2!1d76.780592!2d30.7401467?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-jet-primary text-white rounded-full font-bold hover:bg-jet-primary-dim transition-all shadow-glow"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-jet-primary text-jet-text rounded-full font-bold hover:bg-jet-primary-dim transition-all shadow-glow"
             >
               <MapPin className="w-5 h-5" />
               Get Directions
@@ -275,7 +275,7 @@ export default function ShowroomPage() {
               href="https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20want%20to%20visit%20your%20showroom"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-jet-whatsapp text-white rounded-full font-bold hover:bg-[#128C7E] transition-all"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-jet-whatsapp text-jet-text rounded-full font-bold hover:bg-[#128C7E] transition-all"
             >
               <MessageCircle className="w-5 h-5" />
               Schedule Visit

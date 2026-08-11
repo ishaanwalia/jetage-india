@@ -4,16 +4,23 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Laptop, Monitor, Printer, Mouse, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { products } from "@/lib/data/products";
+import { useCompare } from "@/context/CompareContext";
 
-const countFor = (id: string) => products.filter((p) => p.category === id).length;
+const CATEGORY_META: Record<string, { icon: typeof Printer; color: string }> = {
+  printer: { icon: Printer, color: "#0891b2" },
+  accessory: { icon: Mouse, color: "#06b6d4" },
+};
 
-const categories = [
-  { id: "printer", name: "Printers", icon: Printer, description: "Laser, Color Laser, InkJet, Smart Tank & OfficeJet", count: countFor("printer"), color: "#0891b2" },
-  { id: "accessory", name: "Accessories", icon: Mouse, description: "Keyboards, Mice & Combos", count: countFor("accessory"), color: "#06b6d4" },
-];
+type CategoryCard = {
+  id: string;
+  name: string;
+  description: string;
+  count: number;
+  icon: typeof Printer;
+  color: string;
+};
 
-function CategoryCard3D({ category, index }: { category: typeof categories[0]; index: number }) {
+function CategoryCard3D({ category, index }: { category: CategoryCard; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -119,6 +126,16 @@ function CategoryCard3D({ category, index }: { category: typeof categories[0]; i
 }
 
 export function CategoryGrid3D() {
+  const { categories: dbCategories } = useCompare();
+  const categories: CategoryCard[] = dbCategories.map((c) => ({
+    id: c.id,
+    name: c.name,
+    description: c.description,
+    count: c.count,
+    icon: CATEGORY_META[c.id]?.icon ?? Printer,
+    color: CATEGORY_META[c.id]?.color ?? "#0891b2",
+  }));
+
   return (
     <section className="py-20 relative" style={{ perspective: "1200px" }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">

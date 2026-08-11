@@ -1,9 +1,9 @@
-import { products } from "@/lib/data/products";
+import { getCategories } from "@/lib/cms";
 import CategoryPageClient from "./CategoryPageClient";
 
 export async function generateStaticParams() {
-  const categoryIds = [...new Set(products.map((p) => p.category))];
-  return categoryIds.map((id) => ({ id }));
+  const categories = await getCategories();
+  return categories.map((c) => ({ id: c.id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {

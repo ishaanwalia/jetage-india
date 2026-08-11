@@ -4,7 +4,7 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Calendar, Clock, ArrowRight, User, Tag } from "lucide-react";
 import Link from "next/link";
-import { blogPosts } from "@/lib/data/blogs";
+import { getBlogs } from "@/lib/cms";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -22,7 +22,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogsPage() {
+export default async function BlogsPage() {
+  const blogPosts = await getBlogs();
+
   return (
     <main className="min-h-screen bg-jet-bg">
       <Navbar />
@@ -94,7 +96,7 @@ export default function BlogsPage() {
               <div className="px-8 pb-8">
                 <Link
                   href={`/blogs/${blog.slug}/`}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-jet-bg-elevated text-jet-primary border border-jet-primary/20 rounded-full font-semibold hover:bg-jet-primary hover:text-white transition-all group/btn"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-jet-bg-elevated text-jet-primary border border-jet-primary/20 rounded-full font-semibold hover:bg-jet-primary hover:text-jet-text transition-all group/btn"
                 >
                   Read Full Article
                   <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />

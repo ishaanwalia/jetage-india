@@ -5,10 +5,9 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Scale, ArrowRight } from "lucide-react";
 import { useCompare, MAX_COMPARE } from "@/context/CompareContext";
-import { getProductById } from "@/lib/data/products";
 
 export function CompareTray() {
-  const { ids, remove, clear } = useCompare();
+  const { ids, remove, clear, getProduct } = useCompare();
   const pathname = usePathname();
 
   // The tray duplicates controls that already exist on the compare page itself.
@@ -34,7 +33,7 @@ export function CompareTray() {
 
             <div className="flex-1 flex items-center gap-2 overflow-x-auto">
               {ids.map((id) => {
-                const product = getProductById(id);
+                const product = getProduct(id);
                 if (!product) return null;
                 return (
                   <div
@@ -73,7 +72,7 @@ export function CompareTray() {
               href="/compare/"
               className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm whitespace-nowrap transition-all ${
                 ids.length >= 2
-                  ? "bg-jet-primary text-white hover:bg-jet-primary-dim"
+                  ? "bg-jet-primary text-jet-text hover:bg-jet-primary-dim"
                   : "bg-jet-bg-elevated text-jet-text-muted pointer-events-none"
               }`}
             >

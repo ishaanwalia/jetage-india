@@ -7,6 +7,7 @@ import { Sparkles, ChevronRight, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { Typewriter } from "./Typewriter";
 import { MagneticButton } from "./MagneticButton";
+import { YEARS_TRADING } from "@/lib/business";
 
 // three.js + @react-three/fiber/drei are a ~300KB gzip chunk — keep them
 // out of the initial homepage bundle and stream in only once this mounts.
@@ -96,7 +97,7 @@ export function Hero3D() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
-              Authorized HP World Partner with 37+ years of expertise. Explore our featured laptop in interactive 3D, right here on the homepage.
+              Authorized HP World Partner with {YEARS_TRADING}+ years of expertise. Explore our featured laptop in interactive 3D, right here on the homepage.
             </motion.p>
 
             <motion.div 
@@ -120,7 +121,7 @@ export function Hero3D() {
                   href="https://wa.me/919814958295?text=Hi%20Jetage%2C%20I%20want%20to%20inquire%20about%20HP%20products"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-jet-bg-card text-jet-whatsapp border border-jet-whatsapp/30 rounded-full font-bold hover:bg-jet-whatsapp hover:text-white transition-all duration-300 text-lg"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-jet-bg-card text-jet-whatsapp border border-jet-whatsapp/30 rounded-full font-bold hover:bg-jet-whatsapp hover:text-jet-text transition-all duration-300 text-lg"
                 >
                   <MessageCircle className="w-5 h-5" />
                   WhatsApp Order

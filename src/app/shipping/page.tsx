@@ -133,7 +133,7 @@ export default function ShippingPage() {
             <h3 className="text-xl font-bold text-jet-text mb-4">Need Help with Your Order?</h3>
             <p className="text-jet-text-dim mb-6">Our support team is available Monday to Saturday, 10 AM to 7 PM.</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a href="https://wa.me/919814958295" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-jet-whatsapp text-white rounded-full font-bold hover:bg-[#128C7E] transition-all">
+              <a href="https://wa.me/919814958295" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-jet-whatsapp text-jet-text rounded-full font-bold hover:bg-[#128C7E] transition-all">
                 <MessageCircle className="w-5 h-5" />
                 WhatsApp Support
               </a>

@@ -75,7 +75,7 @@ export function ShowroomMap({ variant = "about" }: ShowroomMapProps) {
                   href="https://www.google.com/maps/dir//SCO-12,+1st+Floor,+Sector-17-E,+Chandigarh,+160017"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-jet-primary text-white rounded-xl font-bold hover:bg-jet-primary-dim transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-jet-primary text-jet-text rounded-xl font-bold hover:bg-jet-primary-dim transition-all"
                 >
                   <Navigation className="w-4 h-4" />
                   Get Directions

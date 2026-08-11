@@ -98,7 +98,7 @@ export function ProductCard({ product, compact = false }: ProductCardProps) {
       {/* Image Area */}
       <div className={`relative ${compact ? "h-[130px]" : "aspect-square"} bg-gray-50 p-4 flex items-center justify-center`}>
         {product.badge && (
-          <div className="absolute top-3 left-3 px-3 py-1 bg-cyan-600 text-white text-xs font-bold rounded-full z-10">
+          <div className="absolute top-3 left-3 px-3 py-1 bg-cyan-600 text-jet-text text-xs font-bold rounded-full z-10">
             {product.badge}
           </div>
         )}
@@ -114,7 +114,7 @@ export function ProductCard({ product, compact = false }: ProductCardProps) {
           title={inCompare ? "Remove from comparison" : isFull ? "Comparison is full (3 max)" : "Add to comparison"}
           className={`absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
             inCompare
-              ? "bg-cyan-600 text-white border-cyan-600"
+              ? "bg-cyan-600 text-jet-text border-cyan-600"
               : "bg-white/90 text-gray-500 border-gray-200 hover:text-cyan-600 hover:border-cyan-300 disabled:opacity-40"
           }`}
         >
@@ -186,15 +186,16 @@ export function ProductCard({ product, compact = false }: ProductCardProps) {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-cyan-600 border border-cyan-200 rounded-xl font-semibold text-sm hover:bg-cyan-600 hover:text-white transition-all"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-jet-text transition-all"
           >
             <MessageCircle className="w-4 h-4" />
             Get Quote
           </a>
           <button
             onClick={handleAddToCart}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-cyan-50 text-cyan-600 border border-cyan-200 rounded-xl font-semibold text-sm hover:bg-cyan-600 hover:text-white transition-all"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-jet-primary/10 text-jet-primary border border-jet-primary/20 rounded-xl font-semibold text-sm hover:bg-jet-primary hover:text-jet-text transition-all"
             title="Add to Cart"
+            aria-label="Add to Cart"
           >
             <ShoppingCart className="w-4 h-4" />
           </button>
