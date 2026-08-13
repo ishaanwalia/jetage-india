@@ -68,11 +68,10 @@ import { Marquee3D } from "@/components/Marquee3D";
 import { ProcessSteps3D } from "@/components/ProcessSteps3D";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 
-// Tied to @react-three/drei's useProgress, so it shares the same heavy
-// three.js chunk as Hero3D — load it off the critical path too.
-const CinematicLoader = dynamic(
-  () => import("@/components/CinematicLoader").then((m) => m.CinematicLoader),
-  { ssr: false }
+// SSR'd (unlike Hero3D) so the loader is the first thing painted — it exists
+// to cover the page mounting behind it, so it can't itself pop in late.
+const CinematicLoader = dynamic(() =>
+  import("@/components/CinematicLoader").then((m) => m.CinematicLoader)
 );
 
 gsap.registerPlugin(ScrollTrigger);

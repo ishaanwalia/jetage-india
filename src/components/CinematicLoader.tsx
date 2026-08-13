@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useProgress } from "@react-three/drei";
 
-const MIN_DISPLAY_MS = 1800;
+const MIN_DISPLAY_MS = 2800;
 const SESSION_KEY = "jetage-intro-shown";
 
 const letters = "JETAGE".split("");
