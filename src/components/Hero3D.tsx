@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Sparkles, ChevronRight, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Typewriter } from "./Typewriter";
 import { MagneticButton } from "./MagneticButton";
 import { YEARS_TRADING } from "@/lib/business";
@@ -25,6 +26,7 @@ const Laptop3DViewer = dynamic(
 
 export function Hero3D() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -70,7 +72,10 @@ export function Hero3D() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-jet-primary/10 text-jet-primary text-sm font-medium border border-jet-primary/20 hover:border-jet-primary/40 transition-all cursor-default group">
+              <div
+                onDoubleClick={() => router.push("/admin/")}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-jet-primary/10 text-jet-primary text-sm font-medium border border-jet-primary/20 hover:border-jet-primary/40 transition-all cursor-default group"
+              >
                 <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                 <span>Trusted Since 1989</span>
               </div>
