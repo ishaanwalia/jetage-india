@@ -94,7 +94,14 @@ export function HomeClient() {
             scrollTrigger: {
               trigger: horizontalSection,
               start: "top top",
-              end: () => `+=${scrollContainer.scrollWidth - window.innerWidth + 100}`,
+              // Same horizontal distance, but on phones it's covered over
+              // roughly half the vertical scroll — full pin duration there
+              // was ~2 extra screens of dead scrolling to clear the row.
+              end: () => {
+                const distance = scrollContainer.scrollWidth - window.innerWidth + 100;
+                const mobileFactor = window.innerWidth < 768 ? 0.55 : 1;
+                return `+=${distance * mobileFactor}`;
+              },
               pin: true,
               scrub: 1,
               invalidateOnRefresh: true,

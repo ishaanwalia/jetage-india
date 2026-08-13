@@ -78,11 +78,12 @@ export function Navbar() {
             {/* Logo - BIGGER SIZE */}
             <Link href="/" className="group relative flex items-center">
               <Image
-                src="/LogoJ.png"
+                src="/LogoJ.webp"
                 alt="Jetage India - Authorized HP World Partner in Chandigarh"
-                width={80}
+                width={147}
                 height={80}
-                className="w-14 h-14 lg:w-20 lg:h-20 rounded-xl transition-transform duration-300 group-hover:scale-105"
+                priority
+                className="h-14 w-auto lg:h-20 rounded-xl object-contain transition-transform duration-300 group-hover:scale-105"
               />
               <div className="absolute -inset-2 bg-jet-primary/0 rounded-xl group-hover:bg-jet-primary/5 transition-all duration-300" />
             </Link>

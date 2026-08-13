@@ -38,7 +38,7 @@ export function Footer() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="space-y-6">
             <div className="flex items-center gap-3">
-              <img src="/LogoJ.png" alt="Jetage India" className="w-12 h-12 rounded-xl" />
+              <img src="/LogoJ.webp" alt="Jetage India" loading="lazy" className="h-12 w-auto rounded-xl object-contain" />
               <div className="flex flex-col">
                 <span className="text-lg font-bold text-jet-text leading-tight">Jetage</span>
                 <span className="text-[10px] text-jet-text-muted tracking-[0.2em] uppercase font-medium">India</span>

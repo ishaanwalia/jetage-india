@@ -35,7 +35,7 @@ export default function ShowroomPage() {
       <div className="relative pt-36 pb-24 overflow-hidden border-b border-jet-border noise-bg">
         <div className="absolute inset-0">
           <img
-            src="/showroom/showroom4.jpeg"
+            src="/showroom/showroom4.webp"
             alt=""
             className="w-full h-full object-cover img-grade animate-kenburns"
           />
@@ -188,14 +188,14 @@ export default function ShowroomPage() {
           </Reveal>
           <div className="grid md:grid-cols-3 gap-4 lg:gap-6">
             <CinematicImage
-              src="/showroom/showroom3.jpeg"
+              src="/showroom/showroom3.webp"
               alt="HP accessories and product display wall at Jetage HP World showroom, Sector 17 Chandigarh"
               className="md:col-span-2 aspect-[16/10]"
               caption="The accessories wall"
               subcaption="Printers, ink, and genuine HP accessories"
             />
             <CinematicImage
-              src="/showroom/entrance2.jpeg"
+              src="/showroom/entrance2.webp"
               alt="Entrance signage for Jetage HP World laptops and printers showroom, Sector 17 Chandigarh"
               className="md:row-span-2 aspect-[3/4] md:aspect-auto md:h-full"
               caption="Find us on the plaza"
@@ -203,7 +203,7 @@ export default function ShowroomPage() {
               delay={0.15}
             />
             <CinematicImage
-              src="/showroom/showroom1.jpeg"
+              src="/showroom/showroom1.webp"
               alt="HP laptop demo zone with live display units at Jetage showroom Chandigarh"
               className="aspect-[16/10]"
               caption="Laptop demo zone"
@@ -211,7 +211,7 @@ export default function ShowroomPage() {
               delay={0.1}
             />
             <CinematicImage
-              src="/showroom/showroom2.jpeg"
+              src="/showroom/showroom2.webp"
               alt="HP workstation and design laptop corner at Jetage HP World showroom Chandigarh"
               className="aspect-[16/10]"
               caption="Design & workstation corner"

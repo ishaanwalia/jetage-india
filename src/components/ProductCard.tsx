@@ -32,9 +32,11 @@ interface ProductCardProps {
   product: Product;
   /** Shorter image area — for rows with a fixed viewport-height budget (e.g. the horizontal scroll section). */
   compact?: boolean;
+  /** Set for cards that render inside the first viewport (e.g. the first grid row) so their image isn't held back by native lazy-loading. */
+  priority?: boolean;
 }
 
-export function ProductCard({ product, compact = false }: ProductCardProps) {
+export function ProductCard({ product, compact = false, priority = false }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { addItem } = useCart();
   const { toggle, has, isFull } = useCompare();
@@ -125,7 +127,8 @@ export function ProductCard({ product, compact = false }: ProductCardProps) {
         <img
           src={product.image}
           alt={product.name}
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : undefined}
           width={300}
           height={200}
           className={`object-contain ${compact ? "max-h-[100px]" : "max-h-[200px]"} w-auto transition-transform duration-500 ease-out group-hover:scale-105`}

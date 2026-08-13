@@ -310,7 +310,7 @@ export default function CategoryPageClient({ id }: CategoryPageClientProps) {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="appearance-none pl-4 pr-10 py-2.5 bg-jet-bg-card border border-jet-border rounded-xl text-jet-text focus:outline-none focus:border-jet-primary/40 transition-all text-sm font-medium cursor-pointer hover:border-jet-border-strong"
+                  className="appearance-none pl-4 pr-10 py-2.5 bg-jet-bg-card border border-jet-border rounded-xl text-jet-text focus:outline-none focus:border-jet-primary/40 focus:ring-2 focus:ring-jet-primary/30 transition-all text-sm font-medium cursor-pointer hover:border-jet-border-strong"
                 >
                   {sortOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -420,7 +420,8 @@ export default function CategoryPageClient({ id }: CategoryPageClientProps) {
                       ease: [0.25, 0.46, 0.45, 0.94],
                     }}
                   >
-                    <ProductCard product={product} />                  </motion.div>
+                    <ProductCard product={product} priority={i < 4} />
+                  </motion.div>
                 ))}
               </AnimatePresence>
             </motion.div>

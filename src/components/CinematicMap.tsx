@@ -61,7 +61,7 @@ export function CinematicMap({ className = "aspect-[4/3]" }: { className?: strin
             }}
           >
             <img
-              src="/showroom/entrance2.jpeg"
+              src="/showroom/entrance2.webp"
               alt="Entrance signage of Jetage HP World showroom, Sector 17 Chandigarh"
               className="w-full h-full object-cover img-grade animate-kenburns"
             />

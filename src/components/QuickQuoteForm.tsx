@@ -99,7 +99,7 @@ export function QuickQuoteForm() {
             onChange={(e) => setName(e.target.value)}
             aria-invalid={!!errors.name}
             aria-describedby={errors.name ? "qq-name-error" : undefined}
-            className="w-full px-4 py-2.5 bg-jet-bg-elevated border border-jet-border rounded-xl text-jet-text focus:outline-none focus:border-jet-primary transition-all"
+            className="w-full px-4 py-2.5 bg-jet-bg-elevated border border-jet-border rounded-xl text-jet-text focus:outline-none focus:border-jet-primary focus:ring-2 focus:ring-jet-primary/30 transition-all"
             placeholder="Your name"
           />
           {errors.name && <p id="qq-name-error" className="text-xs text-jet-primary mt-1">{errors.name}</p>}
@@ -114,7 +114,7 @@ export function QuickQuoteForm() {
             onChange={(e) => setPhone(e.target.value)}
             aria-invalid={!!errors.phone}
             aria-describedby={errors.phone ? "qq-phone-error" : undefined}
-            className="w-full px-4 py-2.5 bg-jet-bg-elevated border border-jet-border rounded-xl text-jet-text focus:outline-none focus:border-jet-primary transition-all"
+            className="w-full px-4 py-2.5 bg-jet-bg-elevated border border-jet-border rounded-xl text-jet-text focus:outline-none focus:border-jet-primary focus:ring-2 focus:ring-jet-primary/30 transition-all"
             placeholder="+91 98765 43210"
           />
           {errors.phone && <p id="qq-phone-error" className="text-xs text-jet-primary mt-1">{errors.phone}</p>}
@@ -127,7 +127,7 @@ export function QuickQuoteForm() {
           id="qq-interest"
           value={interest}
           onChange={(e) => setInterest(e.target.value)}
-          className="w-full px-4 py-2.5 bg-jet-bg-elevated border border-jet-border rounded-xl text-jet-text focus:outline-none focus:border-jet-primary transition-all"
+          className="w-full px-4 py-2.5 bg-jet-bg-elevated border border-jet-border rounded-xl text-jet-text focus:outline-none focus:border-jet-primary focus:ring-2 focus:ring-jet-primary/30 transition-all"
         >
           <option>Printers</option>
           <option>Accessories</option>
@@ -144,7 +144,7 @@ export function QuickQuoteForm() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           rows={3}
-          className="w-full px-4 py-2.5 bg-jet-bg-elevated border border-jet-border rounded-xl text-jet-text focus:outline-none focus:border-jet-primary transition-all resize-none"
+          className="w-full px-4 py-2.5 bg-jet-bg-elevated border border-jet-border rounded-xl text-jet-text focus:outline-none focus:border-jet-primary focus:ring-2 focus:ring-jet-primary/30 transition-all resize-none"
           placeholder="e.g. budget, model in mind, office vs home use"
         />
       </div>

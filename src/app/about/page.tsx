@@ -39,7 +39,7 @@ export default function AboutPage() {
       <div className="relative pt-36 pb-24 overflow-hidden border-b border-jet-border noise-bg">
         <div className="absolute inset-0">
           <img
-            src="/showroom/showroom3.jpeg"
+            src="/showroom/showroom3.webp"
             alt=""
             className="w-full h-full object-cover img-grade animate-kenburns"
           />
@@ -173,7 +173,7 @@ export default function AboutPage() {
             <div className="lg:col-span-2 flex flex-col gap-6">
               <TiltCard tiltAmount={6} className="rounded-3xl lg:flex-1 lg:min-h-0">
                 <CinematicImage
-                  src="/showroom/founder1.jpeg"
+                  src="/showroom/founder1.webp"
                   alt="Sanjeev Walia, Founder and Owner of Jetage Computer Traders, at the HP World showroom in Sector 17 Chandigarh"
                   className="aspect-[3/4] lg:aspect-auto lg:h-full"
                   imgClassName="object-top"
@@ -183,7 +183,7 @@ export default function AboutPage() {
               </TiltCard>
               <TiltCard tiltAmount={6} className="rounded-3xl">
                 <CinematicImage
-                  src="/showroom/founder2.jpeg"
+                  src="/showroom/founder2.webp"
                   alt="Sanjeev Walia inside the Jetage HP World showroom, Chandigarh"
                   className="aspect-[4/3]"
                   imgClassName="object-top"

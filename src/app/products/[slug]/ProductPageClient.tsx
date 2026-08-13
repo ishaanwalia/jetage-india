@@ -200,11 +200,12 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(8,145,178,0.06),transparent_60%)]" />
                 
                 {!imageError[activeImageIndex] ? (
-                  <Image 
-                    src={product.images[activeImageIndex]} 
+                  <Image
+                    src={product.images[activeImageIndex]}
                     alt={product.name}
                     width={400}
                     height={400}
+                    priority={activeImageIndex === 0}
                     className="object-contain max-h-[350px] w-auto z-10"
                     onError={() => setImageError(prev => ({ ...prev, [activeImageIndex]: true }))}
                   />
