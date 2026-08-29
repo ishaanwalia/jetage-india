@@ -77,14 +77,14 @@ problem.
 | --- | ------------------------------ | -------------- | ------ | ------ |
 | 01  | Consent Management             | 0              | 8/10   | Purpose at point of collection, versioned, never pre-ticked |
 | 02  | Authentication & Sessions      | 0              | 6/10   | Staff-only cookie sessions; no customer login, no OTP |
-| 03  | Data Collection & Minimization | 0              | 7/10   | Inventory written; **no deletion schedule at all** |
+| 03  | Data Collection & Minimization | 0              | 8/10   | Inventory written; 5-year retention, manually enforced |
 | 04  | User Rights                    | **1**          | 7/10   | All rights honoured by email; nomination published |
 | 05  | Children's Data                | n/a            | 8/10   | No tracking or ads at any age; nothing to age-verify |
 | 06  | Cross-Border Transfer          | **1**          | 7/10   | Five recipients named and disclosed; **DPAs unsigned** |
 | 07  | Grievance Officer              | 0              | 8/10   | Named, published, footer link, action links in the notice |
 | 08  | Data Breach Response           | 0              | 7/10   | Both Rules deadlines documented; detection thin |
 | 09  | Third-Party & Vendor           | 0              | 9/10   | **Zero third-party scripts** — nothing to review |
-|     | **TOTAL**                      | **2**          | 67/90  | **Read the two above, not this number** |
+|     | **TOTAL**                      | **2**          | 68/90  | **Read the two above, not this number** |
 
 ---
 
@@ -113,11 +113,13 @@ OTP and no customer login anywhere. Nothing claimed beyond that.
 forms, **including what Vercel logs on our behalf** — the row most inventories
 miss.
 
-**Missing two marks:** there is no retention schedule at all. An earlier version
-of this file reported a 24-month period; **that number was invented and has been
-removed** — the owner does not delete enquiries on any schedule. The notice now
-says so and offers deletion on request, which is honest but is not erasure once
-the purpose is served. Deciding a real period is an owner action.
+**Missing two marks:** the checklist wants retention enforced by an automated
+job, and an inbox has none — the five-year clear-out is a person and a calendar
+reminder, which the notice states rather than dressing up.
+
+An earlier version reported a 24-month period that **was invented** and had
+reached the consent sentence itself. The owner has since set the real figure at
+five years, so the number published now is a decision rather than a guess.
 
 ### 04 · User rights — 7, one CRITICAL open
 
@@ -208,8 +210,7 @@ None of this is code.
 5. **Confirm 2FA** on `info@jetageindia.in`, the Gmail that receives copies, and
    the Grievance Officer mailbox. Between them these inboxes are the only place
    customer data lives.
-6. **Decide an actual retention period** for enquiry emails and keep to it.
-   Nothing is deleted today; the notice admits that rather than inventing a
-   figure, but "kept indefinitely" is the weakest item on this page.
+6. **Put the five-year inbox clear-out in the calendar.** The period is now
+   published, so nothing enforcing it turns the notice into a false claim.
 7. **Get someone else to read this file.** It is self-assessed, and that is not
    evidence.

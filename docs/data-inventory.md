@@ -10,10 +10,10 @@ Last verified: 2026-08-29.
 
 | Field | Collection point | Purpose | Lawful basis | Retention | Stored where | Shared with |
 | --- | --- | --- | --- | --- | --- | --- |
-| Name | Quote form — `src/components/QuickQuoteForm.tsx` | Reply and prepare a quote | Consent | No deletion schedule — see note | Email inboxes only | Hostinger → Gmail |
-| Phone number | Quote form — same | Reply and prepare a quote | Consent | No deletion schedule — see note | Email inboxes only | Hostinger → Gmail |
-| Product interest | Quote form — same | Quote the right thing | Consent | No deletion schedule — see note | Email inboxes only | Hostinger → Gmail |
-| Notes / message | Quote form — same | Reply and prepare a quote | Consent | No deletion schedule — see note | Email inboxes only | Hostinger → Gmail |
+| Name | Quote form — `src/components/QuickQuoteForm.tsx` | Reply and prepare a quote | Consent | 5 years from last exchange | Email inboxes only | Hostinger → Gmail |
+| Phone number | Quote form — same | Reply and prepare a quote | Consent | 5 years from last exchange | Email inboxes only | Hostinger → Gmail |
+| Product interest | Quote form — same | Quote the right thing | Consent | 5 years from last exchange | Email inboxes only | Hostinger → Gmail |
+| Notes / message | Quote form — same | Reply and prepare a quote | Consent | 5 years from last exchange | Email inboxes only | Hostinger → Gmail |
 | Consent record (wording shown, version, timestamp) | Quote form — same | Evidence of what was agreed | Consent / legal obligation | With the enquiry | Email inboxes only | as above |
 | **IP address, user agent** | **Every request — Vercel edge, no app code involved** | Serving the site; fault and abuse investigation | Sec. 7 legitimate use | Vercel's plan schedule | Vercel request logs | Vercel |
 | Staff email, password hash, session | `admin_users`, `sessions` in Neon | Staff login for the catalogue CMS | Employment / contract | While the person works here | Neon | Neon |
@@ -21,15 +21,14 @@ Last verified: 2026-08-29.
 
 ## Correction — retention (2026-08-29)
 
-An earlier version of this file, and the privacy notice with it, claimed
-enquiries were kept "24 months from the last exchange, then deleted".
-**That number was invented.** Nobody had decided it. The owner's actual answer
-is that enquiries are not deleted on any schedule.
+An earlier version of this file claimed enquiries were kept "24 months from the
+last exchange". **That number was invented** — nobody had decided it, and it had
+reached the consent sentence itself, so visitors would have been agreeing to a
+schedule that did not exist.
 
-That is a real gap — the Act wants erasure once the purpose is served — and it
-is recorded as one rather than hidden behind a plausible figure. The notice now
-says what is true and offers deletion on request. Deciding a real period is on
-the owner's list.
+Asked and answered: the period is **5 years from the last exchange**, decided by
+the owner on 2026-08-29. Enforcement is a calendar reminder and a person, not a
+job, and the notice says so.
 
 ## Not personal data, but collected — recorded so nothing is hidden
 

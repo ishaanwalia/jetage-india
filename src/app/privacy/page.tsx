@@ -140,10 +140,9 @@ export default function PrivacyPage() {
           </ul>
           <p className="mt-3">
             Being straight about the mechanism: enquiries live in an email inbox,
-            and we do not currently run any schedule that deletes them. We would
-            rather say that than publish a tidy-sounding period we do not keep
-            to. What we will do is delete yours whenever you ask — the links
-            below reach us directly.
+            so the five-year clear-out is a person working to a reminder rather
+            than an automatic job. If you would rather not wait for it, ask us
+            and we will delete yours — the links below reach us directly.
           </p>
         </>
       ),

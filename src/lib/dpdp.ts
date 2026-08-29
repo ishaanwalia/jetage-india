@@ -110,11 +110,12 @@ export type RetentionRule = {
 export const RETENTION: RetentionRule[] = [
   {
     what: "Enquiry emails in our inboxes",
-    period:
-      "Kept while the enquiry is still useful to us. We do not currently delete " +
-      "them on a schedule — ask and we will delete yours",
-    why: "Hardware buyers often come back a year later about the same quote",
-    enforcement: "none",
+    period: "5 years from the last exchange, then deleted",
+    why: "Hardware buyers often come back years later about the same quote",
+    // "manual" and not "automated": a person working to a calendar reminder,
+    // because an inbox has no job to run. The checklist wants automation and
+    // this is not it, so it does not claim to be.
+    enforcement: "manual",
   },
   {
     what: "Vercel request logs (these include your IP address)",
@@ -135,10 +136,10 @@ export const RETENTION: RetentionRule[] = [
  * `CONSENT_PURPOSE` changes, so an old record stays legible as a decision about
  * *older* wording rather than being silently read as agreement to this one.
  */
-export const CONSENT_NOTICE_VERSION = "2026-08-29b";
+export const CONSENT_NOTICE_VERSION = "2026-08-29c";
 
 /** The exact sentence shown beside the quote form's consent checkbox. */
 export const CONSENT_PURPOSE =
   "Use my name, phone number and notes to reply to this enquiry and prepare a " +
-  "quote, and keep it in the Jetage inbox until it is no longer needed. No " +
-  "marketing messages unless I ask for them.";
+  "quote, and keep it in the Jetage inbox for up to 5 years. No marketing " +
+  "messages unless I ask for them.";
