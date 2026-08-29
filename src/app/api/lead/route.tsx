@@ -34,10 +34,10 @@ export async function POST(request: Request) {
     // Not configured yet — don't break the page, just leave a trace in the
     // server logs so this is easy to notice once the env var is set.
     // Deliberately does NOT log `body`. It holds a name, a phone number and
-    // free text, and Vercel's request logs outlive the 24 months this site
-    // promises for enquiries — writing PII there quietly creates a second copy
-    // that nothing tracks and nothing deletes. The source is enough to find
-    // the form; losing the lead itself is the correct trade.
+    // free text, and Vercel's request logs are retained on Vercel's schedule
+    // rather than ours — writing PII there quietly creates a second copy that
+    // nothing tracks and nothing deletes. The source is enough to find the
+    // form; losing the lead itself is the correct trade.
     console.error(
       `Lead capture: HOSTINGER_EMAIL_PASSWORD not set — an enquiry from "${body.source}" was not delivered.`,
     );

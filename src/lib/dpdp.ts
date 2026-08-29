@@ -104,15 +104,17 @@ export type RetentionRule = {
   period: string;
   why: string;
   /** Stated honestly: a period nothing enforces is a claim the data disproves. */
-  enforcement: "manual" | "processor" | "automated";
+  enforcement: "none" | "manual" | "processor" | "automated";
 };
 
 export const RETENTION: RetentionRule[] = [
   {
     what: "Enquiry emails in our inboxes",
-    period: "24 months from the last exchange, then deleted",
+    period:
+      "Kept while the enquiry is still useful to us. We do not currently delete " +
+      "them on a schedule — ask and we will delete yours",
     why: "Hardware buyers often come back a year later about the same quote",
-    enforcement: "manual",
+    enforcement: "none",
   },
   {
     what: "Vercel request logs (these include your IP address)",
@@ -133,10 +135,10 @@ export const RETENTION: RetentionRule[] = [
  * `CONSENT_PURPOSE` changes, so an old record stays legible as a decision about
  * *older* wording rather than being silently read as agreement to this one.
  */
-export const CONSENT_NOTICE_VERSION = "2026-08-29";
+export const CONSENT_NOTICE_VERSION = "2026-08-29b";
 
 /** The exact sentence shown beside the quote form's consent checkbox. */
 export const CONSENT_PURPOSE =
   "Use my name, phone number and notes to reply to this enquiry and prepare a " +
-  "quote, and keep it in the Jetage inbox for up to 24 months. No marketing " +
-  "messages unless I ask for them.";
+  "quote, and keep it in the Jetage inbox until it is no longer needed. No " +
+  "marketing messages unless I ask for them.";

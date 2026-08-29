@@ -28,8 +28,11 @@ discharges. **Standing exception, recorded as a decision, not a backlog item.**
 **2 · No signed DPAs** — Module 06, and the matching Module 09 item.
 Vercel, Neon, Hostinger and Google all receive personal data and none has a
 signed processing agreement. *What would close it:* **owner action, this week.**
-Accepting the Vercel DPA on the Pro team account closes part of it in one click.
-This is the only genuinely open item of the two.
+**Vercel is already covered** — its Data Processing Addendum states it "applies
+to Vercel's Processing of Personal Data as a Processor ... for Customers who are
+on Enterprise and Pro plans", so being on Pro *is* the acceptance and there is
+nothing to click. Verified 2026-08-29. Neon, Hostinger and Google still need
+one.
 
 **Also flagged, not counted:** Module 05's age-verification CRITICAL has nothing
 to attach to — no signup, no accounts, no age-gated content. Recorded as not
@@ -74,14 +77,14 @@ problem.
 | --- | ------------------------------ | -------------- | ------ | ------ |
 | 01  | Consent Management             | 0              | 8/10   | Purpose at point of collection, versioned, never pre-ticked |
 | 02  | Authentication & Sessions      | 0              | 6/10   | Staff-only cookie sessions; no customer login, no OTP |
-| 03  | Data Collection & Minimization | 0              | 8/10   | Inventory written; retention real but manually enforced |
+| 03  | Data Collection & Minimization | 0              | 7/10   | Inventory written; **no deletion schedule at all** |
 | 04  | User Rights                    | **1**          | 7/10   | All rights honoured by email; nomination published |
 | 05  | Children's Data                | n/a            | 8/10   | No tracking or ads at any age; nothing to age-verify |
 | 06  | Cross-Border Transfer          | **1**          | 7/10   | Five recipients named and disclosed; **DPAs unsigned** |
 | 07  | Grievance Officer              | 0              | 8/10   | Named, published, footer link, action links in the notice |
 | 08  | Data Breach Response           | 0              | 7/10   | Both Rules deadlines documented; detection thin |
 | 09  | Third-Party & Vendor           | 0              | 9/10   | **Zero third-party scripts** — nothing to review |
-|     | **TOTAL**                      | **2**          | 68/90  | **Read the two above, not this number** |
+|     | **TOTAL**                      | **2**          | 67/90  | **Read the two above, not this number** |
 
 ---
 
@@ -110,9 +113,11 @@ OTP and no customer login anywhere. Nothing claimed beyond that.
 forms, **including what Vercel logs on our behalf** — the row most inventories
 miss.
 
-**Missing two marks:** the checklist wants retention enforced by an automated
-job. An inbox has none; the 24-month period is real but a person honours it, and
-the notice says so rather than implying otherwise.
+**Missing two marks:** there is no retention schedule at all. An earlier version
+of this file reported a 24-month period; **that number was invented and has been
+removed** — the owner does not delete enquiries on any schedule. The notice now
+says so and offers deletion on request, which is honest but is not erasure once
+the purpose is served. Deciding a real period is an owner action.
 
 ### 04 · User rights — 7, one CRITICAL open
 
@@ -173,7 +178,7 @@ declared as a recipient. It caught a real mismatch on its first run.
 **PII was being written to Vercel's logs.** `src/app/api/lead/route.tsx` called
 `console.error(..., body)` when `HOSTINGER_EMAIL_PASSWORD` was unset — putting
 the enquirer's name, phone number and free text into request logs that outlive
-the 24 months this site promises. A second copy of personal data that nothing
+Vercel's own schedule rather than ours. A second copy of personal data nothing
 tracked and nothing deleted. It now logs the form name only.
 
 ---
@@ -194,9 +199,8 @@ because silent collection is what erodes trust, not the data itself.
 
 None of this is code.
 
-1. **Accept the Vercel DPA** on the Pro team account. One click, and it counts
-   across every site on the account.
-2. **DPAs with Neon, Hostinger and Google.**
+1. **DPAs with Neon, Hostinger and Google.** Vercel needs no action — its DPA
+   applies automatically on the Pro plan.
 3. **Set up Log Drains** with an expiry — closes the Module 08 detection gap and
    caps how long `clientIp` is kept.
 4. **Auto-acknowledgement** on `waliaishaan17@gmail.com` for "Grievance"
@@ -204,7 +208,8 @@ None of this is code.
 5. **Confirm 2FA** on `info@jetageindia.in`, the Gmail that receives copies, and
    the Grievance Officer mailbox. Between them these inboxes are the only place
    customer data lives.
-6. **Calendar reminder** for the 24-month inbox purge, or the retention period in
-   the notice becomes a claim the data disproves.
+6. **Decide an actual retention period** for enquiry emails and keep to it.
+   Nothing is deleted today; the notice admits that rather than inventing a
+   figure, but "kept indefinitely" is the weakest item on this page.
 7. **Get someone else to read this file.** It is self-assessed, and that is not
    evidence.
