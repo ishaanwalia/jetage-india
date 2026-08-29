@@ -156,6 +156,9 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-4 text-sm text-jet-text-muted">
             <Link href="/privacy/" className="hover:text-jet-primary transition-colors">Privacy</Link>
+            {/* DPDP Sec. 13 wants the grievance route reachable from the site
+                itself, not only from inside the policy text. */}
+            <Link href="/privacy/#grievance" className="hover:text-jet-primary transition-colors">Grievance</Link>
             <Link href="/terms/" className="hover:text-jet-primary transition-colors">Terms</Link>
             <Link href="/shipping/" className="hover:text-jet-primary transition-colors">Shipping</Link>
             <Link href="/warranty/" className="hover:text-jet-primary transition-colors">Warranty</Link>

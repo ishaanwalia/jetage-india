@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { MessageCircle, CheckCircle2 } from "lucide-react";
+import { CONSENT_PURPOSE, CONSENT_NOTICE_VERSION } from "@/lib/dpdp";
 
 const WHATSAPP_NUMBER = "919814958295";
 const EMAIL_TO = "info@jetageindia.in";
@@ -11,13 +12,16 @@ export function QuickQuoteForm() {
   const [phone, setPhone] = useState("");
   const [interest, setInterest] = useState("Printers");
   const [message, setMessage] = useState("");
-  const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
+  const [consent, setConsent] = useState(false);
+  const [errors, setErrors] = useState<{ name?: string; phone?: string; consent?: string }>({});
   const [sent, setSent] = useState(false);
 
   const validate = () => {
-    const next: { name?: string; phone?: string } = {};
+    const next: { name?: string; phone?: string; consent?: string } = {};
     if (name.trim().length < 2) next.name = "Enter your name.";
     if (!/^[0-9+\-\s]{7,15}$/.test(phone.trim())) next.phone = "Enter a valid phone number.";
+    // DPDP Sec. 6: consent is given, never inferred from pressing submit.
+    if (!consent) next.consent = "Please tick the box so we can reply to you.";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -55,6 +59,12 @@ export function QuickQuoteForm() {
         interest,
         message: message.trim(),
         source: "quick-quote-form",
+        // What this person was actually shown when they agreed. With no leads
+        // table, the enquiry email is the only place a consent record can
+        // live — so it carries one.
+        consentGiven: CONSENT_PURPOSE,
+        consentNoticeVersion: CONSENT_NOTICE_VERSION,
+        consentAt: new Date().toISOString(),
       }),
     }).catch(() => {});
 
@@ -147,6 +157,35 @@ export function QuickQuoteForm() {
           className="w-full px-4 py-2.5 bg-jet-bg-elevated border border-jet-border rounded-xl text-jet-text focus:outline-none focus:border-jet-primary focus:ring-2 focus:ring-jet-primary/30 transition-all resize-none"
           placeholder="e.g. budget, model in mind, office vs home use"
         />
+      </div>
+
+      {/* The purpose is shown here, beside the fields, rather than behind a
+          link — DPDP wants it at the point of collection and in plain language.
+          Never pre-ticked. */}
+      <div>
+        <label htmlFor="qq-consent" className="flex items-start gap-3 cursor-pointer">
+          <input
+            id="qq-consent"
+            type="checkbox"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            aria-invalid={!!errors.consent}
+            aria-describedby={errors.consent ? "qq-consent-error" : undefined}
+            className="mt-1 h-4 w-4 shrink-0 accent-jet-primary"
+          />
+          <span className="text-xs leading-relaxed text-jet-text-dim">
+            {CONSENT_PURPOSE}{" "}
+            <a href="/privacy/" className="underline hover:text-jet-primary">
+              Privacy policy
+            </a>
+            .
+          </span>
+        </label>
+        {errors.consent && (
+          <p id="qq-consent-error" className="text-xs text-jet-primary mt-1">
+            {errors.consent}
+          </p>
+        )}
       </div>
 
       <button

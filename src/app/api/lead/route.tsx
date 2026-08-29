@@ -12,6 +12,9 @@ interface LeadPayload {
   interest?: string;
   message?: string;
   source: string;
+  consentGiven?: string;
+  consentNoticeVersion?: string;
+  consentAt?: string;
 }
 
 function isLeadPayload(value: unknown): value is LeadPayload {
@@ -30,11 +33,19 @@ export async function POST(request: Request) {
   if (!mailboxPassword) {
     // Not configured yet — don't break the page, just leave a trace in the
     // server logs so this is easy to notice once the env var is set.
-    console.error("Lead capture: HOSTINGER_EMAIL_PASSWORD not set — email not sent.", body);
+    // Deliberately does NOT log `body`. It holds a name, a phone number and
+    // free text, and Vercel's request logs outlive the 24 months this site
+    // promises for enquiries — writing PII there quietly creates a second copy
+    // that nothing tracks and nothing deletes. The source is enough to find
+    // the form; losing the lead itself is the correct trade.
+    console.error(
+      `Lead capture: HOSTINGER_EMAIL_PASSWORD not set — an enquiry from "${body.source}" was not delivered.`,
+    );
     return NextResponse.json({ ok: false, error: "Email not configured" }, { status: 202 });
   }
 
-  const { name, phone, interest, message, source } = body;
+  const { name, phone, interest, message, source, consentGiven, consentNoticeVersion, consentAt } =
+    body;
   const time = `${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST`;
   const text = [
     `Name: ${name}`,
@@ -43,6 +54,13 @@ export async function POST(request: Request) {
     message ? `Notes: ${message}` : null,
     `Source: ${source}`,
     `Time: ${time}`,
+    // The evidence half of consent: what this person was shown, and when they
+    // agreed. Kept with the enquiry because that is where it will still be if
+    // anyone ever asks.
+    consentGiven ? `
+Consent given: "${consentGiven}"` : null,
+    consentNoticeVersion ? `Consent notice version: ${consentNoticeVersion}` : null,
+    consentAt ? `Consent timestamp: ${consentAt}` : null,
   ]
     .filter(Boolean)
     .join("\n");
