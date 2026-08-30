@@ -151,8 +151,27 @@ Named individual, published with email, WhatsApp and address, reachable from a
 `Grievance` link in the footer, 30-day commitment. The checklist calls this the
 most commonly missed requirement in the Act.
 
-**Missing two marks:** no auto-acknowledgement configured, no grievance log yet.
-Both are inbox configuration rather than code.
+**Missing two marks:** no auto-acknowledgement configured, and the register
+exists as a procedure but not yet as an artefact.
+
+`docs/grievance-register.md` (added 2026-08-30) defines the columns, what counts
+as a grievance, the identity check to run before acting on an access or erasure
+request, and where the live register must live — **a private Google Sheet, one
+per business, never this repo**. Real entries are personal data about people
+exercising a legal right, and a commit is permanent.
+
+Two things writing it surfaced, both specific to this site:
+
+- **Enquiries sit in three stores, not one** — the Hostinger mailbox, the Gmail
+  second copy, and WhatsApp. A sweep that clears one and not the others leaves
+  the retention policy false while looking satisfied.
+- **The Gmail copy goes to `ishaan.walia.148@gmail.com`, which is not the
+  Grievance Officer address.** The Officer needs sign-in access to it or an
+  erasure request cannot be fulfilled — a gap that only appears the first time
+  someone asks.
+
+**The score does not move for writing it.** A template is not a log. The mark is
+earned when the sheet exists and the first sweep is recorded in it.
 
 ### 08 · Breach response — 7
 
