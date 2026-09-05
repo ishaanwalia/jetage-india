@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Download } from "lucide-react";
+import { Download, Search } from "lucide-react";
 import { adminListOrders, formatPaise } from "@/lib/orders";
 
 const FILTERS = ["", "pending", "paid", "packed", "shipped", "delivered", "cancelled"] as const;
@@ -19,10 +19,10 @@ export const dynamic = "force-dynamic";
 export default async function AdminOrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; updated?: string }>;
+  searchParams: Promise<{ status?: string; updated?: string; q?: string }>;
 }) {
-  const { status = "", updated } = await searchParams;
-  const orders = await adminListOrders(status);
+  const { status = "", updated, q = "" } = await searchParams;
+  const orders = await adminListOrders(status, q);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -48,11 +48,37 @@ export default async function AdminOrdersPage({
         </p>
       )}
 
+      {/* GET, so the search lives in the URL and survives a refresh — and the
+          desk can bookmark or send a link to a specific customer's orders. */}
+      <form method="get" className="mb-4">
+        {status && <input type="hidden" name="status" value={status} />}
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-jet-text-muted" aria-hidden />
+          <label htmlFor="q" className="sr-only">Search orders</label>
+          <input
+            id="q"
+            name="q"
+            type="search"
+            defaultValue={q}
+            placeholder="Order number, name, email or phone"
+            className="w-full rounded-xl border border-jet-border bg-white py-3 pl-10 pr-4 text-sm text-jet-text placeholder:text-jet-text-muted focus:border-jet-primary focus:outline-none focus:ring-2 focus:ring-jet-primary"
+          />
+        </div>
+      </form>
+
       <div className="mb-6 flex flex-wrap gap-2">
         {FILTERS.map((f) => (
           <Link
             key={f || "all"}
-            href={f ? `/admin/orders?status=${f}` : "/admin/orders"}
+            // Keep the search term when switching status, or filtering
+            // silently throws away what they just typed.
+            href={
+              f
+                ? `/admin/orders?status=${f}${q ? `&q=${encodeURIComponent(q)}` : ""}`
+                : q
+                  ? `/admin/orders?q=${encodeURIComponent(q)}`
+                  : "/admin/orders"
+            }
             aria-current={status === f ? "page" : undefined}
             className={`rounded-lg border px-3 py-1.5 text-sm font-medium capitalize transition-colors ${
               status === f
@@ -67,7 +93,7 @@ export default async function AdminOrdersPage({
 
       {orders.length === 0 ? (
         <p className="rounded-xl border border-jet-border bg-white px-5 py-8 text-center text-jet-text-muted">
-          No orders {status && `with status "${status}"`} yet.
+          {q ? `Nothing matches "${q}".` : `No orders ${status ? `with status "${status}"` : ""} yet.`}
         </p>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-jet-border bg-white">

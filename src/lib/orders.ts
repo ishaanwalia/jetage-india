@@ -353,13 +353,35 @@ export type AdminOrderRow = {
   createdAt: string;
 };
 
-export async function adminListOrders(status = ""): Promise<AdminOrderRow[]> {
+/**
+ * The orders list, optionally filtered by status and free-text search.
+ *
+ * Search covers order number, name, email and phone, because those are the
+ * four things a customer actually says on the phone — and the digits are
+ * stripped from the phone on both sides, so "98149 58295" finds an order
+ * stored as "9814958295".
+ */
+export async function adminListOrders(status = "", search = ""): Promise<AdminOrderRow[]> {
+  const q = search.trim();
+  const like = q ? `%${q.toLowerCase()}%` : null;
+  // Only useful if the search actually looks like part of a number; a bare
+  // "%%" here would match every row's phone and defeat the other clauses.
+  const digits = q.replace(/[^0-9]/g, "");
+  const phoneLike = digits.length >= 3 ? `%${digits}%` : null;
+
   const rows = (await sql`
     SELECT o.id, o.order_no, o.customer_name, o.email, o.phone, o.status,
            o.total_paise, o.created_at,
            (SELECT coalesce(sum(qty), 0) FROM order_items WHERE order_id = o.id) AS item_count
     FROM orders o
-    WHERE ${status || null}::text IS NULL OR o.status = ${status || null}
+    WHERE (${status || null}::text IS NULL OR o.status = ${status || null})
+      AND (
+        ${like}::text IS NULL
+        OR lower(o.order_no)      LIKE ${like}
+        OR lower(o.customer_name) LIKE ${like}
+        OR lower(o.email)         LIKE ${like}
+        OR (${phoneLike}::text IS NOT NULL AND o.phone LIKE ${phoneLike})
+      )
     ORDER BY o.created_at DESC
     LIMIT 200
   `) as Record<string, string>[];

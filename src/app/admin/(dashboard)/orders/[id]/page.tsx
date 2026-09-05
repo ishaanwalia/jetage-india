@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, Printer } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { getOrderById, adminGetEvents, adminSetStatus, formatPaise } from "@/lib/orders";
 
@@ -41,14 +41,22 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
             {order.status} · {new Date(order.createdAt).toLocaleString("en-IN")}
           </p>
         </div>
-        <a
-          href={`/order/${order.publicToken}/`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-xl border border-jet-border px-4 py-2.5 text-sm font-medium text-jet-text-dim hover:border-jet-primary/40"
-        >
-          <ExternalLink className="h-4 w-4" /> Buyer&rsquo;s view
-        </a>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href={`/admin/orders/${orderId}/slip`}
+            className="inline-flex items-center gap-2 rounded-xl bg-jet-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-jet-primary-dim"
+          >
+            <Printer className="h-4 w-4" /> Packing slip
+          </Link>
+          <a
+            href={`/order/${order.publicToken}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-xl border border-jet-border px-4 py-2.5 text-sm font-medium text-jet-text-dim hover:border-jet-primary/40"
+          >
+            <ExternalLink className="h-4 w-4" /> Buyer&rsquo;s view
+          </a>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
