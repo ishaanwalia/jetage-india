@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { LayoutDashboard, LogOut, Newspaper, Package, Settings, ExternalLink, ShoppingBag, Users } from "lucide-react";
+import { LayoutDashboard, LogOut, Newspaper, Package, Settings, ExternalLink, ShoppingBag, Users, FileSpreadsheet } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { logoutAction } from "../actions";
 import AdminNav from "./AdminNav";
@@ -27,11 +27,12 @@ const navItems = [
   { href: "/admin/orders", label: "Orders" },
   { href: "/admin/customers", label: "Customers" },
   { href: "/admin/products", label: "Products" },
+  { href: "/admin/bulk", label: "Bulk edit" },
   { href: "/admin/blogs", label: "Articles" },
   { href: "/admin/settings", label: "Settings" },
 ];
 
-const mobileIcons = [LayoutDashboard, ShoppingBag, Users, Package, Newspaper, Settings];
+const mobileIcons = [LayoutDashboard, ShoppingBag, Users, Package, FileSpreadsheet, Newspaper, Settings];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();

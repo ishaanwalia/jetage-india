@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Newspaper, Package, Settings, ShoppingBag, Users } from "lucide-react";
+import { LayoutDashboard, Newspaper, Package, Settings, ShoppingBag, Users, FileSpreadsheet } from "lucide-react";
 
 const icons: Record<string, React.ComponentType<{ className?: string }>> = {
   "/admin": LayoutDashboard,
   "/admin/orders": ShoppingBag,
   "/admin/customers": Users,
   "/admin/products": Package,
+  "/admin/bulk": FileSpreadsheet,
   "/admin/blogs": Newspaper,
   "/admin/settings": Settings,
 };

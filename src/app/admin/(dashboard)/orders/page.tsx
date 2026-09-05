@@ -35,7 +35,7 @@ export default async function AdminOrdersPage({
         {/* Plain link, not a form: the accountant wants this monthly and a
             bookmarkable URL with dates in it is the whole feature. */}
         <a
-          href="/admin/orders-export"
+          href="/admin/orders-export/"
           className="inline-flex items-center gap-2 rounded-xl border border-jet-border bg-white px-5 py-3 text-sm font-semibold text-jet-text-dim transition-colors hover:border-jet-primary/40 hover:text-jet-primary"
         >
           <Download className="h-4 w-4" /> Sales register (CSV)

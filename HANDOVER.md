@@ -187,7 +187,26 @@ seed step is not something you want twice.
 
 ---
 
-## 7. Still worth doing
+## 7. Bulk editing the catalogue
+
+/admin/bulk. Download the whole catalogue as .xlsx, edit it in Excel, upload it
+back. All 26 fields are in the sheet with dropdowns for category and status,
+and a How-to-use tab.
+
+**An upload never writes anything on its own.** It produces a diff — field by
+field, old value beside new — and a second, separate press applies it. That is
+deliberate: one sheet with the price column shifted by a row would otherwise
+reprice the whole catalogue silently.
+
+Product images are not in the sheet and cannot be changed from it. A file path
+is not something anyone can usefully type, and pasting a wrong one swaps a
+photo with no warning. Pictures stay in Products, where there is an uploader
+and a preview.
+
+To add a product, add a row and leave the id blank. To hide one, set Status to
+draft — deleting a row does nothing, because past orders reference it.
+
+## 8. Still worth doing
 
 - **Product photography and HSN** — data entry, not development.
 - **A test order end to end** once the live keys are in, including checking the
