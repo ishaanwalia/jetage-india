@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal } from "@/components/Reveal";
 import {
   Shield,
@@ -327,7 +326,6 @@ export default function PrivacyPage() {
       </div>
 
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }

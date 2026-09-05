@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal } from "@/components/Reveal";
 import { FileText, ShoppingCart, RotateCcw, Truck, CreditCard, AlertTriangle } from "lucide-react";
 import type { Metadata } from "next";
@@ -90,7 +89,6 @@ export default function TermsPage() {
       </div>
 
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { CartDrawer } from "@/components/CartDrawer";
-import { ChatWidget } from "@/components/ChatWidget";
+import { ContactDock } from "@/components/ContactDock";
 import { CompareTray } from "@/components/CompareTray";
 import { CompareProvider } from "@/context/CompareContext";
 import type { CategoryInfo, Product } from "@/lib/cms";
@@ -20,7 +20,7 @@ export function GlobalShell({
       {children}
       <CartDrawer />
       <CompareTray />
-      <ChatWidget />
+      <ContactDock />
     </CompareProvider>
   );
 }

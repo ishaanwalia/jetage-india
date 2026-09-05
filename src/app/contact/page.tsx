@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Phone, Mail, MapPin, Clock, MessageCircle, Globe, Navigation, Car, Train } from "lucide-react";
 import { CinematicMap } from "@/components/CinematicMap";
@@ -178,7 +177,6 @@ export default function ContactPage() {
       </div>
 
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }

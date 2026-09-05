@@ -31,7 +31,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useCompare } from "@/context/CompareContext";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ProductCard } from "@/components/ProductCard";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -329,7 +328,6 @@ export function HomeClient() {
       </section>
 
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }

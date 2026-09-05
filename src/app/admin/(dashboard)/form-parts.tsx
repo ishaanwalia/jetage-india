@@ -200,7 +200,7 @@ async function toWebp(file: File): Promise<File> {
 async function uploadImage(file: File): Promise<string> {
   const body = new FormData();
   body.append("file", await toWebp(file));
-  const response = await fetch("/api/admin/upload", { method: "POST", body });
+  const response = await fetch("/api/admin/upload/", { method: "POST", body });
   const result = (await response.json()) as { url?: string; error?: string };
   if (!response.ok || !result.url) throw new Error(result.error ?? "Upload failed.");
   return result.url;

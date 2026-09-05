@@ -6,7 +6,6 @@ import { useCompare } from "@/context/CompareContext";
 import { ProductCard } from "@/components/ProductCard";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal } from "@/components/Reveal";
 
 export function ProductsPageClient() {
@@ -231,7 +230,6 @@ export function ProductsPageClient() {
       </div>
 
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }

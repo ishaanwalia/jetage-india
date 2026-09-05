@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { CinematicImage } from "@/components/CinematicImage";
 import { CinematicMap } from "@/components/CinematicMap";
@@ -285,7 +284,6 @@ export default function ShowroomPage() {
       </section>
 
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }

@@ -6,7 +6,6 @@ import { useCompare } from "@/context/CompareContext";
 import { ProductCard } from "@/components/ProductCard";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal } from "@/components/Reveal";
 import { MagneticButton } from "@/components/MagneticButton";
 import {
@@ -503,7 +502,6 @@ export default function CategoryPageClient({ id }: CategoryPageClientProps) {
       </section>
 
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }

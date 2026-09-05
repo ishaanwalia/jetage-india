@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Calendar, Clock, ArrowRight, User, Tag } from "lucide-react";
 import Link from "next/link";
@@ -108,7 +107,6 @@ export default async function BlogsPage() {
       </div>
 
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }

@@ -27,7 +27,6 @@ import Image from "next/image";
 import type { Product } from "@/lib/cms";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ProductCard } from "@/components/ProductCard";
 import { useCart } from "@/context/CartContext";
 import { useCompare } from "@/context/CompareContext";
@@ -539,7 +538,6 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
       </section>
 
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }

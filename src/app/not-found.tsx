@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Search, Home, MessageCircle } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -51,7 +50,6 @@ export default function NotFound() {
         </div>
       </div>
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }

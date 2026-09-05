@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Counter } from "@/components/Counter";
 import { CinematicImage } from "@/components/CinematicImage";
@@ -336,7 +335,6 @@ export default function AboutPage() {
       </section>
 
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }

@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Reveal, StaggerReveal } from "@/components/Reveal";
 import { Shield, Wrench, Clock, FileCheck, AlertCircle, Phone, MessageCircle, Check } from "lucide-react";
 import type { Metadata } from "next";
@@ -140,7 +139,6 @@ export default function WarrantyPage() {
       </div>
 
       <Footer />
-      <WhatsAppButton />
     </main>
   );
 }
