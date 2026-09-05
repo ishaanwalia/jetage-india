@@ -1,6 +1,8 @@
 "use client";
 
 import { useId, useState } from "react";
+import { draftAction } from "./ai-actions";
+import type { DraftKind } from "@/lib/ai-draft";
 import Image from "next/image";
 
 /**
@@ -92,6 +94,67 @@ export function CheckboxField({
   );
 }
 
+/**
+ * "Draft with AI" beside a textarea.
+ *
+ * Facts are gathered from the whole form rather than from a fixed list of
+ * fields, so a new field on the product editor feeds the draft automatically
+ * without anyone remembering to wire it up. Long values and image paths are
+ * dropped — a base64 preview or a gallery list is not a fact about the product
+ * and only burns tokens.
+ *
+ * The draft goes into the textarea, never straight to the database. Whoever is
+ * writing reads it and presses Save, which is the whole point: this is a first
+ * draft, not a publish button.
+ */
+function AiDraftButton({ targetId, kind, label }: { targetId: string; kind: DraftKind; label: string }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function run() {
+    const el = document.getElementById(targetId) as HTMLTextAreaElement | null;
+    const form = el?.closest("form");
+    if (!el || !form) return;
+
+    setBusy(true);
+    setError(null);
+
+    const facts = [...new FormData(form).entries()]
+      .filter(([k, v]) => typeof v === "string" && v.trim() && v.length < 600 && !/image|images|cover/i.test(k))
+      .map(([k, v]) => `${k}: ${String(v).trim()}`)
+      .join("\n");
+
+    const result = await draftAction(kind, facts);
+    setBusy(false);
+
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    el.value = result.text;
+    // The textarea is uncontrolled, so React is not watching it. Fire the
+    // event any listener would expect, and put the cursor where an editor
+    // would want it.
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+    el.focus();
+    el.setSelectionRange(el.value.length, el.value.length);
+  }
+
+  return (
+    <span className="inline-flex items-center gap-2">
+      <button
+        type="button"
+        onClick={run}
+        disabled={busy}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-jet-primary/30 px-2.5 py-1 text-xs font-semibold text-jet-primary transition-colors hover:bg-jet-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jet-primary"
+      >
+        {busy ? "Drafting…" : label}
+      </button>
+      {error && <span className="text-xs text-red-600">{error}</span>}
+    </span>
+  );
+}
+
 export function TextareaField({
   label,
   name,
@@ -100,16 +163,21 @@ export function TextareaField({
   rows = 4,
   required,
   mono,
-}: FieldProps & { rows?: number; mono?: boolean }) {
+  assist,
+  assistLabel = "Draft with AI",
+}: FieldProps & { rows?: number; mono?: boolean; assist?: DraftKind; assistLabel?: string }) {
   const id = useId();
   const hintId = `${id}-hint`;
 
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-jet-text">
-        {label}
-        {required && <span className="ml-1 text-jet-primary">*</span>}
-      </label>
+      <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
+        <label htmlFor={id} className="block text-sm font-medium text-jet-text">
+          {label}
+          {required && <span className="ml-1 text-jet-primary">*</span>}
+        </label>
+        {assist && <AiDraftButton targetId={id} kind={assist} label={assistLabel} />}
+      </div>
       <textarea
         id={id}
         name={name}

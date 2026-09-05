@@ -87,7 +87,7 @@ export default function ProductForm({
             <Field label="SKU" name="sku" defaultValue={product?.sku} />
             <Field label="Badge" name="badge" defaultValue={product?.badge ?? ""} hint="e.g. Best Seller. Leave blank for none." />
           </div>
-          <TextareaField label="Description" name="description" rows={4} defaultValue={product?.description} />
+          <TextareaField label="Description" name="description" rows={4} defaultValue={product?.description} assist="product-description" />
         </Fieldset>
 
         <Fieldset legend="Specs">
@@ -106,6 +106,7 @@ export default function ProductForm({
             label="Features"
             name="features"
             rows={5}
+            assist="product-features"
             defaultValue={product?.features?.join("\n")}
             hint="One per line."
           />

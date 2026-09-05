@@ -7,13 +7,44 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { saveBlogAction, deleteBlogAction } from "../../../actions";
 import { CheckboxField, Field, Fieldset, ImageField, SubmitBar, TextareaField } from "../../form-parts";
+import { draftAction } from "../../ai-actions";
+import type { DraftKind } from "@/lib/ai-draft";
 import type { BlogPost } from "@/lib/cms";
 
 export default function BlogForm({ blog }: { blog: BlogPost | null }) {
   const [state, formAction, pending] = useActionState(saveBlogAction, null);
   const [content, setContent] = useState(blog?.content ?? "");
   const [tab, setTab] = useState<0 | 1>(0);
+  const [aiBusy, setAiBusy] = useState<DraftKind | null>(null);
+  const [aiError, setAiError] = useState<string | null>(null);
   const isNew = !blog;
+
+  /**
+   * Outline drafts from the title and tags; Polish rewrites what is already
+   * there. Both replace the editor's text, so neither runs without them
+   * pressing the button, and Save is still a separate deliberate act.
+   */
+  async function runAi(kind: DraftKind) {
+    setAiBusy(kind);
+    setAiError(null);
+
+    const form = document.querySelector("form");
+    const facts = form
+      ? [...new FormData(form).entries()]
+          .filter(([k, v]) => typeof v === "string" && v.trim() && !/image|cover/i.test(k))
+          .map(([k, v]) => `${k}: ${String(v).trim().slice(0, 6000)}`)
+          .join("\n")
+      : `title: ${blog?.title ?? ""}`;
+
+    const result = await draftAction(kind, facts);
+    setAiBusy(null);
+    if (!result.ok) {
+      setAiError(result.error);
+      return;
+    }
+    setContent(result.text);
+    setTab(0); // Land them in the editor, not the preview, so they can edit it.
+  }
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -46,6 +77,7 @@ export default function BlogForm({ blog }: { blog: BlogPost | null }) {
             label="Excerpt"
             name="excerpt"
             rows={3}
+            assist="blog-excerpt"
             defaultValue={blog?.excerpt}
             hint="Shown on the blog index."
           />
@@ -90,6 +122,30 @@ export default function BlogForm({ blog }: { blog: BlogPost | null }) {
                 {label}
               </button>
             ))}
+
+            {/* This textarea is controlled, so it cannot use TextareaField's
+                assist button — that one writes el.value, which React would
+                immediately overwrite. These go through setContent instead. */}
+            <span className="ml-auto flex items-center gap-2">
+              {aiError && <span className="text-xs text-red-600">{aiError}</span>}
+              <button
+                type="button"
+                disabled={!!aiBusy}
+                onClick={() => runAi("blog-outline")}
+                className="rounded-lg border border-jet-primary/30 px-2.5 py-1 text-xs font-semibold text-jet-primary transition-colors hover:bg-jet-primary hover:text-white disabled:opacity-50"
+              >
+                {aiBusy === "blog-outline" ? "Drafting…" : "Outline"}
+              </button>
+              <button
+                type="button"
+                disabled={!!aiBusy || !content.trim()}
+                onClick={() => runAi("blog-polish")}
+                className="rounded-lg border border-jet-primary/30 px-2.5 py-1 text-xs font-semibold text-jet-primary transition-colors hover:bg-jet-primary hover:text-white disabled:opacity-50"
+                title={content.trim() ? undefined : "Write something first"}
+              >
+                {aiBusy === "blog-polish" ? "Polishing…" : "Polish"}
+              </button>
+            </span>
           </div>
 
           {tab === 0 ? (
