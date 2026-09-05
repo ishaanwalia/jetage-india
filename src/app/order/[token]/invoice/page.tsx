@@ -80,7 +80,13 @@ export default async function InvoicePage({ params }: { params: Promise<{ token:
           </div>
           <div className="text-right">
             <p className="text-lg font-bold uppercase tracking-wide">Tax Invoice</p>
-            <p className="mt-2 text-[12px]"><strong>Order:</strong> {order.orderNo}</p>
+            {/* The invoice number is the legal reference and leads. The order
+                number stays below it because that is what the buyer quotes on
+                the phone. */}
+            <p className="mt-2 text-[13px]">
+              <strong>Invoice:</strong> {order.invoiceNo ?? "—"}
+            </p>
+            <p className="text-[12px] text-neutral-600"><strong>Order:</strong> {order.orderNo}</p>
             <p className="text-[12px]">
               <strong>Date:</strong>{" "}
               {new Date(order.paidAt ?? order.createdAt).toLocaleDateString("en-GB")}

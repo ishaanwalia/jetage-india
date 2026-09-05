@@ -38,8 +38,8 @@ export async function GET(req: Request) {
   const to = url.searchParams.get("to") || "2999-12-31";
 
   const rows = (await sql`
-    SELECT o.order_no, o.created_at, o.paid_at, o.status, o.customer_name, o.email, o.phone,
-           o.ship_address, o.place_of_supply,
+    SELECT o.invoice_no, o.order_no, o.created_at, o.paid_at, o.status, o.customer_name, o.email, o.phone,
+           o.ship_address, o.place_of_supply, o.buyer_gstin,
            o.subtotal_paise, o.gst_paise, o.cgst_paise, o.sgst_paise, o.igst_paise,
            o.total_paise, o.razorpay_payment_id,
            i.sku, i.name AS item_name, i.qty, i.unit_price_paise, i.line_total_paise
@@ -52,8 +52,8 @@ export async function GET(req: Request) {
   `) as Record<string, string>[];
 
   const header = [
-    "Order No", "Order Date", "Paid Date", "Status",
-    "Customer", "Email", "Phone", "Ship City", "Ship State", "PIN", "Place of Supply",
+    "Invoice No", "Order No", "Order Date", "Paid Date", "Status",
+    "Customer", "Buyer GSTIN", "Email", "Phone", "Ship City", "Ship State", "PIN", "Place of Supply",
     "Item", "SKU", "HSN", "Qty",
     "Rate (incl GST)", "Line Total (incl GST)", "Taxable Value", "GST Rate",
     "CGST", "SGST/UTGST", "IGST", "Order Total", "Payment Ref",
@@ -74,11 +74,12 @@ export async function GET(req: Request) {
     const lineGst = Math.round(Number(r.gst_paise) * share);
 
     return [
+      r.invoice_no ?? "",
       r.order_no,
       new Date(r.created_at).toLocaleDateString("en-GB"),
       r.paid_at ? new Date(r.paid_at).toLocaleDateString("en-GB") : "",
       r.status,
-      r.customer_name, r.email, r.phone,
+      r.customer_name, r.buyer_gstin ?? "", r.email, r.phone,
       addr.city ?? "", addr.state ?? "", addr.pincode ?? "",
       r.place_of_supply,
       r.item_name, r.sku,

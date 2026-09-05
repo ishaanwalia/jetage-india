@@ -82,11 +82,29 @@ Every product is treated as 18%. That is correct for printers, ink, toner and
 computer accessories. If anything in the catalogue is at a different slab, say
 so — it is currently a single constant in `src/lib/money.ts`.
 
-### Invoice numbering
+### Invoice numbering — two series, and that is allowed
 
-The site issues **order** numbers (`JI-26-000001`), not tax invoice numbers.
-The GST invoice series should keep coming from Tally, so there is only one
-series and it stays consecutive. Do not start a second series on the website.
+An earlier version of this file said not to start a second invoice series on
+the website. **That was wrong**, and it is worth correcting because it changes
+the whole workflow. Rule 46(b) requires a consecutive serial number unique
+within the financial year, *"in one or multiple series"* — multiple series are
+explicitly permitted.
+
+So the site runs its own:
+
+| | Series | Issued by |
+| --- | --- | --- |
+| Counter sales | whatever Tally already uses | Tally, as today |
+| Website sales | `JI/26-27/0001` | the website, at payment |
+
+The number is allocated **when Razorpay confirms payment**, never when the
+order is placed — an abandoned checkout that burned a number would leave a
+permanent hole in a series that has to be consecutive, and holes are what get
+questioned. The financial year is in the key, so the series restarts at 0001
+by itself every April.
+
+`JI-26-000001` is still the *order* number, and it stays on the invoice
+underneath, because that is what a customer quotes on the phone.
 
 ---
 

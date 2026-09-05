@@ -17,6 +17,7 @@ import {
   GST_RATE,
   type OrderItem,
 } from "./money";
+import { financialYear } from "./fy";
 
 const line = (rupees: number, qty: number): OrderItem => ({
   productId: "x",
@@ -98,4 +99,14 @@ test("the worked example from the price list reconciles", () => {
   const gst = gstContainedIn(total);
   assert.equal(gst, 384819);
   assert.equal(total - gst, 2137881);
+});
+
+test("financial year follows April–March, not the calendar", () => {
+  // Sept 2026 is in FY 2026-27.
+  assert.equal(financialYear(new Date("2026-09-06")), "26-27");
+  // 31 March 2027 is still FY 2026-27; 1 April 2027 starts 27-28.
+  assert.equal(financialYear(new Date("2027-03-31")), "26-27");
+  assert.equal(financialYear(new Date("2027-04-01")), "27-28");
+  // January belongs to the year that began the previous April.
+  assert.equal(financialYear(new Date("2027-01-15")), "26-27");
 });

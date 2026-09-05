@@ -1,7 +1,7 @@
 import { NextResponse, after } from "next/server";
 import { neon } from "@neondatabase/serverless";
 import { verifyWebhookSignature } from "@/lib/razorpay";
-import { addOrderEvent } from "@/lib/orders";
+import { addOrderEvent, nextInvoiceNo } from "@/lib/orders";
 import { notifyOrderPaid } from "@/lib/order-mail";
 
 /**
@@ -64,7 +64,13 @@ export async function POST(req: Request) {
       const order = updated[0];
       if (!order) return NextResponse.json({ ok: true, duplicate: true });
 
-      await addOrderEvent(order.id, "paid", { note: "Payment received" });
+      // Allocated here and nowhere else. Because the UPDATE above only matches
+      // a still-pending order, a replayed webhook never reaches this line and
+      // cannot burn a second number on the same sale.
+      const invoiceNo = await nextInvoiceNo();
+      await sql`UPDATE orders SET invoice_no = ${invoiceNo} WHERE id = ${order.id}`;
+
+      await addOrderEvent(order.id, "paid", { note: `Payment received · invoice ${invoiceNo}` });
 
       // After the 200, not before it. Razorpay gives a webhook only a few
       // seconds before it calls the delivery failed and starts retrying — and

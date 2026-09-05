@@ -247,3 +247,17 @@ create table if not exists rate_limit (
   window_start timestamptz not null default now(),
   count        integer     not null default 0
 );
+
+-- Named counters. One row per series, incremented atomically.
+--
+-- Used for the GST invoice number, whose key carries the financial year
+-- ("invoice:26-27"), so the series restarts at 1 every April on its own rather
+-- than needing somebody to remember to reset it.
+create table if not exists counters (
+  name  text primary key,
+  value integer not null default 0
+);
+
+-- Allocated when payment is captured, never at order creation — an abandoned
+-- checkout must not burn a number out of a series that has to be consecutive.
+alter table orders add column if not exists invoice_no text unique;

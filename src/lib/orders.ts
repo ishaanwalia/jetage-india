@@ -2,10 +2,12 @@ import "server-only";
 import { neon } from "@neondatabase/serverless";
 import { randomBytes } from "node:crypto";
 import { rupeesToPaise, splitGst, type OrderItem, type OrderTotals } from "./money";
+import { financialYear } from "./fy";
 
 // Re-exported so server callers have one import for orders + money.
 export { GST_RATE, gstContainedIn, rupeesToPaise, formatPaise, totalsFor, splitGst, SUPPLY_STATE } from "./money";
 export type { OrderItem, OrderTotals } from "./money";
+export { financialYear } from "./fy";
 
 /**
  * Orders: money, creation, and lookup.
@@ -46,6 +48,7 @@ export interface Order {
   razorpayPaymentId: string | null;
   note: string | null;
   buyerGstin: string | null;
+  invoiceNo: string | null;
   placeOfSupply: string;
   cgstPaise: number;
   sgstPaise: number;
@@ -100,6 +103,29 @@ export async function priceCart(lines: CartLine[]): Promise<OrderItem[]> {
     });
   }
   return items;
+}
+
+/**
+ * The GST tax invoice number: JI/26-27/0001.
+ *
+ * A **separate series from the counter's Tally invoices, which is allowed** —
+ * Rule 46(b) requires a consecutive serial number unique within the financial
+ * year, "in one or multiple series". A dedicated web series means the buyer
+ * gets their invoice the moment they pay, and the accountant imports a block
+ * of consecutive numbers into Tally rather than reconciling interleaved ones.
+ *
+ * Allocated on payment, never at order creation: an abandoned checkout that
+ * burned a number would leave a permanent hole in a series that has to be
+ * consecutive, and holes are what a GST officer asks about.
+ */
+export async function nextInvoiceNo(): Promise<string> {
+  const fy = financialYear();
+  const [row] = (await sql`
+    INSERT INTO counters (name, value) VALUES (${`invoice:${fy}`}, 1)
+    ON CONFLICT (name) DO UPDATE SET value = counters.value + 1
+    RETURNING value
+  `) as { value: number }[];
+  return `JI/${fy}/${String(row.value).padStart(4, "0")}`;
 }
 
 /** JI-26-000123 — quotable over the phone, which is how these get chased up. */
@@ -237,6 +263,7 @@ type OrderRow = {
   razorpay_payment_id: string | null;
   note: string | null;
   buyer_gstin: string | null;
+  invoice_no: string | null;
   place_of_supply: string;
   cgst_paise: string | number;
   sgst_paise: string | number;
@@ -265,6 +292,7 @@ const toOrder = (r: OrderRow, items: OrderItem[]): Order => ({
   razorpayPaymentId: r.razorpay_payment_id,
   note: r.note,
   buyerGstin: r.buyer_gstin,
+  invoiceNo: r.invoice_no,
   placeOfSupply: r.place_of_supply,
   cgstPaise: Number(r.cgst_paise),
   sgstPaise: Number(r.sgst_paise),
