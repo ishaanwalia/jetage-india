@@ -21,6 +21,7 @@ git can see.
 | `RAZORPAY_KEY_SECRET` | Shown **once** when you generate the key. Regenerate if lost. |
 | `RAZORPAY_WEBHOOK_SECRET` | You invent this. Any long random string. |
 | `NEXT_PUBLIC_SITE_URL` | `https://jetageindia.in` — read at **build** time |
+| `SELLER_GSTIN` | **Your own GSTIN.** No invoice can be issued without it. |
 
 Then, in the Razorpay dashboard → Settings → Webhooks:
 
@@ -56,6 +57,16 @@ It is a CSV rather than Tally XML deliberately: Tally XML has to name which
 sales ledger and which tax ledgers each voucher posts to, and only the
 accountant knows that. A wrong guess posts vouchers to the wrong account. They
 map the CSV once in Tally's import wizard and it is reusable after that.
+
+### Your GSTIN — needed before any invoice exists
+
+`/order/<token>/invoice` is a full tax invoice: both GSTINs, place of supply,
+taxable value, and CGST+SGST or IGST depending on where it ships. It **refuses
+to render** until `SELLER_GSTIN` is set, rather than producing a
+confident-looking document that fails at the buyer's accountant.
+
+Buyers can enter their own GSTIN at checkout (collapsed behind a link, so
+retail buyers never see it) and it appears on the invoice.
 
 ### HSN codes — needed from them
 
