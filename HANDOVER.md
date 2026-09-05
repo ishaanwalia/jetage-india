@@ -22,6 +22,7 @@ git can see.
 | `RAZORPAY_WEBHOOK_SECRET` | You invent this. Any long random string. |
 | `NEXT_PUBLIC_SITE_URL` | `https://jetageindia.in` — read at **build** time |
 | `SELLER_GSTIN` | **Your own GSTIN.** No invoice can be issued without it. |
+| `GEMINI_API_KEY` | aistudio.google.com → Get API key. Free tier is enough to start. |
 
 Then, in the Razorpay dashboard → Settings → Webhooks:
 
@@ -113,7 +114,34 @@ turnover, which almost certainly does not apply yet.
 
 ---
 
-## 4. Customers, and why there is no login
+## 4. The chat assistant
+
+Off until `GEMINI_API_KEY` is set — the widget then tells visitors to phone
+instead, which is the right failure. Get a key free at
+[aistudio.google.com](https://aistudio.google.com).
+
+It answers **only** from your live catalogue: all 47 products with current
+prices, the 8 articles, and how ordering works. Edit a price in `/admin` and
+the bot quotes the new one within the hour, no redeploy. It is told never to
+invent a price, promise a delivery date, or claim something is in stock, and it
+cannot look up or change an order.
+
+Two knobs, both optional:
+
+| Variable | Default | What it does |
+| --- | --- | --- |
+| `GEMINI_MODEL` | `gemini-3.8-flash` | Which model answers |
+| `GEMINI_DAILY_CAP` | `500` | Replies per day, site-wide, before it stops |
+
+**Read this before choosing the free tier.** Google's own pricing page says
+free-tier content *may be used to improve their products* — in other words,
+they can train on what your visitors type. The paid tier does not. The privacy
+notice says so plainly and the widget repeats it next to the input box, but it
+is your call which tier to run on, and it is a real one.
+
+---
+
+## 5. Customers, and why there is no login
 
 There is no customer account, no password, and no registration step. That is a
 decision, not something unfinished:
@@ -131,7 +159,7 @@ customers actually ask for it.
 
 ---
 
-## 5. Don't run `npm run db:migrate`
+## 6. Don't run `npm run db:migrate`
 
 It re-seeds the catalogue from `src/lib/data/products.ts` and would **overwrite
 anything edited in the CMS**. Products are managed at `/admin/products` now.
@@ -141,7 +169,7 @@ seed step is not something you want twice.
 
 ---
 
-## 6. Still worth doing
+## 7. Still worth doing
 
 - **Product photography and HSN** — data entry, not development.
 - **A test order end to end** once the live keys are in, including checking the

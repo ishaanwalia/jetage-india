@@ -238,11 +238,12 @@ alter table orders add column if not exists igst_paise bigint not null default 0
 -- Null means an ordinary consumer sale (B2C), which is most of them.
 alter table orders add column if not exists buyer_gstin text;
 
--- Throttle for the unauthenticated "email me my orders" form. Keyed on a
--- SHA-256 of the address rather than the address itself: this table exists to
--- stop abuse, and it should not quietly become a second list of everyone who
--- has ever typed their email into the site.
-create table if not exists email_throttle (
+-- Rate-limit counters, keyed on a SHA-256 rather than the thing being limited:
+-- these exist to stop abuse and should not become a second list of everyone
+-- who has used the site. In the database, not in memory, because on serverless
+-- an in-process counter is bypassed by arriving at a different instance.
+create table if not exists rate_limit (
   key_hash     text primary key,
-  last_sent_at timestamptz not null default now()
+  window_start timestamptz not null default now(),
+  count        integer     not null default 0
 );

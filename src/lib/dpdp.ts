@@ -85,6 +85,21 @@ export const DATA_RECIPIENTS: DataRecipient[] = [
     country: "United States",
   },
   {
+    name: "Google (Gemini)",
+    purpose: "Powers the chat assistant on the site",
+    // The free tier's terms say submitted content may be used to improve
+    // Google's products — i.e. it can train on it. That is a materially
+    // different bargain from the paid tier and the visitor is the one bearing
+    // it, so it is stated here rather than buried. The widget repeats it in
+    // plain words next to the input box, and the assistant is instructed never
+    // to ask for personal details.
+    receives:
+      "Whatever you type into the chat box, plus our product list, so it can answer. " +
+      "On Google's free tier this content may be used to improve their AI models. " +
+      "Nothing you type there is stored by us",
+    country: "United States",
+  },
+  {
     name: "Razorpay",
     purpose: "Takes the payment when you buy something",
     // Card and UPI details never reach this site: Razorpay's own checkout
@@ -152,6 +167,15 @@ export const RETENTION: RetentionRule[] = [
     period: "Retained by Razorpay under their own RBI obligations",
     why: "Settling the payment, and any refund or chargeback",
     enforcement: "processor",
+  },
+  {
+    what: "Chat conversations",
+    // Worth being precise: the transcript lives in the browser tab's memory
+    // and is gone when it closes. What Google keeps is Google's, and their
+    // free-tier terms are named in DATA_RECIPIENTS rather than guessed at.
+    period: "Not kept by us at all — the conversation is gone when you close the tab",
+    why: "There is no reason to keep it, so we don't",
+    enforcement: "automated",
   },
   {
     what: "Vercel request logs (these include your IP address)",

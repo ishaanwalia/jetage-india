@@ -1,9 +1,8 @@
 import "server-only";
-import { createHash } from "node:crypto";
-import { neon } from "@neondatabase/serverless";
 import { render } from "@react-email/render";
 import { getOrderById, getOrdersByEmail, formatPaise, type Order } from "@/lib/orders";
 import { sendMail, INTERNAL_RECIPIENTS } from "@/lib/mail";
+import { allow } from "@/lib/rate-limit";
 import { OrderEmail } from "@/emails/OrderEmail";
 import { OrderLinksEmail } from "@/emails/OrderLinksEmail";
 
@@ -20,34 +19,9 @@ import { OrderLinksEmail } from "@/emails/OrderLinksEmail";
  * worse than a plain one.
  */
 
-const sql = neon(process.env.DATABASE_URL!);
-
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jetageindia.in";
 const orderUrl = (token: string) => `${SITE}/order/${token}/`;
 const invoiceUrl = (token: string) => `${SITE}/order/${token}/invoice/`;
-
-/**
- * Takes a send slot, or refuses. Returns true if the caller may send.
- *
- * In the database rather than in memory because this runs on serverless: each
- * instance has its own memory, several are warm at once, and an in-process Map
- * would let the limit be bypassed simply by arriving at a different one.
- *
- * The key is hashed. This table's job is to prevent abuse, and it should not
- * become a second list of every address that has touched the site.
- */
-async function claimEmailSlot(key: string, minutes: number): Promise<boolean> {
-  const hash = createHash("sha256").update(key).digest("hex");
-  // One statement, so two simultaneous requests cannot both win: the second
-  // one's WHERE clause sees the first one's timestamp.
-  const rows = (await sql`
-    INSERT INTO email_throttle (key_hash, last_sent_at) VALUES (${hash}, now())
-    ON CONFLICT (key_hash) DO UPDATE SET last_sent_at = now()
-    WHERE email_throttle.last_sent_at < now() - (${minutes} || ' minutes')::interval
-    RETURNING key_hash
-  `) as { key_hash: string }[];
-  return rows.length > 0;
-}
 
 /** The text/plain alternative. Every HTML mail below ships with one. */
 function plain(order: Order, heading: string, withInvoice = false): string {
@@ -174,7 +148,7 @@ export async function emailOrderLinks(email: string): Promise<void> {
   // customer's inbox — and burn the sending reputation of the domain that also
   // carries the order confirmations. One mail per address per ten minutes is
   // far more than a real person needs.
-  if (!(await claimEmailSlot(`orderlinks:${email.toLowerCase()}`, 10))) return;
+  if (!(await allow(`orderlinks:${email.toLowerCase()}`, 10, 1))) return;
 
   const orders = await getOrdersByEmail(email);
   if (orders.length === 0) return;
