@@ -221,3 +221,13 @@ create index if not exists order_events_order_idx on order_events (order_id, cre
 -- Order numbers come from a sequence rather than max(order_no)+1, which races
 -- the moment two people check out in the same second.
 create sequence if not exists order_no_seq start 1;
+
+-- The tax lines an Indian invoice must actually show. Same total either way,
+-- but a Chandigarh buyer gets CGST + SGST/UTGST and everyone else a single
+-- IGST line. Stored per order rather than derived on read, because the
+-- place of supply is a fact about the sale on the day it happened — moving
+-- the business, or a buyer editing an address, must not restate old invoices.
+alter table orders add column if not exists place_of_supply text not null default '';
+alter table orders add column if not exists cgst_paise bigint not null default 0;
+alter table orders add column if not exists sgst_paise bigint not null default 0;
+alter table orders add column if not exists igst_paise bigint not null default 0;

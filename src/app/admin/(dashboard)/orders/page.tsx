@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Download } from "lucide-react";
 import { adminListOrders, formatPaise } from "@/lib/orders";
 
 const FILTERS = ["", "pending", "paid", "packed", "shipped", "delivered", "cancelled"] as const;
@@ -25,10 +26,20 @@ export default async function AdminOrdersPage({
 
   return (
     <div className="mx-auto max-w-6xl">
-      <div className="mb-6">
-        <span className="text-xs font-semibold uppercase tracking-wider text-jet-primary">Sales</span>
-        <h1 className="mt-2 text-3xl font-bold text-jet-text">Orders</h1>
-        <p className="mt-2 text-jet-text-muted">{orders.length} shown</p>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <span className="text-xs font-semibold uppercase tracking-wider text-jet-primary">Sales</span>
+          <h1 className="mt-2 text-3xl font-bold text-jet-text">Orders</h1>
+          <p className="mt-2 text-jet-text-muted">{orders.length} shown</p>
+        </div>
+        {/* Plain link, not a form: the accountant wants this monthly and a
+            bookmarkable URL with dates in it is the whole feature. */}
+        <a
+          href="/admin/orders-export"
+          className="inline-flex items-center gap-2 rounded-xl border border-jet-border bg-white px-5 py-3 text-sm font-semibold text-jet-text-dim transition-colors hover:border-jet-primary/40 hover:text-jet-primary"
+        >
+          <Download className="h-4 w-4" /> Sales register (CSV)
+        </a>
       </div>
 
       {updated && (

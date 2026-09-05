@@ -9,7 +9,14 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { gstContainedIn, rupeesToPaise, totalsFor, GST_RATE, type OrderItem } from "./money";
+import {
+  gstContainedIn,
+  rupeesToPaise,
+  totalsFor,
+  splitGst,
+  GST_RATE,
+  type OrderItem,
+} from "./money";
 
 const line = (rupees: number, qty: number): OrderItem => ({
   productId: "x",
@@ -61,4 +68,34 @@ test("an empty cart is zero, not NaN", () => {
   const t = totalsFor([]);
   assert.equal(t.totalPaise, 0);
   assert.equal(t.gstPaise, 0);
+});
+
+test("intra-state supply splits into CGST + SGST, inter-state into IGST", () => {
+  // Chandigarh buyer: two 9% halves, no IGST.
+  const local = splitGst(384819, "Chandigarh");
+  assert.equal(local.igstPaise, 0);
+  assert.equal(local.cgstPaise + local.sgstPaise, 384819, "halves must sum to the tax");
+  assert.ok(local.intraState);
+
+  // Punjab buyer: one 18% IGST line, no CGST/SGST.
+  const away = splitGst(384819, "Punjab");
+  assert.equal(away.igstPaise, 384819);
+  assert.equal(away.cgstPaise + away.sgstPaise, 0);
+  assert.ok(!away.intraState);
+});
+
+test("an odd paise of tax is not lost in the split", () => {
+  // 7 paise cannot halve evenly. The invoice must still add up.
+  const s = splitGst(7, "chandigarh"); // case-insensitive on purpose
+  assert.equal(s.cgstPaise + s.sgstPaise, 7);
+  assert.equal(s.cgstPaise, 4);
+  assert.equal(s.sgstPaise, 3);
+});
+
+test("the worked example from the price list reconciles", () => {
+  // ₹25,227 inclusive of 18% => ₹21,378.81 taxable + ₹3,848.19 tax.
+  const total = rupeesToPaise(25227);
+  const gst = gstContainedIn(total);
+  assert.equal(gst, 384819);
+  assert.equal(total - gst, 2137881);
 });

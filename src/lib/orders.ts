@@ -1,10 +1,10 @@
 import "server-only";
 import { neon } from "@neondatabase/serverless";
 import { randomBytes } from "node:crypto";
-import { rupeesToPaise, type OrderItem, type OrderTotals } from "./money";
+import { rupeesToPaise, splitGst, type OrderItem, type OrderTotals } from "./money";
 
 // Re-exported so server callers have one import for orders + money.
-export { GST_RATE, gstContainedIn, rupeesToPaise, formatPaise, totalsFor } from "./money";
+export { GST_RATE, gstContainedIn, rupeesToPaise, formatPaise, totalsFor, splitGst, SUPPLY_STATE } from "./money";
 export type { OrderItem, OrderTotals } from "./money";
 
 /**
@@ -118,15 +118,22 @@ export async function createOrder(input: {
   // has to be unguessable rather than merely unique.
   const publicToken = randomBytes(32).toString("hex");
 
+  // The place of supply is the delivery state, and it decides whether this is
+  // a CGST+SGST sale or an IGST one. Frozen onto the row: it is a fact about
+  // the sale on the day, and a later address edit must not restate the tax.
+  const split = splitGst(input.totals.gstPaise, input.shipAddress.state);
+
   const [order] = (await sql`
     INSERT INTO orders (
       order_no, public_token, email, phone, customer_name, ship_address,
-      subtotal_paise, gst_paise, shipping_paise, total_paise, note
+      subtotal_paise, gst_paise, shipping_paise, total_paise, note,
+      place_of_supply, cgst_paise, sgst_paise, igst_paise
     ) VALUES (
       ${orderNo}, ${publicToken}, ${input.email}, ${input.phone}, ${input.customerName},
       ${JSON.stringify(input.shipAddress)},
       ${input.totals.subtotalPaise}, ${input.totals.gstPaise},
-      ${input.totals.shippingPaise}, ${input.totals.totalPaise}, ${input.note ?? null}
+      ${input.totals.shippingPaise}, ${input.totals.totalPaise}, ${input.note ?? null},
+      ${input.shipAddress.state}, ${split.cgstPaise}, ${split.sgstPaise}, ${split.igstPaise}
     )
     RETURNING id, order_no, public_token
   `) as { id: number; order_no: string; public_token: string }[];

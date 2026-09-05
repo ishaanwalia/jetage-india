@@ -26,6 +26,37 @@ export function formatPaise(paise: number): string {
   return `₹${(paise / 100).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
 }
 
+/**
+ * Where Jetage supplies from. Chandigarh is a union territory, so an
+ * intra-UT sale is CGST + UTGST — which is filed and rendered exactly like
+ * CGST + SGST, at the same 9 + 9. The distinction matters for the wording on
+ * the invoice, not the arithmetic.
+ */
+export const SUPPLY_STATE = "Chandigarh";
+
+export interface GstSplit {
+  cgstPaise: number;
+  sgstPaise: number;
+  igstPaise: number;
+  intraState: boolean;
+}
+
+/**
+ * Splits the tax into the lines an Indian invoice must actually show.
+ *
+ * Same total either way — but a Chandigarh buyer gets CGST 9% + SGST/UTGST 9%,
+ * and anyone outside gets a single IGST 18% line. Showing the wrong pair makes
+ * the invoice non-compliant and breaks the buyer's input credit, so this is
+ * driven by the delivery state rather than assumed.
+ */
+export function splitGst(gstPaise: number, shipState: string): GstSplit {
+  const intraState = shipState.trim().toLowerCase() === SUPPLY_STATE.toLowerCase();
+  if (!intraState) return { cgstPaise: 0, sgstPaise: 0, igstPaise: gstPaise, intraState: false };
+  // An odd paise goes to CGST so the halves still sum to the total exactly.
+  const half = Math.floor(gstPaise / 2);
+  return { cgstPaise: gstPaise - half, sgstPaise: half, igstPaise: 0, intraState: true };
+}
+
 export interface OrderItem {
   productId: string | null;
   sku: string;
