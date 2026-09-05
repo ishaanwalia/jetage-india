@@ -11,6 +11,12 @@
  * travels with the lead email, and erasure means deleting mail. Building a
  * leads table to hold consent records would create more personal data than it
  * documents.
+ *
+ * **Orders are different, and the distinction matters.** Placing an order
+ * writes a name, email, phone and delivery address to the database and sends
+ * the same to a payment gateway. That is not an enquiry emailed and forgotten;
+ * it is stored personal data with a statutory retention period behind it, and
+ * it is described separately below.
  */
 
 /** The Data Fiduciary — the business that decides why data is collected here. */
@@ -69,10 +75,24 @@ export const DATA_RECIPIENTS: DataRecipient[] = [
   },
   {
     name: "Neon",
-    purpose: "Database for the product catalogue and the staff login",
+    purpose: "Database for the product catalogue, orders, and the staff login",
+    // This entry used to say "nothing about visitors". Checkout made that
+    // false the moment it shipped: an order row holds a name, email, phone
+    // and delivery address. Stated plainly rather than softened.
     receives:
-      "Nothing about visitors. Product and article content, and the staff accounts that manage it",
+      "If you place an order — your name, email, phone number, delivery address and what you bought. " +
+      "If you only browse — nothing. Also the product and article content, and the staff accounts that manage it",
     country: "United States",
+  },
+  {
+    name: "Razorpay",
+    purpose: "Takes the payment when you buy something",
+    // Card and UPI details never reach this site: Razorpay's own checkout
+    // collects them directly. Worth saying, because buyers assume otherwise.
+    receives:
+      "Your name, email, phone number and the amount payable. Your card, UPI or banking details go " +
+      "straight to Razorpay and never touch this website or our database",
+    country: "India",
   },
   {
     name: "Hostinger",
@@ -118,6 +138,22 @@ export const RETENTION: RetentionRule[] = [
     enforcement: "manual",
   },
   {
+    what: "Orders — your name, email, phone, delivery address and what you bought",
+    // Not a number we chose. Rule 56 of the CGST Rules requires the records
+    // behind a tax invoice to be kept for 72 months from the annual return's
+    // due date, and an order is one of those records. So this period is not
+    // ours to shorten on request, and the notice should not pretend it is.
+    period: "8 years, to cover the 72-month GST record-keeping requirement",
+    why: "It is a tax record. Also how we handle a warranty claim or a repeat order years later",
+    enforcement: "manual",
+  },
+  {
+    what: "Payment records held by Razorpay",
+    period: "Retained by Razorpay under their own RBI obligations",
+    why: "Settling the payment, and any refund or chargeback",
+    enforcement: "processor",
+  },
+  {
     what: "Vercel request logs (these include your IP address)",
     period: "Retained by Vercel on their plan's schedule",
     why: "Serving the site, and investigating faults or abuse",
@@ -137,6 +173,23 @@ export const RETENTION: RetentionRule[] = [
  * *older* wording rather than being silently read as agreement to this one.
  */
 export const CONSENT_NOTICE_VERSION = "2026-08-29c";
+
+/**
+ * The notice shown at checkout — a notice, deliberately, not a tick-box.
+ *
+ * Under Sec. 7(a) a Data Principal who *voluntarily provides* data for a
+ * specified purpose is a legitimate use, and typing a delivery address into a
+ * checkout is that: the purpose is self-evident from the act. A consent
+ * checkbox reading "I agree you may post me the thing I just bought" is
+ * theatre, and theatre is what makes real consent requests ignorable.
+ *
+ * What is owed instead is the honest disclosure — who gets the data and how
+ * long it is kept — which is why this sentence names both.
+ */
+export const CHECKOUT_NOTICE =
+  "We use your name, email, phone and address to fulfil this order and to contact you about it. " +
+  "Payment is handled by Razorpay — your card or UPI details never reach this site. " +
+  "Because an order is a tax record, we keep it for 8 years.";
 
 /** The exact sentence shown beside the quote form's consent checkbox. */
 export const CONSENT_PURPOSE =

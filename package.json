@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "db:migrate": "tsx scripts/migrate.ts",
-    "check:dpdp": "node scripts/check-dpdp.mjs"
+    "check:dpdp": "node scripts/check-dpdp.mjs",
+    "test": "node --test --import tsx src/lib/*.test.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

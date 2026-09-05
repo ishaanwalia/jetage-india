@@ -24,6 +24,15 @@ interface CartContextType {
   totalMrp: number;
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
+  /**
+   * False until the browser has read localStorage.
+   *
+   * The initial render happens on the server, where there is no cart, so any
+   * component that renders `items` must wait for this or React reports a
+   * hydration mismatch and throws the tree away. Exposed rather than handled
+   * internally because only the consumer knows what to show meanwhile.
+   */
+  isHydrated: boolean;
 }
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -112,6 +121,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         totalMrp,
         isCartOpen,
         setIsCartOpen,
+        isHydrated,
       }}
     >
       {children}

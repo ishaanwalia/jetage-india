@@ -9,6 +9,7 @@ import {
   Trash2,
   ShoppingCart,
   MessageCircle,
+  Lock,
   ArrowRight,
   Package,
 } from "lucide-react";
@@ -223,15 +224,26 @@ export function CartDrawer() {
                   </div>
                 </div>
 
-                {/* WhatsApp Order Button */}
+                {/* Pay online is the primary action now; WhatsApp stays as the
+                    secondary one because a good share of this trade still
+                    prefers to talk to somebody before paying. */}
+                <Link
+                  href="/checkout/"
+                  onClick={() => setIsCartOpen(false)}
+                  className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-jet-primary text-white rounded-xl font-bold text-lg hover:bg-jet-primary-dim transition-all hover:scale-[1.02] shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-jet-primary"
+                >
+                  <Lock className="w-5 h-5" aria-hidden />
+                  Checkout · ₹{totalPrice.toLocaleString()}
+                </Link>
+
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-jet-whatsapp text-jet-text rounded-xl font-bold text-lg hover:bg-[#128C7E] transition-all hover:scale-[1.02] shadow-lg"
+                  className="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-jet-whatsapp text-jet-text rounded-xl font-semibold hover:bg-[#128C7E] transition-all hover:scale-[1.02]"
                 >
-                  <MessageCircle className="w-6 h-6" />
-                  Order All on WhatsApp
+                  <MessageCircle className="w-5 h-5" />
+                  Or order on WhatsApp
                 </a>
 
                 <div className="flex gap-3">

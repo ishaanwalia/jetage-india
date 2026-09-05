@@ -2,10 +2,12 @@ import Link from "next/link";
 import { ArrowRight, FileText, Package, Plus, Star } from "lucide-react";
 import { adminListBlogs, adminListProducts, getDashboardStats } from "@/lib/cms";
 import { getCurrentUser } from "@/lib/auth";
+import { getOrderStats, formatPaise } from "@/lib/orders";
 
 export default async function AdminDashboard() {
-  const [stats, products, blogs, user] = await Promise.all([
+  const [stats, orderStats, products, blogs, user] = await Promise.all([
     getDashboardStats(),
+    getOrderStats(),
     adminListProducts(),
     adminListBlogs(),
     getCurrentUser(),
@@ -14,11 +16,13 @@ export default async function AdminDashboard() {
   const recentProducts = products.slice(-5).reverse();
   const recentBlogs = blogs.slice(0, 5);
 
-  const tiles = [
+  // Sales first: an unpaid order is the only thing on this screen that is
+  // time-sensitive, so it should not sit below the article count.
+  const tiles: { label: string; value: string | number; sub: string; href: string }[] = [
+    { label: "Revenue", value: formatPaise(orderStats.revenuePaise), sub: `${orderStats.paid} paid orders`, href: "/admin/orders?status=paid" },
+    { label: "Awaiting payment", value: orderStats.pending, sub: "needs a call", href: "/admin/orders?status=pending" },
     { label: "Products", value: Number(stats.products), sub: `${stats.product_drafts} drafts`, href: "/admin/products" },
-    { label: "Featured", value: Number(stats.featured), sub: "on the homepage", href: "/admin/products" },
     { label: "Articles", value: Number(stats.blogs), sub: `${stats.blog_drafts} drafts`, href: "/admin/blogs" },
-    { label: "Categories", value: Number(stats.categories), sub: "product groups", href: "/admin/products" },
   ];
 
   return (
