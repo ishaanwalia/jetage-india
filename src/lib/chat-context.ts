@@ -33,10 +33,17 @@ export const buildChatContext = unstable_cache(
       ORDER BY category_id, price
     `) as Record<string, string>[];
 
+    // Articles tagged FAQ come through in full; everything else as a title and
+    // a line. The assistant can only *answer* from text it has been given —
+    // with excerpts alone it could point at an article about a jammed printer
+    // but not say what to do about one. Tagging is the lever: the sales desk
+    // decides what the bot knows deeply by tagging an article FAQ in the CMS.
     const blogs = (await sql`
-      SELECT slug, title, excerpt FROM blogs WHERE status = 'published'
+      SELECT slug, title, excerpt, content,
+             (tags @> '["FAQ"]'::jsonb) AS is_faq
+      FROM blogs WHERE status = 'published'
       ORDER BY published_at DESC
-    `) as { slug: string; title: string; excerpt: string }[];
+    `) as { slug: string; title: string; excerpt: string; content: string; is_faq: boolean }[];
 
     // One line per product. Enough to recommend, compare and quote from;
     // deliberately not the full spec sheet, which is on the product page the
@@ -68,6 +75,20 @@ export const buildChatContext = unstable_cache(
       .map((b) => `- "${b.title}" — ${b.excerpt} → /blogs/${b.slug}/`)
       .join("\n");
 
+    // Budgeted rather than unbounded. Without a cap, tagging ten long articles
+    // FAQ would quietly grow every single chat request until somebody noticed
+    // the bill. Oldest-first truncation, because the newest FAQ is the one
+    // most likely to matter.
+    const FAQ_BUDGET = 24_000;
+    let used = 0;
+    const faqBodies: string[] = [];
+    for (const b of blogs.filter((b) => b.is_faq)) {
+      const block = `\n### ${b.title}\n(source: /blogs/${b.slug}/)\n\n${b.content.trim()}\n`;
+      if (used + block.length > FAQ_BUDGET) break;
+      faqBodies.push(block);
+      used += block.length;
+    }
+
     return `# Jetage India — shop facts
 
 Authorised HP dealer in Chandigarh, trading ${YEARS_TRADING} years (since 1989).
@@ -89,6 +110,11 @@ ${catalogue}
 
 ## Articles on the site
 ${articles}
+
+## Reference answers
+These are our own published answers. Prefer them over general knowledge, and
+link to the source article when you use one.
+${faqBodies.join("\n")}
 `;
   },
   ["chat-context"],
