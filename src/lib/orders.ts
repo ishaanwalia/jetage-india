@@ -45,6 +45,11 @@ export interface Order {
   razorpayOrderId: string | null;
   razorpayPaymentId: string | null;
   note: string | null;
+  buyerGstin: string | null;
+  placeOfSupply: string;
+  cgstPaise: number;
+  sgstPaise: number;
+  igstPaise: number;
   createdAt: string;
   paidAt: string | null;
   items: OrderItem[];
@@ -112,6 +117,7 @@ export async function createOrder(input: {
   customerName: string;
   shipAddress: ShipAddress;
   note?: string;
+  buyerGstin?: string | null;
 }): Promise<{ id: number; orderNo: string; publicToken: string }> {
   const orderNo = await nextOrderNo();
   // 256 bits. This token is the entirety of the buyer's authentication, so it
@@ -123,32 +129,75 @@ export async function createOrder(input: {
   // the sale on the day, and a later address edit must not restate the tax.
   const split = splitGst(input.totals.gstPaise, input.shipAddress.state);
 
+  // One statement, so it is atomic.
+  //
+  // This used to be an INSERT followed by a loop of item inserts. Over the
+  // HTTP driver each of those is a separate round trip with no transaction
+  // around them, so a failure partway through left an order row with some of
+  // its lines missing — and that order can still be paid. Chaining the writes
+  // as CTEs means Postgres either applies all of it or none of it.
+  const itemsJson = JSON.stringify(
+    input.items.map((i) => ({
+      product_id: i.productId,
+      sku: i.sku,
+      name: i.name,
+      image: i.image,
+      qty: i.qty,
+      unit_price_paise: i.unitPricePaise,
+      line_total_paise: i.lineTotalPaise,
+    })),
+  );
+
   const [order] = (await sql`
-    INSERT INTO orders (
-      order_no, public_token, email, phone, customer_name, ship_address,
-      subtotal_paise, gst_paise, shipping_paise, total_paise, note,
-      place_of_supply, cgst_paise, sgst_paise, igst_paise
-    ) VALUES (
-      ${orderNo}, ${publicToken}, ${input.email}, ${input.phone}, ${input.customerName},
-      ${JSON.stringify(input.shipAddress)},
-      ${input.totals.subtotalPaise}, ${input.totals.gstPaise},
-      ${input.totals.shippingPaise}, ${input.totals.totalPaise}, ${input.note ?? null},
-      ${input.shipAddress.state}, ${split.cgstPaise}, ${split.sgstPaise}, ${split.igstPaise}
+    WITH new_order AS (
+      INSERT INTO orders (
+        order_no, public_token, email, phone, customer_name, ship_address,
+        subtotal_paise, gst_paise, shipping_paise, total_paise, note,
+        place_of_supply, cgst_paise, sgst_paise, igst_paise, buyer_gstin
+      ) VALUES (
+        ${orderNo}, ${publicToken}, ${input.email}, ${input.phone}, ${input.customerName},
+        ${JSON.stringify(input.shipAddress)},
+        ${input.totals.subtotalPaise}, ${input.totals.gstPaise},
+        ${input.totals.shippingPaise}, ${input.totals.totalPaise}, ${input.note ?? null},
+        ${input.shipAddress.state}, ${split.cgstPaise}, ${split.sgstPaise}, ${split.igstPaise},
+        ${input.buyerGstin ?? null}
+      )
+      RETURNING id, order_no, public_token
+    ),
+    new_items AS (
+      INSERT INTO order_items
+        (order_id, product_id, sku, name, image, qty, unit_price_paise, line_total_paise)
+      SELECT o.id, x.product_id, x.sku, x.name, x.image, x.qty, x.unit_price_paise, x.line_total_paise
+      FROM new_order o, jsonb_to_recordset(${itemsJson}::jsonb) AS x(
+        product_id text, sku text, name text, image text,
+        qty integer, unit_price_paise bigint, line_total_paise bigint
+      )
+    ),
+    new_event AS (
+      INSERT INTO order_events (order_id, type, note)
+      SELECT id, 'placed', 'Order placed' FROM new_order
     )
-    RETURNING id, order_no, public_token
+    SELECT id, order_no, public_token FROM new_order
   `) as { id: number; order_no: string; public_token: string }[];
 
-  for (const i of input.items) {
-    await sql`
-      INSERT INTO order_items (order_id, product_id, sku, name, image, qty, unit_price_paise, line_total_paise)
-      VALUES (${order.id}, ${i.productId}, ${i.sku}, ${i.name}, ${i.image}, ${i.qty},
-              ${i.unitPricePaise}, ${i.lineTotalPaise})
-    `;
-  }
-
-  await addOrderEvent(order.id, "placed", { note: "Order placed" });
-
   return { id: order.id, orderNo: order.order_no, publicToken: order.public_token };
+}
+
+/**
+ * How many orders this address has placed recently.
+ *
+ * Throttling is keyed on email rather than IP on purpose: an IP address is
+ * personal data under the DPDP Act, and storing one to rate-limit would create
+ * a new category of data to disclose and retain. The email is already on the
+ * order.
+ */
+export async function recentOrderCount(email: string, minutes = 60): Promise<number> {
+  const [row] = (await sql`
+    SELECT count(*)::int AS n FROM orders
+    WHERE lower(email) = lower(${email})
+      AND created_at > now() - (${minutes} || ' minutes')::interval
+  `) as { n: number }[];
+  return row.n;
 }
 
 export async function addOrderEvent(
@@ -187,6 +236,11 @@ type OrderRow = {
   razorpay_order_id: string | null;
   razorpay_payment_id: string | null;
   note: string | null;
+  buyer_gstin: string | null;
+  place_of_supply: string;
+  cgst_paise: string | number;
+  sgst_paise: string | number;
+  igst_paise: string | number;
   created_at: string;
   paid_at: string | null;
 };
@@ -210,6 +264,11 @@ const toOrder = (r: OrderRow, items: OrderItem[]): Order => ({
   razorpayOrderId: r.razorpay_order_id,
   razorpayPaymentId: r.razorpay_payment_id,
   note: r.note,
+  buyerGstin: r.buyer_gstin,
+  placeOfSupply: r.place_of_supply,
+  cgstPaise: Number(r.cgst_paise),
+  sgstPaise: Number(r.sgst_paise),
+  igstPaise: Number(r.igst_paise),
   createdAt: r.created_at,
   paidAt: r.paid_at,
   items,

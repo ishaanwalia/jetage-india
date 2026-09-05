@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { neon } from "@neondatabase/serverless";
 import { verifyWebhookSignature } from "@/lib/razorpay";
 import { addOrderEvent } from "@/lib/orders";
@@ -65,9 +65,16 @@ export async function POST(req: Request) {
       if (!order) return NextResponse.json({ ok: true, duplicate: true });
 
       await addOrderEvent(order.id, "paid", { note: "Payment received" });
-      await notifyOrderPaid(order.id).catch((err) =>
-        console.error("[razorpay] confirmation email failed", err),
-      );
+
+      // After the 200, not before it. Razorpay gives a webhook only a few
+      // seconds before it calls the delivery failed and starts retrying — and
+      // an SMTP handshake here has been measured at ten. Holding the response
+      // open for the email is how you turn one payment into a retry storm.
+      after(async () => {
+        await notifyOrderPaid(order.id).catch((err) =>
+          console.error("[razorpay] confirmation email failed", err),
+        );
+      });
     }
 
     if (event.event === "payment.failed") {

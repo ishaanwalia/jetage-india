@@ -1,10 +1,12 @@
 "use server";
 
+import { after } from "next/server";
 import {
   priceCart,
   totalsFor,
   createOrder,
   attachRazorpayOrder,
+  recentOrderCount,
   type CartLine,
   type ShipAddress,
 } from "@/lib/orders";
@@ -45,6 +47,19 @@ const isPincode = (v: string) => /^[1-9][0-9]{5}$/.test(v);
 const isPhone = (v: string) => /^[6-9][0-9]{9}$/.test(v.replace(/[^0-9]/g, "").slice(-10));
 const isEmail = (v: string) => /^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$/.test(v);
 
+/**
+ * GSTIN: 2-digit state code, 10-character PAN, entity digit, 'Z', checksum.
+ *
+ * Shape only — this cannot tell you the number belongs to the person typing
+ * it, and it is not validated against the GST portal. It catches a typo before
+ * the number reaches an invoice, which is what it is for.
+ */
+const isGstin = (v: string) =>
+  /^[0-3][0-9][A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(v);
+
+/** One buyer, one hour. Past this the counter should be phoning them anyway. */
+const MAX_ORDERS_PER_HOUR = 6;
+
 export async function placeOrder(input: {
   cart: CartLine[];
   name: string;
@@ -52,10 +67,12 @@ export async function placeOrder(input: {
   phone: string;
   address: ShipAddress;
   note?: string;
+  gstin?: string;
 }): Promise<CheckoutResult> {
   const name = input.name?.trim() ?? "";
   const email = input.email?.trim() ?? "";
   const phone = (input.phone ?? "").replace(/[^0-9]/g, "").slice(-10);
+  const gstin = (input.gstin ?? "").trim().toUpperCase();
 
   // Validated here rather than only in the browser: this is a server action,
   // reachable without the form.
@@ -74,6 +91,22 @@ export async function placeOrder(input: {
   if (!address.city) return { ok: false, error: "Please enter your city." };
   if (!address.state) return { ok: false, error: "Please select your state." };
   if (!isPincode(address.pincode)) return { ok: false, error: "Please enter a valid 6-digit PIN code." };
+
+  // Optional — but if they typed something, it goes on a tax invoice, so a
+  // malformed one is rejected rather than quietly saved.
+  if (gstin && !isGstin(gstin)) {
+    return { ok: false, error: "That GSTIN doesn't look right. Check it, or leave it blank." };
+  }
+
+  // Throttle on the email, which is already on the order — rate-limiting by IP
+  // would mean storing an IP, and that is personal data we would then have to
+  // disclose and retain.
+  if ((await recentOrderCount(email)) >= MAX_ORDERS_PER_HOUR) {
+    return {
+      ok: false,
+      error: "That's a lot of orders in one hour. Please call us on +91 98149 58295 and we'll sort it out.",
+    };
+  }
 
   const requested = input.cart ?? [];
   const items = await priceCart(requested);
@@ -103,14 +136,20 @@ export async function placeOrder(input: {
     customerName: name,
     shipAddress: address,
     note: input.note?.trim() || undefined,
+    buyerGstin: gstin || null,
   });
 
-  // Send the "we have your order" mail now, on the pending order. The buyer
-  // gets their tracking link even if they abandon the payment sheet, which is
-  // also what lets the counter follow up on a dropped checkout.
-  await notifyOrderPlaced(order.id).catch((err) =>
-    console.error("[checkout] placed-order email failed", err),
-  );
+  // Email goes out AFTER the response, not before it.
+  //
+  // Awaiting the SMTP handshake here cost ten seconds of spinner between
+  // pressing Pay and the payment sheet opening — measured, not guessed. The
+  // buyer does not need the email to have landed before they can pay, and the
+  // slowest thing in the request has no business being on the critical path.
+  after(async () => {
+    await notifyOrderPlaced(order.id).catch((err) =>
+      console.error("[checkout] placed-order email failed", err),
+    );
+  });
 
   if (!razorpayConfigured()) {
     // No keys yet. The order stands and the counter collects payment — the

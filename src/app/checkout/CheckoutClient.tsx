@@ -64,6 +64,8 @@ export function CheckoutClient() {
   const [state, setState] = useState("");
   const [pincode, setPincode] = useState("");
   const [note, setNote] = useState("");
+  const [gstin, setGstin] = useState("");
+  const [showGstin, setShowGstin] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -98,6 +100,7 @@ export function CheckoutClient() {
         phone,
         address: { line1, line2, city, state, pincode },
         note,
+        gstin,
       });
 
       if (!result.ok) {
@@ -211,6 +214,40 @@ export function CheckoutClient() {
                   </label>
                   <input id="phone" type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)}
                     autoComplete="tel" inputMode="numeric" placeholder="10 digits" className={inputClass} />
+                </div>
+
+                {/* Businesses buy printers and toner as much as households do,
+                    and without their GSTIN on the invoice they cannot claim
+                    the input credit — which is a reason to buy elsewhere.
+                    Collapsed by default so it costs a retail buyer nothing. */}
+                <div className="sm:col-span-2">
+                  {!showGstin ? (
+                    <button
+                      type="button"
+                      onClick={() => setShowGstin(true)}
+                      className="text-sm font-medium text-jet-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jet-primary rounded"
+                    >
+                      + Buying for a business? Add your GSTIN
+                    </button>
+                  ) : (
+                    <>
+                      <label htmlFor="gstin" className="block text-sm font-medium text-jet-text-dim mb-1.5">
+                        GSTIN <span className="text-jet-text-muted font-normal">(optional)</span>
+                      </label>
+                      <input
+                        id="gstin"
+                        value={gstin}
+                        onChange={(e) => setGstin(e.target.value.toUpperCase())}
+                        maxLength={15}
+                        placeholder="04ABCDE1234F1Z5"
+                        aria-describedby="gstin-help"
+                        className={`${inputClass} font-mono tracking-wide`}
+                      />
+                      <p id="gstin-help" className="text-xs text-jet-text-muted mt-1.5">
+                        We&rsquo;ll put this on your tax invoice so you can claim input credit.
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             </section>

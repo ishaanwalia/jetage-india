@@ -102,7 +102,7 @@ export function CartDrawer() {
                   </div>
                   <p className="text-jet-text-dim font-medium">Your cart is empty</p>
                   <p className="text-sm text-jet-text-muted">
-                    Add products to create a bulk WhatsApp order
+                    Add products and check out, or send the list on WhatsApp
                   </p>
                   <button
                     onClick={() => setIsCartOpen(false)}

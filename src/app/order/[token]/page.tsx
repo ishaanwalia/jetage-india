@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { CheckCircle2, Clock, Package, Truck, Home, XCircle } from "lucide-react";
+import { CheckCircle2, Clock, Package, Truck, Home, XCircle, FileText } from "lucide-react";
 import { getOrderByToken, getPublicEvents, formatPaise } from "@/lib/orders";
 
 /**
@@ -196,6 +196,16 @@ export default async function OrderPage({
           </section>
         )}
       </div>
+
+      {/* Only once it's paid — there is nothing to invoice before that. */}
+      {order.status !== "pending" && order.status !== "cancelled" && (
+        <Link
+          href={`/order/${order.publicToken}/invoice/`}
+          className="mb-8 inline-flex items-center gap-2 rounded-xl border border-jet-border bg-jet-bg-card px-5 py-3 text-sm font-semibold text-jet-text-dim transition-colors hover:border-jet-primary/40 hover:text-jet-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-jet-primary"
+        >
+          <FileText className="h-4 w-4" aria-hidden /> View tax invoice
+        </Link>
+      )}
 
       <p className="text-sm text-jet-text-dim">
         Questions about this order? Call{" "}
