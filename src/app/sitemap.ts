@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/warranty/`, lastModified, changeFrequency: "yearly", priority: 0.4 },
     { url: `${BASE_URL}/privacy/`, lastModified, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE_URL}/terms/`, lastModified, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/refund/`, lastModified, changeFrequency: "yearly", priority: 0.3 },
   ];
 
   const productPages: MetadataRoute.Sitemap = products.map((product) => ({

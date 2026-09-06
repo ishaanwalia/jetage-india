@@ -27,12 +27,12 @@ export default function TermsPage() {
     {
       icon: CreditCard,
       title: "Payment Terms",
-      content: "We accept payments via UPI, bank transfer, and cash on delivery for select orders. Full payment must be received before shipping. For bulk orders, a 50% advance may be required. All prices include applicable GST unless otherwise stated."
+      content: "Online orders are paid at checkout by card, UPI or netbanking, handled by Razorpay — your card and banking details go directly to them and never reach this website. At the counter we also accept bank transfer, and cash on delivery for select orders. For bulk orders, a 50% advance may be required. All prices shown include GST."
     },
     {
       icon: Truck,
       title: "Shipping & Delivery",
-      content: "We deliver across India. Delivery times vary by location and typically range from 3-7 business days. Shipping costs are calculated at checkout based on weight and destination. Risk of loss passes to the buyer upon delivery. We are not responsible for delays caused by carriers or force majeure events."
+      content: "We deliver across India and delivery is free — there is no shipping charge at checkout. Delivery times vary by location and typically range from 3-7 business days. Risk of loss passes to the buyer upon delivery. We are not responsible for delays caused by carriers or force majeure events."
     },
     {
       icon: RotateCcw,

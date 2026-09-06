@@ -18,6 +18,7 @@ export function Footer() {
   const supportLinks = [
     { label: "Contact Us", href: "/contact/" },
     { label: "Shipping & Returns", href: "/shipping/" },
+    { label: "Cancellation & Refund Policy", href: "/refund/" },
     { label: "Warranty Info", href: "/warranty/" },
     { label: "Privacy Policy", href: "/privacy/" },
     { label: "Terms of Service", href: "/terms/" },
@@ -161,6 +162,7 @@ export function Footer() {
             <Link href="/privacy/#grievance" className="hover:text-jet-primary transition-colors">Grievance</Link>
             <Link href="/terms/" className="hover:text-jet-primary transition-colors">Terms</Link>
             <Link href="/shipping/" className="hover:text-jet-primary transition-colors">Shipping</Link>
+            <Link href="/refund/" className="hover:text-jet-primary transition-colors">Refunds</Link>
             <Link href="/warranty/" className="hover:text-jet-primary transition-colors">Warranty</Link>
           </div>
         </div>
