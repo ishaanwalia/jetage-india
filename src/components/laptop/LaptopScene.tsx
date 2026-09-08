@@ -9,7 +9,7 @@ import {
   RIGGED_MODEL_URL,
   type LaptopVariant,
 } from "@/lib/laptop-variants";
-import { createScreenTexture } from "./screen-texture";
+import { createLogoTexture, createScreenTexture } from "./screen-texture";
 
 const DRACO_PATH = "/draco/";
 /** Longest edge the model is normalised to, so camera distances are meaningful. */
@@ -88,7 +88,7 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
     // Sketchfab baked these as "palette" materials: the baseColour map is a
     // ~176-byte swatch atlas, so dropping it costs no detail and buys exact
     // colour control. The metallic/roughness maps stay — they do the shading.
-    for (const mat of [...chassis, ...logo]) mat.map = null;
+    for (const mat of chassis) mat.map = null;
 
     return {
       lid,
@@ -113,7 +113,14 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
   }, [scene]);
 
   const screenTex = useMemo(() => createScreenTexture(variant), []); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => () => screenTex.texture.dispose(), [screenTex]);
+  const logoTex = useMemo(() => createLogoTexture(), []);
+  useEffect(
+    () => () => {
+      screenTex.texture.dispose();
+      logoTex.dispose();
+    },
+    [screenTex, logoTex]
+  );
 
   useEffect(() => {
     for (const mat of parts.chassis) {
@@ -125,11 +132,17 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
       mat.emissiveIntensity = 1.6;
       mat.needsUpdate = true;
     }
-    // A leftover decal quad that ships as a flat purple swatch. The OMEN
-    // wordmark is already modelled into the lid, so this has nothing to say —
-    // match it to the shell and let it disappear.
+    // The blank decal square dead centre on the lid, carrying the HP roundel.
+    // glTF defaults metalness to 1 when unspecified, which is why this plate
+    // rendered as a black rectangle before — a full metal with nothing to
+    // reflect. Dial it back to a painted badge.
     for (const mat of parts.logo) {
-      mat.color.set(variant.chassis);
+      mat.color.set("#ffffff");
+      mat.map = logoTex;
+      mat.metalness = 0.15;
+      mat.roughness = 0.45;
+      mat.transparent = true;
+      mat.emissive.set("#000000");
       mat.emissiveIntensity = 0;
       mat.needsUpdate = true;
     }
@@ -142,7 +155,7 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
       screen.toneMapped = true;
       screen.needsUpdate = true;
     }
-  }, [parts, variant, screenTex]);
+  }, [parts, variant, screenTex, logoTex]);
 
   useFrame((state) => {
     const p = reducedMotion ? STILL.p : progress.current;

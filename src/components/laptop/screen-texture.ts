@@ -83,6 +83,38 @@ export function paintScreen(canvas: HTMLCanvasElement, v: LaptopVariant) {
 }
 
 /**
+ * The HP roundel for the lid plate. The model ships a blank square decal dead
+ * centre on the lid, which is exactly where the badge belongs — so this paints
+ * into it rather than adding geometry.
+ */
+export function createLogoTexture() {
+  const S = 512;
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = S;
+  const ctx = canvas.getContext("2d");
+
+  if (ctx) {
+    ctx.clearRect(0, 0, S, S);
+    ctx.fillStyle = "#0096D6";
+    ctx.beginPath();
+    ctx.arc(S / 2, S / 2, S * 0.4, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "italic 700 210px Inter, system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("hp", S / 2, S / 2 + 8);
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.flipY = false;
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 4;
+  return texture;
+}
+
+/**
  * A screen texture that can be repainted in place. glTF textures are sampled
  * with flipY=false, so match that or the wallpaper lands upside down on the
  * model's existing UVs.

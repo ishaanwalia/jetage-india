@@ -35,11 +35,15 @@ export type LaptopVariant = {
   model?: string;
 };
 
+// These are FINISHES of the one chassis we have a mesh for, and the copy says
+// so. Labelling a silver OMEN a "Pavilion" would be a lie the model itself
+// contradicts — the OMEN wordmark is right there on the chin once it opens.
+// Real HP lines go in here the day each one has its own rigged GLB.
 export const LAPTOP_VARIANTS: LaptopVariant[] = [
   {
-    id: "omen",
-    name: "OMEN",
-    tagline: "Gaming, at full tilt",
+    id: "shadow",
+    name: "Shadow Black",
+    tagline: "OMEN · gaming, at full tilt",
     chassis: "#26292f",
     backlight: "#22d3ee",
     accent: "#22d3ee",
@@ -51,43 +55,43 @@ export const LAPTOP_VARIANTS: LaptopVariant[] = [
     },
   },
   {
-    id: "victus",
-    name: "Victus",
-    tagline: "Serious play, sensible price",
+    id: "cobalt",
+    name: "Performance Blue",
+    tagline: "OMEN · built for long sessions",
     chassis: "#2f4270",
     backlight: "#60a5fa",
     accent: "#60a5fa",
     screen: {
-      heading: "Victus",
+      heading: "OMEN",
       sub: "RTX 4050 · 144Hz · 16GB DDR5",
       from: "#0b1220",
       to: "#1d4ed8",
     },
   },
   {
-    id: "pavilion",
-    name: "Pavilion",
-    tagline: "The everyday all-rounder",
-    chassis: "#98a1ab",
+    id: "ceramic",
+    name: "Ceramic White",
+    tagline: "OMEN · the quiet one",
+    chassis: "#a9b1ba",
     backlight: "#e2e8f0",
     accent: "#94a3b8",
     screen: {
-      heading: "Pavilion",
-      sub: "Core i5 · 16GB · all-day battery",
+      heading: "OMEN",
+      sub: "Core i7 · 16GB · all-day battery",
       from: "#111827",
       to: "#64748b",
     },
   },
   {
-    id: "elitebook",
-    name: "EliteBook",
-    tagline: "Built for the office floor",
+    id: "mica",
+    name: "Mica Silver",
+    tagline: "OMEN · desk-friendly finish",
     chassis: "#4c545f",
     backlight: "#38bdf8",
     accent: "#0891b2",
     screen: {
-      heading: "EliteBook",
-      sub: "vPro · Sure View · 3-year warranty",
+      heading: "OMEN",
+      sub: "vPro · 3-year onsite warranty",
       from: "#0f172a",
       to: "#155e75",
     },
