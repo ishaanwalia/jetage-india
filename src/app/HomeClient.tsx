@@ -54,7 +54,6 @@ const HOME_SECTIONS = [
   { id: "featured", label: "Featured" },
   { id: "process", label: "How It Works" },
   { id: "showroom", label: "Showroom" },
-  { id: "advantage", label: "Why Jetage" },
   { id: "testimonials", label: "Reviews" },
   { id: "cta", label: "Get Started" },
 ];
@@ -233,41 +232,6 @@ export function HomeClient() {
       <div id="showroom">
         <ShowroomSection />
       </div>
-
-      {/* ==================== WHY JETAGE ==================== */}
-      <section id="advantage" className="py-20 relative">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <Reveal direction="up" className="text-center mb-12 space-y-4">
-            <span className="inline-block px-4 py-1.5 bg-jet-primary/10 text-jet-primary text-sm font-semibold rounded-full border border-jet-primary/20">
-              Why Jetage
-            </span>
-            <h2 className="text-4xl lg:text-6xl font-bold text-jet-text">
-              The Jetage <span className="text-gradient-gold">Advantage</span>
-            </h2>
-          </Reveal>
-
-          <StaggerReveal className="grid md:grid-cols-2 lg:grid-cols-3 gap-5" direction="up" stagger={0.1}>
-            {[
-              { icon: Award, title: "Authorized HP World", description: "Genuine HP products with full manufacturer warranty and official support. No grey market risks." },
-              { icon: Phone, title: "WhatsApp Ordering", description: "Order instantly via WhatsApp. Get quotes, place orders, and track delivery — all on your phone." },
-              { icon: Zap, title: "Best Price Guarantee", description: "We match and beat competitor prices. Exclusive deals you won't find on Amazon or Flipkart." },
-              { icon: Shield, title: "Expert Consultation", description: `${YEARS_TRADING}+ years of tech expertise. We help you choose the right product for your exact needs.` },
-              { icon: Truck, title: "All India Delivery", description: "Fast, insured shipping across India. Special handling for fragile components." },
-              { icon: Clock, title: "After-Sales Support", description: "Dedicated support for installation, setup, and troubleshooting. We're just a message away." }
-            ].map((item, i) => (
-              <SpotlightCard key={i}>
-                <div className="group p-8 rounded-3xl bg-jet-bg-card border border-jet-border hover:border-jet-border-strong transition-all duration-500 hover:shadow-premium h-full cursor-default">
-                  <div className="w-14 h-14 bg-jet-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-jet-primary group-hover:scale-110 transition-all duration-500 border border-jet-primary/20">
-                    <item.icon className="w-7 h-7 text-jet-primary group-hover:text-jet-bg transition-colors" />
-                  </div>
-                  <h3 className="text-xl font-bold text-jet-text mb-3 group-hover:text-jet-primary transition-colors">{item.title}</h3>
-                  <p className="text-jet-text-dim leading-relaxed">{item.description}</p>
-                </div>
-              </SpotlightCard>
-            ))}
-          </StaggerReveal>
-        </div>
-      </section>
 
       {/* ==================== TESTIMONIALS ==================== */}
       <div id="testimonials">

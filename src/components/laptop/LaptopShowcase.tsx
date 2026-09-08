@@ -5,15 +5,13 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+
 import { ChevronRight, MessageCircle, MousePointer2, Sparkles } from "lucide-react";
 import { LAPTOP_VARIANTS, type LaptopVariant } from "@/lib/laptop-variants";
 import { YEARS_TRADING } from "@/lib/business";
 import { MagneticButton } from "@/components/MagneticButton";
 import { Typewriter } from "@/components/Typewriter";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+import { ScreenPanel } from "./ScreenPanel";
 
 // three + drei is a ~300KB gzip chunk; keep it out of the initial bundle.
 const LaptopScene = dynamic(() => import("./LaptopScene").then((m) => m.LaptopScene), {
@@ -28,8 +26,10 @@ const LaptopScene = dynamic(() => import("./LaptopScene").then((m) => m.LaptopSc
 export function LaptopShowcase() {
   const router = useRouter();
   const wrap = useRef<HTMLDivElement>(null);
-  const progress = useRef(0);
   const spin = useRef(0);
+  const portalRef = useRef<HTMLDivElement>(null);
+  const copyRef = useRef<HTMLDivElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
   const [variant, setVariant] = useState<LaptopVariant>(LAPTOP_VARIANTS[0]);
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -41,38 +41,9 @@ export function LaptopShowcase() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  useGSAP(
-    () => {
-      if (reducedMotion) return;
-
-      // Publishes normalised scroll progress into a ref. The 3D scene reads it
-      // in useFrame, so nothing here re-renders React while scrolling.
-      ScrollTrigger.create({
-        trigger: wrap.current,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 0.6,
-        onUpdate: (self) => {
-          progress.current = self.progress;
-        },
-      });
-
-      // The hero copy stays put for the whole pinned run — only the laptop
-      // animates. The hint is the one thing that gets out of the way, and it
-      // needs its own short trigger rather than a slice of the run above.
-      gsap.to(".jet-scroll-hint", {
-        opacity: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: wrap.current,
-          start: "top top",
-          end: "+=320",
-          scrub: true,
-        },
-      });
-    },
-    { scope: wrap, dependencies: [reducedMotion] }
-  );
+  // No ScrollTrigger here on purpose. The scene already runs a frame loop, so
+  // it reads the wrapper's scroll position itself and drives the 3D, the hero
+  // copy and the portal from that one number in a single frame.
 
   const pick = (next: LaptopVariant) => {
     if (next.id === variant.id) return;
@@ -121,7 +92,7 @@ export function LaptopShowcase() {
       aria-label="Explore HP laptops in 3D"
       className="relative bg-jet-bg"
     >
-      <div ref={wrap} className={reducedMotion ? "relative" : "relative h-[340vh]"}>
+      <div ref={wrap} className={reducedMotion ? "relative" : "relative h-[520vh]"}>
         <div
           className={`${
             reducedMotion ? "relative" : "sticky top-0"
@@ -138,16 +109,19 @@ export function LaptopShowcase() {
 
           <div className="absolute inset-0">
             <LaptopScene
-              progress={progress}
               spin={spin}
               variant={variant}
               reducedMotion={reducedMotion}
+              wrapRef={wrap}
+              portalRef={portalRef}
+              copyRef={copyRef}
+              hintRef={hintRef}
             />
           </div>
 
           <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
             <div className="relative max-w-xl">
-              <div className="space-y-5">
+              <div ref={copyRef} className="space-y-5 will-change-transform">
                 <div
                   onDoubleClick={() => router.push("/admin/")}
                   className="group inline-flex cursor-default items-center gap-2 rounded-full border border-jet-primary/20 bg-jet-primary/10 px-4 py-2 text-sm font-medium text-jet-primary transition-all hover:border-jet-primary/40"
@@ -203,14 +177,41 @@ export function LaptopShowcase() {
             </div>
           </div>
 
+          {/* Act II, riding on the glass. The scene writes this element's
+              transform every frame so it sits exactly on the display, growing
+              with it until it IS the viewport. Authored at viewport size so one
+              uniform scale works.
+
+              Deliberately NOT aria-hidden: this is the only place the Jetage
+              Advantage now lives, so it has to be real content for readers and
+              for search, not decoration. Reduced motion gets it in plain flow
+              below instead — the animation must never be the only way to read
+              the business. */}
           {!reducedMotion && (
-            <div className="jet-scroll-hint pointer-events-none absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full border border-jet-border bg-jet-bg-card/80 px-5 py-2.5 text-sm font-medium text-jet-text-dim backdrop-blur-md">
+            <div
+              ref={portalRef}
+              className="pointer-events-none absolute inset-0 z-20 opacity-0 will-change-transform"
+            >
+              <ScreenPanel />
+            </div>
+          )}
+
+          {!reducedMotion && (
+            <div ref={hintRef} className="jet-scroll-hint pointer-events-none absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full border border-jet-border bg-jet-bg-card/80 px-5 py-2.5 text-sm font-medium text-jet-text-dim backdrop-blur-md">
               <MousePointer2 className="h-4 w-4" />
               Scroll to open
             </div>
           )}
         </div>
       </div>
+
+      {/* Without the scroll story there is no screen to reveal it in, so the
+          advantages simply sit on the page. */}
+      {reducedMotion && (
+        <div className="py-16">
+          <ScreenPanel />
+        </div>
+      )}
     </section>
   );
 }

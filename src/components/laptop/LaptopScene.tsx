@@ -2,9 +2,10 @@
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ContactShadows, Environment, useGLTF } from "@react-three/drei";
-import { Suspense, useEffect, useMemo, useRef, type RefObject } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, type RefObject } from "react";
 import * as THREE from "three";
 import {
+  LAPTOP_VARIANTS,
   LID_OPEN_RADIANS,
   RIGGED_MODEL_URL,
   type LaptopVariant,
@@ -33,35 +34,124 @@ function ramp(p: number, stops: Stop[]) {
   return stops[stops.length - 1][1];
 }
 
-const OPEN = (p: number) => ramp(p, [[0.06, 0], [0.36, 1]]);
-const SCREEN_ON = (p: number) => ramp(p, [[0.3, 0], [0.48, 1]]);
-const AZIMUTH: Stop[] = [[0, -0.62], [0.4, 0.06], [0.72, 0.95], [1, -0.3]];
-const RADIUS: Stop[] = [[0, 6.4], [0.4, 5.0], [0.72, 4.7], [1, 6.0]];
-const HEIGHT: Stop[] = [[0, 2.6], [0.4, 1.5], [0.72, 1.1], [1, 2.3]];
-const LOOK_Y: Stop[] = [[0, 0.3], [0.4, 0.55], [1, 0.4]];
+// The whole story on one scrubbed clock, read from scroll position:
+//   0.00-0.08  settle, lid shut, held in the empty right-hand half
+//   0.08-0.28  lid opens — still clear of the headline column
+//   0.40-0.58  copy clears, laptop walks to centre and squares up
+//   0.50-0.64  the display grows to fill the frame; the panel takes over
+//   0.64-0.72  HOLD — nothing moves, the advantages are readable
+//   0.72-0.80  pull back out; the laptop fades in again
+//   0.76-0.88  it tumbles through upside-down as the lid folds shut
+//   0.87-1.00  the closing parade: every finish, one after another
+/** Lid opens for the approach, then folds shut again during the flip. */
+const OPEN = (p: number) => ramp(p, [[0.08, 0], [0.28, 1], [0.76, 1], [0.87, 0]]);
+const SCREEN_ON = (p: number) => ramp(p, [[0.2, 0], [0.4, 1], [0.76, 1], [0.84, 0]]);
+/** How far the camera has abandoned the orbit for a head-on approach. */
+const ALIGN = (p: number) => ramp(p, [[0.42, 0], [0.58, 1], [0.7, 1], [0.8, 0]]);
+/** Distance in front of the display once aligned — this is the push-in. */
+const DOLLY = (p: number) => ramp(p, [[0.42, 4.6], [0.6, 1.0], [0.7, 1.0], [0.8, 3.4]]);
+/** The panel behind the glass fades up, holds through the pause, then goes. */
+const PANEL_IN = (p: number) => ramp(p, [[0.5, 0], [0.62, 1], [0.72, 1], [0.8, 0]]);
+/** The laptop dissolves for the pause, then comes back for the flip. */
+const LAPTOP_OUT = (p: number) => ramp(p, [[0.56, 0], [0.64, 1], [0.72, 1], [0.8, 0]]);
+/**
+ * Unwinds the hero's right-hand offset. Runs ahead of ALIGN so the laptop has
+ * already walked back to centre by the time the panel is readable — the display
+ * opens in the middle of the frame, not off to one side — and stays centred.
+ */
+const CENTRE = (p: number) => ramp(p, [[0.4, 0], [0.56, 1]]);
+/** A full tumble as the lid shuts: passes through upside-down, lands upright. */
+const FLIP = (p: number) => ramp(p, [[0.76, 0], [0.88, 1]]);
+/** Drives the closing colourway parade. */
+const SHOWCASE = (p: number) => ramp(p, [[0.87, 0], [1, 1]]);
+
+const AZIMUTH: Stop[] = [[0, -0.55], [0.3, -0.34], [0.56, 0], [0.8, 0], [1, 0.85]];
+const RADIUS: Stop[] = [[0, 7.4], [0.3, 6.9], [0.56, 6.4], [0.8, 6.4], [1, 6.8]];
+const HEIGHT: Stop[] = [[0, 2.5], [0.3, 2.1], [0.56, 1.8], [0.8, 2.0], [1, 2.4]];
+const LOOK_Y: Stop[] = [[0, 0.52], [0.42, 0.75], [0.8, 0.8], [1, 0.7]];
 
 /**
  * Slide the subject into the right-hand half on landscape viewports so the
  * headline column stays clear. Done by dollying the camera sideways after
- * lookAt, which shifts the framing without bending the orbit.
+ * lookAt, which shifts the framing without bending the orbit. It has to unwind
+ * to zero as the display takes over, or the portal would open off-centre.
  */
 function screenShift(aspect: number) {
   if (aspect < 1.1) return 0; // portrait: centre it, copy stacks above
-  return THREE.MathUtils.lerp(0.4, 1.5, THREE.MathUtils.clamp((aspect - 1.1) / 0.9, 0, 1));
+  return THREE.MathUtils.lerp(0.7, 2.3, THREE.MathUtils.clamp((aspect - 1.1) / 0.9, 0, 1));
 }
 
 /** Where the scene rests when motion is suppressed: open, three-quarter view. */
-const STILL = { p: 0.45, open: 1 };
+const STILL = { p: 0.4, open: 1 };
 
 type SceneProps = {
-  progress: RefObject<number>;
   spin: RefObject<number>;
   variant: LaptopVariant;
   reducedMotion: boolean;
+  /** The tall wrapper whose scroll position IS the timeline. */
+  wrapRef: RefObject<HTMLDivElement | null>;
+  /** The DOM panel that has to end up sitting exactly where the display is. */
+  portalRef: RefObject<HTMLDivElement | null>;
+  /** Hero copy and scroll hint, faded from the same clock as the 3D. */
+  copyRef: RefObject<HTMLDivElement | null>;
+  hintRef: RefObject<HTMLDivElement | null>;
 };
 
-function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
+/**
+ * Bounds of a subtree in its OWN local space.
+ *
+ * Box3.setFromObject walks matrixWorld, so once this scene has been parented to
+ * the scaled group even once, it measures itself already multiplied by that
+ * scale — and useGLTF caches the scene across remounts. Fitting off that gives
+ * FIT/(size*scale), collapsing the next scale to ~1 and rendering a miniature
+ * laptop. Composing local matrices from the root makes the fit reproducible.
+ */
+function localBounds(root: THREE.Object3D) {
+  const box = new THREE.Box3();
+  const stack: Array<[THREE.Object3D, THREE.Matrix4]> = root.children.map((c) => [
+    c,
+    new THREE.Matrix4(),
+  ]);
+  while (stack.length) {
+    const [obj, parentMatrix] = stack.pop()!;
+    obj.updateMatrix();
+    const matrix = new THREE.Matrix4().multiplyMatrices(parentMatrix, obj.matrix);
+    const mesh = obj as THREE.Mesh;
+    if (mesh.isMesh && mesh.geometry) {
+      if (!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox();
+      box.union(mesh.geometry.boundingBox!.clone().applyMatrix4(matrix));
+    }
+    for (const child of obj.children) stack.push([child, matrix]);
+  }
+  return box;
+}
+
+/**
+ * Scroll position of the pinned wrapper, 0-1.
+ *
+ * Read straight from layout rather than pushed in by ScrollTrigger: the whole
+ * act runs off one number, and taking it here means the 3D, the copy and the
+ * portal are all reading the same value in the same frame — no scrub lag and
+ * nothing to fall out of sync.
+ */
+function readProgress(el: HTMLDivElement | null) {
+  if (!el) return 0;
+  const r = el.getBoundingClientRect();
+  const span = r.height - window.innerHeight;
+  return span > 0 ? THREE.MathUtils.clamp(-r.top / span, 0, 1) : 0;
+}
+
+function Laptop({
+  spin,
+  variant,
+  reducedMotion,
+  wrapRef,
+  portalRef,
+  copyRef,
+  hintRef,
+}: SceneProps) {
   const { scene } = useGLTF(RIGGED_MODEL_URL, DRACO_PATH);
+  const { camera, size } = useThree();
   const group = useRef<THREE.Group>(null);
 
   // The rig ships two nodes: Base, and Lid whose origin sits on the hinge with
@@ -70,21 +160,32 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
     const lid = scene.getObjectByName("Lid") ?? null;
     const chassis: THREE.MeshStandardMaterial[] = [];
     const backlight: THREE.MeshStandardMaterial[] = [];
+    const all: THREE.MeshStandardMaterial[] = [];
+    const doomed: THREE.Mesh[] = [];
     let screen: THREE.MeshStandardMaterial | null = null;
+    let screenMesh: THREE.Mesh | null = null;
 
     scene.traverse((child) => {
       const mesh = child as THREE.Mesh;
       if (!mesh.isMesh) return;
       for (const raw of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
         const mat = raw as THREE.MeshStandardMaterial;
+        all.push(mat);
         if (mat.name.startsWith("PaletteMaterial001")) chassis.push(mat);
         else if (mat.name.startsWith("PaletteMaterial003")) backlight.push(mat);
         // A blank decal square the source model leaves dead centre on the lid.
         // A real OMEN carries no badge there, so drop it rather than invent one.
-        else if (mat.name.startsWith("PaletteMaterial002")) mesh.visible = false;
-        else if (mat.name.startsWith("PaletteMaterial004")) screen = mat;
+        // Detached rather than hidden: setting .visible did not survive the
+        // reconciler re-attaching the cached scene, and it kept reappearing.
+        else if (mat.name.startsWith("PaletteMaterial002")) doomed.push(mesh);
+        else if (mat.name.startsWith("PaletteMaterial004")) {
+          screen = mat;
+          screenMesh = mesh;
+        }
       }
     });
+
+    for (const mesh of doomed) mesh.removeFromParent();
 
     // Sketchfab baked these as "palette" materials: the baseColour map is a
     // ~176-byte swatch atlas, so dropping it costs no detail and buys exact
@@ -95,49 +196,97 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
       lid,
       chassis,
       backlight,
+      all,
       screen: screen as THREE.MeshStandardMaterial | null,
+      screenMesh: screenMesh as THREE.Mesh | null,
     };
   }, [scene]);
+
+  // The display is a single quad; its four corners are all the portal needs.
+  const corners = useMemo(() => {
+    const mesh = parts.screenMesh;
+    if (!mesh) return [];
+    const pos = mesh.geometry.attributes.position;
+    return Array.from({ length: pos.count }, (_, i) =>
+      new THREE.Vector3().fromBufferAttribute(pos, i)
+    );
+  }, [parts.screenMesh]);
 
   // Normalise once, from the CLOSED rest pose, so the fit doesn't change as the
   // lid swings. Centre on X/Z and sit the base on y=0.
   const fit = useMemo(() => {
-    const box = new THREE.Box3().setFromObject(scene);
-    const size = box.getSize(new THREE.Vector3());
-    const centre = box.getCenter(new THREE.Vector3());
-    const scale = FIT / Math.max(size.x, size.y, size.z);
+    // Measure the CLOSED rest pose: useFrame leaves the lid wherever the last
+    // frame put it, and the fit must not depend on that.
+    const lid = scene.getObjectByName("Lid");
+    const held = lid ? lid.rotation.x : 0;
+    if (lid) lid.rotation.x = 0;
+    const box = localBounds(scene);
+    if (lid) lid.rotation.x = held;
+
+    const s = box.getSize(new THREE.Vector3());
+    const c = box.getCenter(new THREE.Vector3());
+    const scale = FIT / Math.max(s.x, s.y, s.z);
     return {
       scale,
-      offset: new THREE.Vector3(-centre.x * scale, -box.min.y * scale, -centre.z * scale),
+      // Inner offset centres the model on the pivot group's origin, so the
+      // flip tumbles it about its own middle rather than hinging off the desk.
+      inner: new THREE.Vector3(-c.x * scale, -c.y * scale, -c.z * scale),
+      // Outer lift then sets it back down on y=0 for the contact shadow.
+      lift: (s.y / 2) * scale,
     };
   }, [scene]);
 
   const screenTex = useMemo(() => createScreenTexture(variant), []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => () => screenTex.texture.dispose(), [screenTex]);
 
-  useEffect(() => {
-    for (const mat of parts.chassis) {
-      mat.color.set(variant.chassis);
-      mat.needsUpdate = true;
-    }
-    for (const mat of parts.backlight) {
-      mat.emissive.set(variant.backlight);
-      mat.emissiveIntensity = 1.6;
-      mat.needsUpdate = true;
-    }
-    screenTex.repaint(variant);
-    const screen = parts.screen;
-    if (screen) {
-      screen.map = screenTex.texture;
-      screen.emissiveMap = screenTex.texture;
-      screen.emissive.set("#ffffff");
-      screen.toneMapped = true;
-      screen.needsUpdate = true;
-    }
-  }, [parts, variant, screenTex]);
+  // Applied imperatively rather than through render, because the closing
+  // colourway parade is driven by scroll inside useFrame — putting that through
+  // React state would re-render the tree mid-scroll for no benefit.
+  const applyLook = useCallback(
+    (v: LaptopVariant) => {
+      for (const mat of parts.chassis) {
+        mat.color.set(v.chassis);
+        mat.needsUpdate = true;
+      }
+      for (const mat of parts.backlight) {
+        mat.emissive.set(v.backlight);
+        mat.emissiveIntensity = 1.6;
+        mat.needsUpdate = true;
+      }
+      screenTex.repaint(v);
+      const screen = parts.screen;
+      if (screen) {
+        screen.map = screenTex.texture;
+        screen.emissiveMap = screenTex.texture;
+        screen.emissive.set("#ffffff");
+        screen.toneMapped = true;
+        screen.needsUpdate = true;
+      }
+    },
+    [parts, screenTex]
+  );
 
-  useFrame((state) => {
-    const p = reducedMotion ? STILL.p : progress.current;
+  const applied = useRef<string | null>(null);
+  useEffect(() => {
+    applyLook(variant);
+    applied.current = variant.id;
+  }, [applyLook, variant]);
+
+  // Scratch vectors, reused every frame so the loop allocates nothing.
+  const rig = useRef(new THREE.Vector3(-2, 2.6, 6));
+  const look = useRef(new THREE.Vector3(0, 0.3, 0));
+  const v = useMemo(() => new THREE.Vector3(), []);
+  const centre = useMemo(() => new THREE.Vector3(), []);
+  const normal = useMemo(() => new THREE.Vector3(), []);
+  const edgeA = useMemo(() => new THREE.Vector3(), []);
+  const edgeB = useMemo(() => new THREE.Vector3(), []);
+  const orbit = useMemo(() => new THREE.Vector3(), []);
+  const aligned = useMemo(() => new THREE.Vector3(), []);
+  const lookTarget = useMemo(() => new THREE.Vector3(), []);
+
+  useFrame((state, delta) => {
+    const p = reducedMotion ? STILL.p : readProgress(wrapRef.current);
+
     if (parts.lid) {
       parts.lid.rotation.x = -LID_OPEN_RADIANS * (reducedMotion ? STILL.open : OPEN(p));
     }
@@ -147,52 +296,137 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
     }
     if (group.current) {
       group.current.rotation.y = spin.current;
-      // A breath of idle motion so the shot is never completely dead.
+      // A full tumble about the model's own centre as the lid shuts.
+      group.current.rotation.x = reducedMotion ? 0 : FLIP(p) * Math.PI * 2;
       group.current.position.y =
-        fit.offset.y + (reducedMotion ? 0 : Math.sin(state.clock.elapsedTime * 0.7) * 0.02);
+        fit.lift + (reducedMotion ? 0 : Math.sin(state.clock.elapsedTime * 0.7) * 0.02);
+      group.current.updateWorldMatrix(true, true);
+    }
+
+    // Closing parade: step through every finish over the last stretch.
+    if (!reducedMotion) {
+      const show = SHOWCASE(p);
+      const next =
+        show > 0
+          ? LAPTOP_VARIANTS[
+              Math.min(LAPTOP_VARIANTS.length - 1, Math.floor(show * LAPTOP_VARIANTS.length))
+            ]
+          : variant;
+      if (applied.current !== next.id) {
+        applyLook(next);
+        applied.current = next.id;
+      }
+    }
+
+    // --- Where is the display right now, in world space? -------------------
+    const mesh = parts.screenMesh;
+    let haveScreen = false;
+    if (mesh && corners.length >= 3) {
+      centre.set(0, 0, 0);
+      for (const c of corners) centre.add(v.copy(c).applyMatrix4(mesh.matrixWorld));
+      centre.multiplyScalar(1 / corners.length);
+
+      edgeA.copy(corners[1]).applyMatrix4(mesh.matrixWorld).sub(
+        v.copy(corners[0]).applyMatrix4(mesh.matrixWorld)
+      );
+      edgeB.copy(corners[2]).applyMatrix4(mesh.matrixWorld).sub(
+        v.copy(corners[0]).applyMatrix4(mesh.matrixWorld)
+      );
+      normal.crossVectors(edgeA, edgeB).normalize();
+      // Face the side the viewer is on, whichever winding the quad has.
+      if (normal.dot(v.copy(camera.position).sub(centre)) < 0) normal.negate();
+      haveScreen = true;
+    }
+
+    // --- Camera: orbit early, square-on to the display late ----------------
+    const align = reducedMotion ? 0 : ALIGN(p);
+    const a = ramp(p, AZIMUTH);
+    const r = ramp(p, RADIUS);
+    orbit.set(Math.sin(a) * r, ramp(p, HEIGHT), Math.cos(a) * r);
+    lookTarget.set(0, ramp(p, LOOK_Y), 0);
+
+    if (haveScreen && align > 0) {
+      aligned.copy(normal).multiplyScalar(DOLLY(p)).add(centre);
+      orbit.lerp(aligned, align);
+      lookTarget.lerp(centre, align);
+    }
+
+    const k = 1 - Math.pow(0.0015, delta);
+    rig.current.lerp(orbit, k);
+    look.current.lerp(lookTarget, k);
+    camera.position.copy(rig.current);
+    camera.lookAt(look.current);
+    // Unwind the hero offset before the display squares up, or the portal opens
+    // off-centre and the handoff misses the viewport.
+    camera.translateX(-screenShift(size.width / size.height) * (1 - CENTRE(p)));
+    camera.updateMatrixWorld();
+
+    // --- Drive the DOM panel onto the display ------------------------------
+    const panel = portalRef.current;
+    if (panel && haveScreen) {
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (const c of corners) {
+        v.copy(c).applyMatrix4(mesh!.matrixWorld).project(camera);
+        const x = (v.x * 0.5 + 0.5) * size.width;
+        const y = (-v.y * 0.5 + 0.5) * size.height;
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
+      // The panel is authored at viewport size, so one uniform scale puts it on
+      // the glass. Past the point where the display outgrows the viewport there
+      // is nothing left to track — the bezel is off-frame — so it locks to a
+      // dead-centre, 1:1 viewport instead of magnifying to 2x and beyond.
+      const raw = (maxX - minX) / size.width;
+      const lock = THREE.MathUtils.clamp((raw - 1) / 0.35, 0, 1);
+      const scale = Math.min(raw, 1);
+      const dx = ((minX + maxX) / 2 - size.width / 2) * (1 - lock);
+      const dy = ((minY + maxY) / 2 - size.height / 2) * (1 - lock);
+      const shown = reducedMotion ? 0 : PANEL_IN(p);
+      panel.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(${scale})`;
+      panel.style.opacity = String(shown);
+      // Only clickable once it has actually arrived — otherwise an invisible
+      // full-bleed panel sits over the hero and eats every button press.
+      panel.style.pointerEvents = shown > 0.9 ? "auto" : "none";
+    }
+
+    // Hero copy clears out before the display swallows the frame, and the
+    // scroll cue goes as soon as the reader has taken the hint.
+    const copy = copyRef.current;
+    if (copy && !reducedMotion) {
+      const f = ramp(p, [[0.3, 0], [0.46, 1]]);
+      copy.style.opacity = String(1 - f);
+      copy.style.transform = `translateY(${-46 * f}px)`;
+      copy.style.pointerEvents = f > 0.6 ? "none" : "";
+    }
+    if (hintRef.current && !reducedMotion) {
+      hintRef.current.style.opacity = String(1 - ramp(p, [[0.02, 0], [0.12, 1]]));
+    }
+
+
+    // The laptop dissolves once the page underneath is carrying the frame.
+    const fade = reducedMotion ? 0 : LAPTOP_OUT(p);
+    if (group.current) group.current.visible = fade < 1;
+    for (const mat of parts.all) {
+      mat.transparent = fade > 0;
+      mat.opacity = 1 - fade;
     }
   });
 
   return (
-    <group ref={group} position={fit.offset} scale={fit.scale}>
-      <primitive object={scene} />
+    <group ref={group} position={[0, fit.lift, 0]}>
+      <group position={fit.inner} scale={fit.scale}>
+        <primitive object={scene} />
+      </group>
     </group>
   );
-}
-
-function CameraRig({ progress, reducedMotion }: Pick<SceneProps, "progress" | "reducedMotion">) {
-  const { camera, size } = useThree();
-  // The orbit position is tracked separately from camera.position: the sideways
-  // dolly below is applied fresh each frame, so it must never be lerped from.
-  const rig = useRef(new THREE.Vector3(-2, 2.6, 6));
-  const look = useRef(new THREE.Vector3(0, 0.3, 0));
-  const target = useMemo(() => new THREE.Vector3(), []);
-  const lookTarget = useMemo(() => new THREE.Vector3(), []);
-
-  useFrame((_, delta) => {
-    const p = reducedMotion ? STILL.p : progress.current;
-    const a = ramp(p, AZIMUTH);
-    const r = ramp(p, RADIUS);
-    target.set(Math.sin(a) * r, ramp(p, HEIGHT), Math.cos(a) * r);
-    lookTarget.set(0, ramp(p, LOOK_Y), 0);
-
-    // Damped follow: scrub arrives in steps, this turns it into a glide.
-    const k = 1 - Math.pow(0.0015, delta);
-    rig.current.lerp(target, k);
-    look.current.lerp(lookTarget, k);
-
-    camera.position.copy(rig.current);
-    camera.lookAt(look.current);
-    camera.translateX(-screenShift(size.width / size.height));
-  });
-
-  return null;
 }
 
 export function LaptopScene(props: SceneProps) {
   return (
     <Canvas
-      camera={{ position: [-2, 1.45, 2.9], fov: 34 }}
+      camera={{ position: [-2, 2.6, 6], fov: 34 }}
       gl={{
         alpha: true,
         antialias: true,
@@ -225,8 +459,6 @@ export function LaptopScene(props: SceneProps) {
       <Suspense fallback={null}>
         <Environment files="/hdri/studio_small_03_1k.hdr" environmentIntensity={0.7} />
       </Suspense>
-
-      <CameraRig progress={props.progress} reducedMotion={props.reducedMotion} />
     </Canvas>
   );
 }
