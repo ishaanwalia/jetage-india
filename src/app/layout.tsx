@@ -38,9 +38,9 @@ export const metadata: Metadata = {
     canonical: "https://www.jetageindia.in/",
   },
   icons: {
-    icon: "/FaviconJ.png",
-    shortcut: "/FaviconJ.png",
-    apple: "/FaviconJ.png",
+    icon: "/FaviconJ.min.png",
+    shortcut: "/FaviconJ.min.png",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: "Jetage India | Authorized HP Dealer Since 1989",

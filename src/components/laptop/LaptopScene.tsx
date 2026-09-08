@@ -503,9 +503,19 @@ export function LaptopScene(props: SceneProps) {
         />
       </Suspense>
 
-      {/* Its own boundary so the HDRI never holds up the model. */}
+      {/* Its own boundary so the environment never holds up the model.
+
+          This was a 1.6MB HDRI — the heaviest asset on the page. It is the
+          same map downsampled to 256x128: environment maps are low-frequency
+          by nature, supplying diffuse ambience and broad highlights rather
+          than detail anyone can resolve in a reflection, so the light
+          directions survive intact for 6% of the bytes.
+
+          A procedural Lightformer studio would have cost zero bytes, but it
+          re-rendered its cubemap continuously and pinned the GPU — trading
+          download for a permanent frame cost is not a win. */}
       <Suspense fallback={null}>
-        <Environment files="/hdri/studio_small_03_1k.hdr" environmentIntensity={0.7} />
+        <Environment files="/hdri/studio_256.hdr" environmentIntensity={0.75} />
       </Suspense>
     </Canvas>
   );
