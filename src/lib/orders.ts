@@ -5,7 +5,7 @@ import { rupeesToPaise, splitGst, type OrderItem, type OrderTotals } from "./mon
 import { financialYear } from "./fy";
 
 // Re-exported so server callers have one import for orders + money.
-export { GST_RATE, gstContainedIn, rupeesToPaise, formatPaise, totalsFor, splitGst, SUPPLY_STATE } from "./money";
+export { GST_RATE, gstContainedIn, rupeesToPaise, formatPaise, formatPaiseExact, totalsFor, splitGst, SUPPLY_STATE } from "./money";
 export type { OrderItem, OrderTotals } from "./money";
 export { financialYear } from "./fy";
 

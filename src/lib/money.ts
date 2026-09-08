@@ -22,8 +22,28 @@ export function gstContainedIn(totalPaise: number): number {
 
 export const rupeesToPaise = (rupees: number) => Math.round(rupees * 100);
 
+/**
+ * For the shop: whole rupees stay clean, so ₹25,227 does not read as
+ * ₹25,227.00 on every product card and in every cart line.
+ */
 export function formatPaise(paise: number): string {
   return `₹${(paise / 100).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
+}
+
+/**
+ * For the tax invoice: always two decimals.
+ *
+ * The shop formatter drops a trailing zero, which put "CGST ₹1,924.1"
+ * immediately above "SGST ₹1,924.09" on a document a buyer's accountant
+ * reads. Two halves of the same tax, formatted differently, look like a
+ * mistake even though they add up. Money on a legal document is written to
+ * the paise or not at all.
+ */
+export function formatPaiseExact(paise: number): string {
+  return `₹${(paise / 100).toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
 }
 
 /**

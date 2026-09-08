@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getOrderByToken, formatPaise } from "@/lib/orders";
+import { getOrderByToken, formatPaiseExact } from "@/lib/orders";
 import { SELLER, sellerIsInvoiceReady } from "@/lib/business";
 import { PrintButton } from "./PrintButton";
 
@@ -144,8 +144,8 @@ export default async function InvoicePage({ params }: { params: Promise<{ token:
                     code on a real tax invoice is worse than an empty cell. */}
                 <td className="py-2 px-2 text-neutral-400">—</td>
                 <td className="py-2 px-2 text-right">{i.qty}</td>
-                <td className="py-2 px-2 text-right">{formatPaise(i.unitPricePaise)}</td>
-                <td className="py-2 pl-2 text-right">{formatPaise(i.lineTotalPaise)}</td>
+                <td className="py-2 px-2 text-right">{formatPaiseExact(i.unitPricePaise)}</td>
+                <td className="py-2 pl-2 text-right">{formatPaiseExact(i.lineTotalPaise)}</td>
               </tr>
             ))}
           </tbody>
@@ -154,27 +154,27 @@ export default async function InvoicePage({ params }: { params: Promise<{ token:
         <section className="mt-4 flex justify-end">
           <dl className="w-full max-w-xs space-y-1">
             <div className="flex justify-between">
-              <dt>Taxable value</dt><dd>{formatPaise(taxable)}</dd>
+              <dt>Taxable value</dt><dd>{formatPaiseExact(taxable)}</dd>
             </div>
             {intraState ? (
               <>
                 <div className="flex justify-between">
-                  <dt>CGST @ 9%</dt><dd>{formatPaise(order.cgstPaise)}</dd>
+                  <dt>CGST @ 9%</dt><dd>{formatPaiseExact(order.cgstPaise)}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt>SGST/UTGST @ 9%</dt><dd>{formatPaise(order.sgstPaise)}</dd>
+                  <dt>SGST/UTGST @ 9%</dt><dd>{formatPaiseExact(order.sgstPaise)}</dd>
                 </div>
               </>
             ) : (
               <div className="flex justify-between">
-                <dt>IGST @ 18%</dt><dd>{formatPaise(order.igstPaise)}</dd>
+                <dt>IGST @ 18%</dt><dd>{formatPaiseExact(order.igstPaise)}</dd>
               </div>
             )}
             <div className="flex justify-between">
               <dt>Delivery</dt><dd>Free</dd>
             </div>
             <div className="flex justify-between border-t-2 border-black pt-2 text-base font-bold">
-              <dt>Total</dt><dd>{formatPaise(order.totalPaise)}</dd>
+              <dt>Total</dt><dd>{formatPaiseExact(order.totalPaise)}</dd>
             </div>
           </dl>
         </section>

@@ -10,6 +10,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  formatPaise,
+  formatPaiseExact,
   gstContainedIn,
   rupeesToPaise,
   totalsFor,
@@ -109,4 +111,17 @@ test("financial year follows April–March, not the calendar", () => {
   assert.equal(financialYear(new Date("2027-04-01")), "27-28");
   // January belongs to the year that began the previous April.
   assert.equal(financialYear(new Date("2027-01-15")), "26-27");
+});
+
+test("invoice amounts always carry two decimals", () => {
+  // The bug this pins: the shop formatter renders ₹1,924.10 as "₹1,924.1",
+  // which on an invoice sat directly above "₹1,924.09" — the two halves of
+  // one tax, looking like a typo.
+  assert.equal(formatPaiseExact(192410), "₹1,924.10");
+  assert.equal(formatPaiseExact(192409), "₹1,924.09");
+  assert.equal(formatPaiseExact(2522700), "₹25,227.00");
+  assert.equal(formatPaiseExact(0), "₹0.00");
+
+  // The shop formatter is deliberately left alone: whole rupees stay clean.
+  assert.equal(formatPaise(2522700), "₹25,227");
 });
