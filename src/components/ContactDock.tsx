@@ -180,13 +180,38 @@ export function ContactDock() {
 
   // Hold the page still behind the sheet. Only while it is actually a full
   // sheet: on desktop it is a corner widget and the page should still scroll.
+  //
+  // This used to be overflow:hidden on the body, which iOS Safari ignores
+  // outright — the page went on scrolling under the sheet, and a drag anywhere
+  // that is not the message list (the header, the input row) still moved it.
+  // That is how you end up reading the footer through the strip above the
+  // keyboard. Nothing short of taking the document out of flow stops it, so:
+  // position:fixed pinned at minus the scroll offset, which is where every
+  // dialog library lands in the end, with an explicit scrollTo on the way back
+  // because going out of flow forgets where the page was.
+  //
+  // The hero's 3D reads its own wrapper's bounding rect rather than scrollY, so
+  // shifting the body up by exactly what it was scrolled leaves the scene on
+  // the frame it was already showing.
   useEffect(() => {
     if (!open || !window.matchMedia("(max-width: 639px)").matches) return;
     const body = document.body;
-    const previous = body.style.overflow;
-    body.style.overflow = "hidden";
+    const y = window.scrollY;
+    const previous = {
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+      overflow: body.style.overflow,
+    };
+    Object.assign(body.style, {
+      position: "fixed",
+      top: `-${y}px`,
+      width: "100%",
+      overflow: "hidden",
+    });
     return () => {
-      body.style.overflow = previous;
+      Object.assign(body.style, previous);
+      window.scrollTo(0, y);
     };
   }, [open]);
 
