@@ -170,7 +170,23 @@ export function ContactDock() {
   }, [messages]);
 
   useEffect(() => {
-    if (open) inputRef.current?.focus();
+    if (!open) return;
+    // Only take focus on pointer devices. Focusing on a phone throws the
+    // keyboard up the instant the sheet opens, before the reader has seen the
+    // prompts — Instagram and friends wait for a deliberate tap on the field.
+    if (window.matchMedia("(min-width: 640px)").matches) inputRef.current?.focus();
+  }, [open]);
+
+  // Hold the page still behind the sheet. Only while it is actually a full
+  // sheet: on desktop it is a corner widget and the page should still scroll.
+  useEffect(() => {
+    if (!open || !window.matchMedia("(max-width: 639px)").matches) return;
+    const body = document.body;
+    const previous = body.style.overflow;
+    body.style.overflow = "hidden";
+    return () => {
+      body.style.overflow = previous;
+    };
   }, [open]);
 
   useEffect(() => {
@@ -300,22 +316,38 @@ export function ContactDock() {
             id="chat-panel"
             role="dialog"
             aria-label="Product assistant"
-            initial={{ opacity: 0, y: 16, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.97 }}
+            // Rise only, no scale. As a full-bleed sheet a scaled entrance
+            // leaves the page showing through all four edges on the way in.
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 24 }}
             transition={{ duration: reduce ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
-            // Only the toggle is left below it now (56px + gap + bottom
-            // offset), so the panel takes the column the other two vacated
-            // and gets that height back.
-            className="fixed bottom-[6.25rem] right-4 z-[80] flex h-[min(620px,calc(100dvh-9rem))] w-[min(400px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-jet-border bg-jet-bg-card shadow-2xl md:right-6"
+            // Phones get a full sheet, not a floating card. h-dvh is the whole
+            // trick: the dynamic viewport unit shrinks when the keyboard comes
+            // up, so the sheet resizes to the space above it instead of being
+            // shoved off-screen. On sm+ it goes back to the corner panel, where
+            // only the toggle sits below it.
+            className="fixed inset-0 z-[80] flex h-dvh w-full flex-col overflow-hidden bg-jet-bg-card shadow-2xl sm:inset-auto sm:bottom-[6.25rem] sm:right-4 sm:h-[min(620px,calc(100dvh-9rem))] sm:w-[min(400px,calc(100vw-2rem))] sm:rounded-2xl sm:border sm:border-jet-border md:right-6"
           >
-            <header className="shrink-0 bg-gradient-to-br from-jet-primary to-jet-primary-dim px-5 py-4">
-              <h2 className="flex items-center gap-2 font-bold text-white">
-                <Sparkles className="h-4 w-4" aria-hidden /> Ask Jetage
-              </h2>
-              <p className="mt-0.5 text-xs text-white/80">
-                Answers come from our own catalogue and prices.
-              </p>
+            <header className="flex shrink-0 items-start justify-between gap-3 bg-gradient-to-br from-jet-primary to-jet-primary-dim px-5 py-4">
+              <div>
+                <h2 className="flex items-center gap-2 font-bold text-white">
+                  <Sparkles className="h-4 w-4" aria-hidden /> Ask Jetage
+                </h2>
+                <p className="mt-0.5 text-xs text-white/80">
+                  Answers come from our own catalogue and prices.
+                </p>
+              </div>
+              {/* The sheet covers the dock on phones, so the toggle that opened
+                  it is underneath — without this there is no way back out. */}
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Close the assistant"
+                className="-mr-1 -mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 sm:hidden"
+              >
+                <X className="h-5 w-5" />
+              </button>
             </header>
 
             <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
@@ -383,7 +415,10 @@ export function ContactDock() {
                   maxLength={1000}
                   placeholder="Ask about a product…"
                   autoComplete="off"
-                  className="min-w-0 flex-1 rounded-xl border border-jet-border bg-jet-bg px-3.5 py-2.5 text-sm text-jet-text placeholder:text-jet-text-muted focus:border-jet-primary focus:outline-none focus:ring-2 focus:ring-jet-primary"
+                  // text-base, not text-sm: iOS Safari zooms the whole page in
+                  // on any focused input under 16px, and there is no way to
+                  // undo that zoom afterwards. 16px on phones, 14px from sm up.
+                  className="min-w-0 flex-1 rounded-xl border border-jet-border bg-jet-bg px-3.5 py-2.5 text-base text-jet-text placeholder:text-jet-text-muted focus:border-jet-primary focus:outline-none focus:ring-2 focus:ring-jet-primary sm:text-sm"
                 />
                 <button
                   type="submit"
