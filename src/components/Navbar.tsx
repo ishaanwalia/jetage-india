@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Menu, X, MessageCircle, ChevronDown, Laptop, Monitor, Printer, Mouse, Droplet, PcCase, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -22,12 +22,24 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isHidden, setIsHidden] = useState(false);
+  const lastY = useRef(0);
   const { totalItems, setIsCartOpen } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setIsScrolled(scrollY > 50);
+
+      // Get out of the way on the way down and come straight back the moment
+      // they head up — the header is wanted when it is reached for, not while
+      // they are reading. The 6px deadzone stops trackpad jitter flickering it.
+      const delta = scrollY - lastY.current;
+      if (Math.abs(delta) > 6) {
+        setIsHidden(delta > 0 && scrollY > 160);
+        lastY.current = scrollY;
+      }
+
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       setScrollProgress((scrollY / docHeight) * 100);
     };
@@ -69,8 +81,12 @@ export function Navbar() {
       <nav 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? "glass-strong py-3 shadow-lg shadow-black/5"
-            : "bg-transparent py-5"
+            ? "glass-strong py-2 shadow-lg shadow-black/5"
+            : "bg-transparent py-3"
+        } ${
+          // Never retract while the mobile menu is open — it would take the
+          // open menu with it.
+          isHidden && !isMobileMenuOpen ? "-translate-y-full" : "translate-y-0"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">

@@ -96,7 +96,7 @@ export function LaptopShowcase() {
         <div
           className={`${
             reducedMotion ? "relative" : "sticky top-0"
-          } flex h-screen w-full items-center overflow-hidden pt-32 pb-12`}
+          } flex h-screen w-full items-center overflow-hidden pt-24 pb-10`}
         >
           {/* Ambient wash — cheap stand-in for a bloom pass, and it recolours
               with the variant so the whole frame shifts, not just the shell. */}

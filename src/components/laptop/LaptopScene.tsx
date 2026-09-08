@@ -72,9 +72,9 @@ const FLIP = (p: number) => ramp(p, [[0.83, 0], [0.9, 1]]);
 const SHOWCASE = (p: number) => ramp(p, [[0.9, 0], [1, 1]]);
 
 const AZIMUTH: Stop[] = [[0, -0.55], [0.26, -0.34], [0.54, 0], [1, 0]];
-const RADIUS: Stop[] = [[0, 6.2], [0.26, 5.9], [0.54, 5.8], [0.86, 5.9], [1, 6.4]];
-const HEIGHT: Stop[] = [[0, 2.2], [0.26, 1.9], [0.54, 1.75], [0.86, 1.9], [1, 2.3]];
-const LOOK_Y: Stop[] = [[0, 0.78], [0.4, 0.88], [0.86, 0.85], [1, 0.75]];
+const RADIUS: Stop[] = [[0, 6.2], [0.26, 5.9], [0.54, 5.8], [0.86, 5.6], [0.93, 4.4], [1, 4.4]];
+const HEIGHT: Stop[] = [[0, 2.2], [0.26, 1.9], [0.54, 1.75], [0.86, 1.9], [0.93, 2.1], [1, 2.1]];
+const LOOK_Y: Stop[] = [[0, 0.78], [0.4, 0.88], [0.86, 0.7], [0.93, 0.22], [1, 0.22]];
 
 /**
  * Slide the subject into the right-hand half on landscape viewports so the
@@ -168,6 +168,7 @@ function Laptop({
     const backlight: THREE.MeshStandardMaterial[] = [];
     const all: THREE.MeshStandardMaterial[] = [];
     const plate: THREE.MeshStandardMaterial[] = [];
+    const mark: THREE.MeshStandardMaterial[] = [];
     let screen: THREE.MeshStandardMaterial | null = null;
     let screenMesh: THREE.Mesh | null = null;
 
@@ -177,7 +178,8 @@ function Laptop({
       for (const raw of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
         const mat = raw as THREE.MeshStandardMaterial;
         all.push(mat);
-        if (mat.name.startsWith("PaletteMaterial001")) chassis.push(mat);
+        if (mat.name.startsWith("OmenMark")) mark.push(mat);
+        else if (mat.name.startsWith("PaletteMaterial001")) chassis.push(mat);
         else if (mat.name.startsWith("PaletteMaterial003")) backlight.push(mat);
         // A blank decal square dead centre on the lid. It cannot simply be
         // removed — it plugs a cutout in the lid shell, and deleting it opens a
@@ -193,13 +195,14 @@ function Laptop({
     // Sketchfab baked these as "palette" materials: the baseColour map is a
     // ~176-byte swatch atlas, so dropping it costs no detail and buys exact
     // colour control. The metallic/roughness maps stay — they do the shading.
-    for (const mat of [...chassis, ...plate]) mat.map = null;
+    for (const mat of [...chassis, ...plate, ...mark]) mat.map = null;
 
     return {
       lid,
       chassis,
       backlight,
       plate,
+      mark,
       all,
       screen: screen as THREE.MeshStandardMaterial | null,
       screenMesh: screenMesh as THREE.Mesh | null,
@@ -252,6 +255,21 @@ function Laptop({
         mat.color.set(v.chassis);
         mat.needsUpdate = true;
       }
+      // The OMEN wordmark etched into the chin. It shares the shell's material
+      // in the source, so recolouring the chassis painted it the identical
+      // colour and it vanished. Etched marks read by CONTRAST, not hue, so it
+      // is pushed away from whatever the shell is wearing.
+      for (const mat of parts.mark) {
+        const shell = new THREE.Color(v.chassis);
+        const lum = 0.2126 * shell.r + 0.7152 * shell.g + 0.0722 * shell.b;
+        mat.color
+          .copy(shell)
+          .lerp(new THREE.Color(lum > 0.3 ? "#0d1116" : "#e8eef4"), 0.8);
+        mat.metalness = 0.55;
+        mat.roughness = 0.3;
+        mat.needsUpdate = true;
+      }
+
       // Same paint as the shell, and dialled off full metal — glTF defaults
       // metalness to 1 when unspecified, which rendered this plate solid black.
       for (const mat of parts.plate) {
