@@ -5,6 +5,37 @@ In the order it should be dealt with.
 
 ---
 
+## What's left, in one place
+
+Updated 8 Sep 2026. Everything else in this file is background.
+
+**Blocking a real sale — nothing.** Live Razorpay keys, the webhook and the
+GSTIN are all in. The next thing to happen is a test purchase.
+
+| # | What | Whose | Why it matters |
+| --- | --- | --- | --- |
+| 1 | **One real test order**, then refund it | Owner | Nothing has actually been paid for yet. Buy the ₹449 M10 mouse, confirm `/admin/orders` says **Paid** — not Pending — then refund from Razorpay. Only that proves the webhook fired. |
+| 2 | **HSN codes per product** | Accountant | The HSN column on every invoice and on the sales register is blank. An invoice without it is incomplete for a business buyer. |
+| 3 | **Confirm 18% across the catalogue** | Accountant | Everything is treated as 18%. Correct for printers, ink, toner and accessories — but he should say so. |
+| 4 | **Send him `docs/ACCOUNTANT.md`** | Owner | Explains the two invoice series and the Tally import. He does not need to raise web invoices by hand. |
+| 5 | **Product photography** | Owner | Data entry, not development. Upload in Products; bulk edit handles everything else. |
+| 6 | **Decide on the free Gemini tier** | Owner | Free-tier chat content may be used to train Google's models. Paid tier does not. Disclosed on the site either way. |
+
+**Known gaps, deliberately not built:**
+
+- **Stock is not tracked.** Nothing stops someone ordering an item you do not
+  have; the counter catches it on the call.
+- **Refunds are manual** — Razorpay dashboard, then mark Refunded in
+  `/admin/orders`. Fine at this volume.
+- **No customer accounts.** Guest checkout with emailed tracking links. See §5.
+- **Payments settle to a Razorpay account not registered to Jetage.** The
+  owner's decision, taken knowingly. The invoice still shows Jetage's GSTIN,
+  because Jetage made the sale. Tell the accountant so he books it the same
+  way from the first order rather than reconstructing it in March. Switching
+  later is two environment variables and a redeploy.
+
+---
+
 ## 1. Turn Razorpay on
 
 Checkout is live **right now in offline mode**: an order is recorded, the buyer
@@ -21,7 +52,6 @@ git can see.
 | `RAZORPAY_KEY_SECRET` | Shown **once** when you generate the key. Regenerate if lost. |
 | `RAZORPAY_WEBHOOK_SECRET` | You invent this. Any long random string. |
 | `NEXT_PUBLIC_SITE_URL` | `https://jetageindia.in` — read at **build** time |
-| `SELLER_GSTIN` | **Your own GSTIN.** No invoice can be issued without it. |
 | `GEMINI_API_KEY` | aistudio.google.com → Get API key. Free tier is enough to start. |
 
 Then, in the Razorpay dashboard → Settings → Webhooks:
@@ -59,12 +89,16 @@ sales ledger and which tax ledgers each voucher posts to, and only the
 accountant knows that. A wrong guess posts vouchers to the wrong account. They
 map the CSV once in Tally's import wizard and it is reusable after that.
 
-### Your GSTIN — needed before any invoice exists
+### Your GSTIN — done
 
-`/order/<token>/invoice` is a full tax invoice: both GSTINs, place of supply,
-taxable value, and CGST+SGST or IGST depending on where it ships. It **refuses
-to render** until `SELLER_GSTIN` is set, rather than producing a
-confident-looking document that fails at the buyer's accountant.
+ is a full tax invoice: both GSTINs, place of supply,
+taxable value, and CGST+SGST or IGST depending on where it ships.
+
+Jetage's GSTIN —  — is set, in  next to
+the address and phone rather than in an environment variable. It is not a
+secret, it is printed on every invoice the firm issues, and it does not change
+between environments, so keeping it in code means the invoice cannot break
+because a variable went missing.
 
 Buyers can enter their own GSTIN at checkout (collapsed behind a link, so
 retail buyers never see it) and it appears on the invoice.

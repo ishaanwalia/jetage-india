@@ -6,12 +6,15 @@ export const YEARS_TRADING = new Date().getFullYear() - FOUNDING_YEAR;
 /**
  * The seller, as it must appear on a tax invoice.
  *
- * `gstin` comes from the environment and there is no default. A tax invoice
- * without the supplier's GSTIN is not a tax invoice — it is a receipt that
- * looks like one, and a business buyer who tries to claim credit against it
- * will have the claim rejected. So the invoice route refuses to render at all
- * until this is set, rather than producing a confident-looking document that
- * fails at the buyer's accountant.
+ * The GSTIN lives here rather than in an environment variable, alongside the
+ * address and phone. It is not a secret — it is printed on every invoice the
+ * firm issues and is publicly searchable on the GST portal — and it does not
+ * differ between environments. Env vars are for secrets and for things that
+ * change per deployment; this is neither, and keeping it here means the
+ * invoice cannot break because somebody forgot to set a variable.
+ *
+ * `04` is Chandigarh, which is also why an order shipped within Chandigarh is
+ * CGST + SGST and everything else is IGST — see `splitGst` in money.ts.
  */
 export const SELLER = {
   legalName: "Jetage Computer Traders",
@@ -22,7 +25,17 @@ export const SELLER = {
   stateCode: "04",
   phone: "+91 98149 58295",
   email: "info@jetageindia.in",
-  gstin: process.env.SELLER_GSTIN ?? "",
+  /** Verified: state code 04, valid check digit, PAN AACFJ8106G (partnership firm). */
+  gstin: "04AACFJ8106G1ZQ",
 } as const;
 
+/**
+ * Kept as a guard even though the GSTIN is now a constant.
+ *
+ * A tax invoice without the supplier's GSTIN is not a tax invoice — it is a
+ * receipt that looks like one, and a business buyer claiming input credit
+ * against it will have the claim rejected. If this value is ever blanked or
+ * mistyped, the invoice route refuses to render rather than producing a
+ * confident-looking document that fails at the buyer's accountant.
+ */
 export const sellerIsInvoiceReady = () => SELLER.gstin.length === 15;

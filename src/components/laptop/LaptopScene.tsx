@@ -9,7 +9,7 @@ import {
   RIGGED_MODEL_URL,
   type LaptopVariant,
 } from "@/lib/laptop-variants";
-import { createLogoTexture, createScreenTexture } from "./screen-texture";
+import { createScreenTexture } from "./screen-texture";
 
 const DRACO_PATH = "/draco/";
 /** Longest edge the model is normalised to, so camera distances are meaningful. */
@@ -70,7 +70,6 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
     const lid = scene.getObjectByName("Lid") ?? null;
     const chassis: THREE.MeshStandardMaterial[] = [];
     const backlight: THREE.MeshStandardMaterial[] = [];
-    const logo: THREE.MeshStandardMaterial[] = [];
     let screen: THREE.MeshStandardMaterial | null = null;
 
     scene.traverse((child) => {
@@ -80,7 +79,9 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
         const mat = raw as THREE.MeshStandardMaterial;
         if (mat.name.startsWith("PaletteMaterial001")) chassis.push(mat);
         else if (mat.name.startsWith("PaletteMaterial003")) backlight.push(mat);
-        else if (mat.name.startsWith("PaletteMaterial002")) logo.push(mat);
+        // A blank decal square the source model leaves dead centre on the lid.
+        // A real OMEN carries no badge there, so drop it rather than invent one.
+        else if (mat.name.startsWith("PaletteMaterial002")) mesh.visible = false;
         else if (mat.name.startsWith("PaletteMaterial004")) screen = mat;
       }
     });
@@ -94,7 +95,6 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
       lid,
       chassis,
       backlight,
-      logo,
       screen: screen as THREE.MeshStandardMaterial | null,
     };
   }, [scene]);
@@ -113,14 +113,7 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
   }, [scene]);
 
   const screenTex = useMemo(() => createScreenTexture(variant), []); // eslint-disable-line react-hooks/exhaustive-deps
-  const logoTex = useMemo(() => createLogoTexture(), []);
-  useEffect(
-    () => () => {
-      screenTex.texture.dispose();
-      logoTex.dispose();
-    },
-    [screenTex, logoTex]
-  );
+  useEffect(() => () => screenTex.texture.dispose(), [screenTex]);
 
   useEffect(() => {
     for (const mat of parts.chassis) {
@@ -132,20 +125,6 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
       mat.emissiveIntensity = 1.6;
       mat.needsUpdate = true;
     }
-    // The blank decal square dead centre on the lid, carrying the HP roundel.
-    // glTF defaults metalness to 1 when unspecified, which is why this plate
-    // rendered as a black rectangle before — a full metal with nothing to
-    // reflect. Dial it back to a painted badge.
-    for (const mat of parts.logo) {
-      mat.color.set("#ffffff");
-      mat.map = logoTex;
-      mat.metalness = 0.15;
-      mat.roughness = 0.45;
-      mat.transparent = true;
-      mat.emissive.set("#000000");
-      mat.emissiveIntensity = 0;
-      mat.needsUpdate = true;
-    }
     screenTex.repaint(variant);
     const screen = parts.screen;
     if (screen) {
@@ -155,7 +134,7 @@ function Laptop({ progress, spin, variant, reducedMotion }: SceneProps) {
       screen.toneMapped = true;
       screen.needsUpdate = true;
     }
-  }, [parts, variant, screenTex, logoTex]);
+  }, [parts, variant, screenTex]);
 
   useFrame((state) => {
     const p = reducedMotion ? STILL.p : progress.current;
