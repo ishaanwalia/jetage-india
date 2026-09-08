@@ -60,14 +60,14 @@ const HOME_SECTIONS = [
 ];
 
 // NEW 3D COMPONENTS
-import { Hero3D } from "@/components/Hero3D";
+import { LaptopShowcase } from "@/components/laptop/LaptopShowcase";
 import { Stats3D } from "@/components/Stats3D";
 import { CategoryGrid3D } from "@/components/CategoryGrid3D";
 import { Marquee3D } from "@/components/Marquee3D";
 import { ProcessSteps3D } from "@/components/ProcessSteps3D";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 
-// SSR'd (unlike Hero3D) so the loader is the first thing painted — it exists
+// SSR'd (unlike LaptopShowcase) so the loader is the first thing painted — it exists
 // to cover the page mounting behind it, so it can't itself pop in late.
 const CinematicLoader = dynamic(() =>
   import("@/components/CinematicLoader").then((m) => m.CinematicLoader)
@@ -121,12 +121,11 @@ export function HomeClient() {
       <SectionNav sections={HOME_SECTIONS} />
 
       {/* ==================== 3D HERO SECTION ==================== */}
-      <div id="hero">
-        <Hero3D />
+      {/* Owns its own #hero anchor — it spans three screens of pinned scroll. */}
+      <LaptopShowcase />
 
-        {/* ==================== 3D STATS SECTION ==================== */}
-        <Stats3D />
-      </div>
+      {/* ==================== 3D STATS SECTION ==================== */}
+      <Stats3D />
 
       {/* ==================== 3D CATEGORIES SECTION ==================== */}
       <div id="categories">
