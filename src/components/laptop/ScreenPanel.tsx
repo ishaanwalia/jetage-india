@@ -52,8 +52,20 @@ const ADVANTAGES = [
  */
 export function ScreenPanel() {
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-7 bg-jet-bg px-8 py-8">
-      <div className="space-y-3 text-center">
+    // pt-32 clears the fixed navbar: at full-screen this panel IS the viewport,
+    // so anything at the top would sit under the header.
+    <div className="flex h-full w-full flex-col items-center justify-center gap-7 bg-jet-bg px-8 pb-10 pt-32">
+      {/* --panel-in is written by the scene each frame. Everything below reads
+          it with a per-item offset, which is what gives the stagger — and the
+          heading rides further than the cards, so they part company slightly
+          on the way in rather than moving as one slab. */}
+      <div
+        className="space-y-3 text-center"
+        style={{
+          opacity: "calc(var(--panel-in, 0) * 2.2)",
+          transform: "translateY(calc((1 - var(--panel-in, 0)) * 46px))",
+        }}
+      >
         <span className="inline-block rounded-full border border-jet-primary/20 bg-jet-primary/10 px-4 py-1.5 text-sm font-semibold text-jet-primary">
           Why Jetage
         </span>
@@ -63,10 +75,18 @@ export function ScreenPanel() {
       </div>
 
       <div className="grid w-full max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {ADVANTAGES.map((item) => (
+        {ADVANTAGES.map((item, i) => (
           <div
             key={item.title}
-            className="rounded-2xl border border-jet-border bg-jet-bg-card p-5 text-left"
+            className="rounded-2xl border border-jet-border bg-jet-bg-card p-5 text-left will-change-transform"
+            style={
+              {
+                "--i": i,
+                opacity: "calc((var(--panel-in, 0) - var(--i) * 0.07) * 3)",
+                transform:
+                  "translateY(calc((1 - var(--panel-in, 0)) * (26px + var(--i) * 10px)))",
+              } as React.CSSProperties
+            }
           >
             <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl border border-jet-primary/20 bg-jet-primary/10">
               <item.icon className="h-5 w-5 text-jet-primary" />

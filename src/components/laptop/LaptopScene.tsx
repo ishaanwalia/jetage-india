@@ -35,40 +35,46 @@ function ramp(p: number, stops: Stop[]) {
 }
 
 // The whole story on one scrubbed clock, read from scroll position:
-//   0.00-0.08  settle, lid shut, held in the empty right-hand half
-//   0.08-0.28  lid opens — still clear of the headline column
-//   0.40-0.58  copy clears, laptop walks to centre and squares up
-//   0.50-0.64  the display grows to fill the frame; the panel takes over
-//   0.64-0.72  HOLD — nothing moves, the advantages are readable
-//   0.72-0.80  pull back out; the laptop fades in again
-//   0.76-0.88  it tumbles through upside-down as the lid folds shut
-//   0.87-1.00  the closing parade: every finish, one after another
+//   0.00-0.06  settle, lid shut, held in the empty right-hand half
+//   0.06-0.22  lid opens — still clear of the headline column
+//   0.22-0.36  breathe: the reader gets to actually read the hero
+//   0.36-0.54  copy clears, laptop walks to centre and squares up
+//   0.52-0.62  the display grows to fill the frame; the panel staggers in
+//   0.62-0.70  the laptop dissolves, but only once the panel already covers
+//   0.70-0.80  HOLD — nothing moves, the advantages are readable
+//   0.80-0.86  pull back out; the laptop fades in again
+//   0.84-0.90  it tumbles through upside-down as the lid folds shut
+//   0.90-1.00  the closing parade: four finishes, a beat each
 /** Lid opens for the approach, then folds shut again during the flip. */
-const OPEN = (p: number) => ramp(p, [[0.08, 0], [0.28, 1], [0.76, 1], [0.87, 0]]);
-const SCREEN_ON = (p: number) => ramp(p, [[0.2, 0], [0.4, 1], [0.76, 1], [0.84, 0]]);
+const OPEN = (p: number) => ramp(p, [[0.06, 0], [0.22, 1], [0.84, 1], [0.9, 0]]);
+const SCREEN_ON = (p: number) => ramp(p, [[0.18, 0], [0.36, 1], [0.84, 1], [0.89, 0]]);
 /** How far the camera has abandoned the orbit for a head-on approach. */
-const ALIGN = (p: number) => ramp(p, [[0.42, 0], [0.58, 1], [0.7, 1], [0.8, 0]]);
+const ALIGN = (p: number) => ramp(p, [[0.38, 0], [0.56, 1], [0.8, 1], [0.86, 0]]);
 /** Distance in front of the display once aligned — this is the push-in. */
-const DOLLY = (p: number) => ramp(p, [[0.42, 4.6], [0.6, 1.0], [0.7, 1.0], [0.8, 3.4]]);
+const DOLLY = (p: number) => ramp(p, [[0.38, 4.6], [0.6, 0.95], [0.8, 0.95], [0.86, 3.4]]);
 /** The panel behind the glass fades up, holds through the pause, then goes. */
-const PANEL_IN = (p: number) => ramp(p, [[0.5, 0], [0.62, 1], [0.72, 1], [0.8, 0]]);
-/** The laptop dissolves for the pause, then comes back for the flip. */
-const LAPTOP_OUT = (p: number) => ramp(p, [[0.56, 0], [0.64, 1], [0.72, 1], [0.8, 0]]);
+const PANEL_IN = (p: number) => ramp(p, [[0.52, 0], [0.62, 1], [0.8, 1], [0.85, 0]]);
+/**
+ * The laptop dissolves for the pause, then comes back for the flip. Starts
+ * late on purpose: fading it while the panel is still smaller than the frame
+ * leaves a half-transparent laptop washed out against the white page.
+ */
+const LAPTOP_OUT = (p: number) => ramp(p, [[0.63, 0], [0.7, 1], [0.8, 1], [0.86, 0]]);
 /**
  * Unwinds the hero's right-hand offset. Runs ahead of ALIGN so the laptop has
  * already walked back to centre by the time the panel is readable — the display
  * opens in the middle of the frame, not off to one side — and stays centred.
  */
-const CENTRE = (p: number) => ramp(p, [[0.4, 0], [0.56, 1]]);
+const CENTRE = (p: number) => ramp(p, [[0.36, 0], [0.54, 1]]);
 /** A full tumble as the lid shuts: passes through upside-down, lands upright. */
-const FLIP = (p: number) => ramp(p, [[0.76, 0], [0.88, 1]]);
+const FLIP = (p: number) => ramp(p, [[0.84, 0], [0.93, 1]]);
 /** Drives the closing colourway parade. */
-const SHOWCASE = (p: number) => ramp(p, [[0.87, 0], [1, 1]]);
+const SHOWCASE = (p: number) => ramp(p, [[0.9, 0], [1, 1]]);
 
-const AZIMUTH: Stop[] = [[0, -0.55], [0.3, -0.34], [0.56, 0], [0.8, 0], [1, 0.85]];
-const RADIUS: Stop[] = [[0, 7.4], [0.3, 6.9], [0.56, 6.4], [0.8, 6.4], [1, 6.8]];
-const HEIGHT: Stop[] = [[0, 2.5], [0.3, 2.1], [0.56, 1.8], [0.8, 2.0], [1, 2.4]];
-const LOOK_Y: Stop[] = [[0, 0.52], [0.42, 0.75], [0.8, 0.8], [1, 0.7]];
+const AZIMUTH: Stop[] = [[0, -0.55], [0.26, -0.34], [0.54, 0], [0.86, 0], [1, 1.1]];
+const RADIUS: Stop[] = [[0, 6.2], [0.26, 5.9], [0.54, 5.8], [0.86, 5.9], [1, 6.4]];
+const HEIGHT: Stop[] = [[0, 2.2], [0.26, 1.9], [0.54, 1.75], [0.86, 1.9], [1, 2.3]];
+const LOOK_Y: Stop[] = [[0, 0.78], [0.4, 0.88], [0.86, 0.85], [1, 0.75]];
 
 /**
  * Slide the subject into the right-hand half on landscape viewports so the
@@ -161,7 +167,7 @@ function Laptop({
     const chassis: THREE.MeshStandardMaterial[] = [];
     const backlight: THREE.MeshStandardMaterial[] = [];
     const all: THREE.MeshStandardMaterial[] = [];
-    const doomed: THREE.Mesh[] = [];
+    const plate: THREE.MeshStandardMaterial[] = [];
     let screen: THREE.MeshStandardMaterial | null = null;
     let screenMesh: THREE.Mesh | null = null;
 
@@ -173,11 +179,10 @@ function Laptop({
         all.push(mat);
         if (mat.name.startsWith("PaletteMaterial001")) chassis.push(mat);
         else if (mat.name.startsWith("PaletteMaterial003")) backlight.push(mat);
-        // A blank decal square the source model leaves dead centre on the lid.
-        // A real OMEN carries no badge there, so drop it rather than invent one.
-        // Detached rather than hidden: setting .visible did not survive the
-        // reconciler re-attaching the cached scene, and it kept reappearing.
-        else if (mat.name.startsWith("PaletteMaterial002")) doomed.push(mesh);
+        // A blank decal square dead centre on the lid. It cannot simply be
+        // removed — it plugs a cutout in the lid shell, and deleting it opens a
+        // hole you can see the screen through. So it stays, painted to match.
+        else if (mat.name.startsWith("PaletteMaterial002")) plate.push(mat);
         else if (mat.name.startsWith("PaletteMaterial004")) {
           screen = mat;
           screenMesh = mesh;
@@ -185,17 +190,16 @@ function Laptop({
       }
     });
 
-    for (const mesh of doomed) mesh.removeFromParent();
-
     // Sketchfab baked these as "palette" materials: the baseColour map is a
     // ~176-byte swatch atlas, so dropping it costs no detail and buys exact
     // colour control. The metallic/roughness maps stay — they do the shading.
-    for (const mat of chassis) mat.map = null;
+    for (const mat of [...chassis, ...plate]) mat.map = null;
 
     return {
       lid,
       chassis,
       backlight,
+      plate,
       all,
       screen: screen as THREE.MeshStandardMaterial | null,
       screenMesh: screenMesh as THREE.Mesh | null,
@@ -246,6 +250,16 @@ function Laptop({
     (v: LaptopVariant) => {
       for (const mat of parts.chassis) {
         mat.color.set(v.chassis);
+        mat.needsUpdate = true;
+      }
+      // Same paint as the shell, and dialled off full metal — glTF defaults
+      // metalness to 1 when unspecified, which rendered this plate solid black.
+      for (const mat of parts.plate) {
+        mat.color.set(v.chassis);
+        mat.metalness = 0.5;
+        mat.roughness = 0.5;
+        mat.emissive.set("#000000");
+        mat.emissiveIntensity = 0;
         mat.needsUpdate = true;
       }
       for (const mat of parts.backlight) {
@@ -303,18 +317,20 @@ function Laptop({
       group.current.updateWorldMatrix(true, true);
     }
 
-    // Closing parade: step through every finish over the last stretch.
+    // Closing parade: every finish gets its own beat, and lands with a small
+    // settle that decays across the beat rather than cross-fading blandly.
     if (!reducedMotion) {
       const show = SHOWCASE(p);
-      const next =
-        show > 0
-          ? LAPTOP_VARIANTS[
-              Math.min(LAPTOP_VARIANTS.length - 1, Math.floor(show * LAPTOP_VARIANTS.length))
-            ]
-          : variant;
+      const count = LAPTOP_VARIANTS.length;
+      const slot = show * count;
+      const index = Math.min(count - 1, Math.floor(slot));
+      const next = show > 0 ? LAPTOP_VARIANTS[index] : variant;
       if (applied.current !== next.id) {
         applyLook(next);
         applied.current = next.id;
+      }
+      if (group.current) {
+        group.current.scale.setScalar(1 + (show > 0 ? Math.exp(-(slot - index) * 5) * 0.06 : 0));
       }
     }
 
@@ -378,7 +394,7 @@ function Laptop({
       // the glass. Past the point where the display outgrows the viewport there
       // is nothing left to track — the bezel is off-frame — so it locks to a
       // dead-centre, 1:1 viewport instead of magnifying to 2x and beyond.
-      const raw = (maxX - minX) / size.width;
+      const raw = Math.max((maxX - minX) / size.width, (maxY - minY) / size.height);
       const lock = THREE.MathUtils.clamp((raw - 1) / 0.35, 0, 1);
       const scale = Math.min(raw, 1);
       const dx = ((minX + maxX) / 2 - size.width / 2) * (1 - lock);
@@ -386,6 +402,7 @@ function Laptop({
       const shown = reducedMotion ? 0 : PANEL_IN(p);
       panel.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(${scale})`;
       panel.style.opacity = String(shown);
+      panel.style.setProperty('--panel-in', String(shown));
       // Only clickable once it has actually arrived — otherwise an invisible
       // full-bleed panel sits over the hero and eats every button press.
       panel.style.pointerEvents = shown > 0.9 ? "auto" : "none";
