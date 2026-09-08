@@ -50,11 +50,21 @@ const ADVANTAGES = [
  * of cards two thirds of the way down. Authored at viewport size so the scene
  * can put it on the glass with one uniform scale.
  */
-export function ScreenPanel() {
+export function ScreenPanel({ inFlow = false }: { inFlow?: boolean }) {
   return (
     // pt-32 clears the fixed navbar: at full-screen this panel IS the viewport,
-    // so anything at the top would sit under the header.
-    <div className="flex h-full w-full flex-col items-center justify-center gap-7 bg-jet-bg px-8 pb-10 pt-32">
+    // so anything at the top would sit under the header. As an ordinary section
+    // it needs neither that clearance nor the scene, which means nothing is
+    // writing --panel-in — so it is pinned to 1 here. Without that every child
+    // below resolves to opacity 0, which is exactly what the reduced-motion
+    // fallback has been rendering: the section that exists so those readers can
+    // read the advantages, showing them nothing.
+    <div
+      className={`flex h-full w-full flex-col items-center justify-center gap-7 bg-jet-bg px-8 ${
+        inFlow ? "py-4" : "pb-10 pt-32"
+      }`}
+      style={inFlow ? ({ "--panel-in": 1 } as React.CSSProperties) : undefined}
+    >
       {/* --panel-in is written by the scene each frame. Everything below reads
           it with a per-item offset, which is what gives the stagger — and the
           heading rides further than the cards, so they part company slightly

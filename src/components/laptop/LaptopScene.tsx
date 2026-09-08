@@ -122,6 +122,16 @@ type SceneProps = {
   /** Hero copy and scroll hint, faded from the same clock as the 3D. */
   copyRef: RefObject<HTMLDivElement | null>;
   hintRef: RefObject<HTMLDivElement | null>;
+  /**
+   * Fired when the panel arrives on the glass, and again when it leaves.
+   *
+   * The one thing in here that has to reach React: the phone panel mounts its
+   * counters off it, because "in the viewport" is true from the first frame and
+   * would run the count while the display is still a thumbnail. Only ever fires
+   * on a crossing — twice per pass, not once per frame — which is why this is
+   * allowed to set state where the colourway parade deliberately is not.
+   */
+  onPanelArrive?: (arrived: boolean) => void;
 };
 
 /**
@@ -176,6 +186,7 @@ function Laptop({
   portalRef,
   copyRef,
   hintRef,
+  onPanelArrive,
 }: SceneProps) {
   const { scene } = useGLTF(RIGGED_MODEL_URL, DRACO_PATH);
   const { camera, size } = useThree();
@@ -333,6 +344,7 @@ function Laptop({
   const normal = useMemo(() => new THREE.Vector3(), []);
   const edgeA = useMemo(() => new THREE.Vector3(), []);
   const edgeB = useMemo(() => new THREE.Vector3(), []);
+  const arrived = useRef(false);
   const orbit = useMemo(() => new THREE.Vector3(), []);
   const aligned = useMemo(() => new THREE.Vector3(), []);
   const lookTarget = useMemo(() => new THREE.Vector3(), []);
@@ -471,6 +483,16 @@ function Laptop({
     }
     if (hintRef.current && !reducedMotion) {
       hintRef.current.style.opacity = String(1 - ramp(p, [[0.017, 0], [0.087, 1]]));
+    }
+
+    // Read from the ramp rather than the panel element, so it is right even on
+    // the frames before the display has been located.
+    if (onPanelArrive && !reducedMotion) {
+      const now = PANEL_IN(p) > 0.6;
+      if (now !== arrived.current) {
+        arrived.current = now;
+        onPanelArrive(now);
+      }
     }
 
 

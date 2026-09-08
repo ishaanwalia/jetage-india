@@ -12,6 +12,7 @@ import { YEARS_TRADING } from "@/lib/business";
 import { MagneticButton } from "@/components/MagneticButton";
 import { Typewriter } from "@/components/Typewriter";
 import { ScreenPanel } from "./ScreenPanel";
+import { StatsPanel } from "./StatsPanel";
 
 // three + drei is a ~300KB gzip chunk; keep it out of the initial bundle.
 const LaptopScene = dynamic(() => import("./LaptopScene").then((m) => m.LaptopScene), {
@@ -23,7 +24,13 @@ const LaptopScene = dynamic(() => import("./LaptopScene").then((m) => m.LaptopSc
   ),
 });
 
-export function LaptopShowcase() {
+/**
+ * @param phone  Swaps what the display carries. On a phone it is the counters,
+ *               and the advantages move to a section below the hero — see
+ *               StatsPanel. Decided by the page, which has to make the matching
+ *               swap underneath, so one media query drives both halves.
+ */
+export function LaptopShowcase({ phone = false }: { phone?: boolean }) {
   const router = useRouter();
   const wrap = useRef<HTMLDivElement>(null);
   const spin = useRef(0);
@@ -32,6 +39,7 @@ export function LaptopShowcase() {
   const hintRef = useRef<HTMLDivElement>(null);
   const [variant, setVariant] = useState<LaptopVariant>(LAPTOP_VARIANTS[0]);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [arrived, setArrived] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -116,6 +124,8 @@ export function LaptopShowcase() {
               portalRef={portalRef}
               copyRef={copyRef}
               hintRef={hintRef}
+              // Desktop never asks, so the Canvas is never re-rendered by it.
+              onPanelArrive={phone ? setArrived : undefined}
             />
           </div>
 
@@ -192,7 +202,7 @@ export function LaptopShowcase() {
               ref={portalRef}
               className="pointer-events-none absolute inset-0 z-20 opacity-0 will-change-transform"
             >
-              <ScreenPanel />
+              {phone ? <StatsPanel active={arrived} /> : <ScreenPanel />}
             </div>
           )}
 
@@ -206,10 +216,12 @@ export function LaptopShowcase() {
       </div>
 
       {/* Without the scroll story there is no screen to reveal it in, so the
-          advantages simply sit on the page. */}
-      {reducedMotion && (
+          advantages simply sit on the page. Not on a phone: there the page is
+          already putting them below the hero, and rendering them here as well
+          would print the whole section twice. */}
+      {reducedMotion && !phone && (
         <div className="py-16">
-          <ScreenPanel />
+          <ScreenPanel inFlow />
         </div>
       )}
     </section>

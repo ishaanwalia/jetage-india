@@ -115,23 +115,45 @@ function StatCard3D({ icon: Icon, value, suffix, label, sub = "", decimals = 0, 
   );
 }
 
-export function Stats3D() {
-  const stats = [
-    { icon: Clock, value: YEARS_TRADING, suffix: "+", label: "Years Experience", sub: "yrs" },
-    { icon: Printer, value: 50000, suffix: "+", label: "Products Sold", sub: "" },
-    { icon: Globe, value: 50, suffix: "+", label: "Cities Served", sub: "" },
-    { icon: Star, value: 4.5, suffix: "", label: "Customer Rating", sub: "/5", decimals: 1 },
-  ];
+const STATS = [
+  { icon: Clock, value: YEARS_TRADING, suffix: "+", label: "Years Experience", sub: "yrs" },
+  { icon: Printer, value: 50000, suffix: "+", label: "Products Sold", sub: "" },
+  { icon: Globe, value: 50, suffix: "+", label: "Cities Served", sub: "" },
+  { icon: Star, value: 4.5, suffix: "", label: "Customer Rating", sub: "/5", decimals: 1 },
+];
 
+/**
+ * Just the four cards, without the page section around them.
+ *
+ * Split out because on phones these are what the laptop's display shows, and a
+ * panel that is already the viewport does not want a section's own padding and
+ * background gradient inside it. The counters live here either way, so there is
+ * one set of numbers rather than two that can drift apart.
+ *
+ * The counters start when this mounts — they are keyed off useInView, and the
+ * cards are in view the moment they exist. In the display that is deliberate:
+ * the panel mounts them on arrival rather than at page load, so the count runs
+ * when the reader is looking at it.
+ */
+export function StatsGrid() {
   return (
-    <section className="py-20 relative" style={{ perspective: "1000px" }}>
+    <div
+      className="grid grid-cols-2 lg:grid-cols-4 gap-6"
+      style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
+    >
+      {STATS.map((stat, i) => (
+        <StatCard3D key={i} {...stat} index={i} />
+      ))}
+    </div>
+  );
+}
+
+export function Stats3D() {
+  return (
+    <section className="py-20 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-jet-bg via-jet-bg-elevated to-jet-bg" />
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6" style={{ transformStyle: "preserve-3d" }}>
-          {stats.map((stat, i) => (
-            <StatCard3D key={i} {...stat} index={i} />
-          ))}
-        </div>
+        <StatsGrid />
       </div>
     </section>
   );
