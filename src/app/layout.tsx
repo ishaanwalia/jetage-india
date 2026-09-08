@@ -91,7 +91,6 @@ export default async function RootLayout({
         <meta name="geo.placename" content="Chandigarh" />
         <meta name="geo.position" content="30.741482;76.788724" />
         <meta name="ICBM" content="30.741482, 76.788724" />
-        <link rel="canonical" href="https://www.jetageindia.in/" />
         <link rel="preconnect" href="https://ssl-product-images.www8-hp.com" />
         <link rel="dns-prefetch" href="https://ssl-product-images.www8-hp.com" />
         <link rel="manifest" href="/manifest.json" />
