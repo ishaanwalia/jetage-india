@@ -63,9 +63,10 @@ Then, in the Razorpay dashboard → Settings → Webhooks:
 Redeploy after setting the variables. Vercel does not apply them to a build
 that already happened.
 
-**Test with Razorpay's test keys first.** They are free and permanent, and a
-test payment goes through the identical code path. Card `4111 1111 1111 1111`,
-any future expiry, any CVV.
+**These are live keys, so the first payment is real money.** The account had no
+Test Mode available, so testing means buying something cheap from the site and
+refunding it afterwards from Razorpay → Transactions → Refund. The M10 mouse at
+₹449 is the cheapest thing in the catalogue.
 
 ### How to know it actually worked
 
@@ -91,14 +92,18 @@ map the CSV once in Tally's import wizard and it is reusable after that.
 
 ### Your GSTIN — done
 
- is a full tax invoice: both GSTINs, place of supply,
+`/order/<token>/invoice` is a full tax invoice: both GSTINs, place of supply,
 taxable value, and CGST+SGST or IGST depending on where it ships.
 
-Jetage's GSTIN —  — is set, in  next to
-the address and phone rather than in an environment variable. It is not a
-secret, it is printed on every invoice the firm issues, and it does not change
-between environments, so keeping it in code means the invoice cannot break
-because a variable went missing.
+Jetage's GSTIN — **`04AACFJ8106G1ZQ`** — is set, in `src/lib/business.ts`
+alongside the address and phone rather than in an environment variable. It is
+not a secret, it is printed on every invoice the firm issues, and it does not
+differ between environments — so keeping it in code means the invoice cannot
+break because a variable went missing.
+
+Checked before it went in: valid check digit, state code `04` (Chandigarh,
+which is what makes an intra-Chandigarh sale CGST+SGST), and PAN `AACFJ8106G`,
+whose fourth character `F` confirms a partnership firm.
 
 Buyers can enter their own GSTIN at checkout (collapsed behind a link, so
 retail buyers never see it) and it appears on the invoice.
