@@ -143,6 +143,7 @@ export async function saveProductAction(
     price: Math.round(price),
     mrp: Math.round(mrp),
     sku: String(formData.get("sku") ?? "").trim(),
+    hsn: String(formData.get("hsn") ?? "").trim(),
     speed: String(formData.get("speed") ?? "").trim(),
     connectivity: lines(formData.get("connectivity")),
     duplex: formData.get("duplex") === "on",

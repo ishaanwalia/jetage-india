@@ -140,9 +140,11 @@ export default async function InvoicePage({ params }: { params: Promise<{ token:
                   {i.name}
                   <span className="block text-[11px] text-neutral-500">{i.sku}</span>
                 </td>
-                {/* Blank until HSN codes are entered per product — an invented
-                    code on a real tax invoice is worse than an empty cell. */}
-                <td className="py-2 px-2 text-neutral-400">—</td>
+                {/* Still a dash when no code has been set on the product — an
+                    invented code on a real tax invoice is worse than a blank. */}
+                <td className={i.hsn ? "py-2 px-2" : "py-2 px-2 text-neutral-400"}>
+                  {i.hsn || "—"}
+                </td>
                 <td className="py-2 px-2 text-right">{i.qty}</td>
                 <td className="py-2 px-2 text-right">{formatPaiseExact(i.unitPricePaise)}</td>
                 <td className="py-2 pl-2 text-right">{formatPaiseExact(i.lineTotalPaise)}</td>

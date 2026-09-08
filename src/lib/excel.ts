@@ -25,6 +25,7 @@ const sql = neon(process.env.DATABASE_URL!);
 export const COLUMNS = [
   { key: "id", header: "id (do not edit)", width: 34 },
   { key: "sku", header: "SKU", width: 14 },
+  { key: "hsn", header: "HSN", width: 12 },
   { key: "name", header: "Name", width: 44 },
   { key: "shortName", header: "Short name", width: 22 },
   { key: "category", header: "Category", width: 14 },
@@ -57,6 +58,7 @@ type Field = Exclude<(typeof COLUMNS)[number]["key"], "id">;
 export interface SheetRow {
   id: string | null;
   sku: string;
+  hsn: string;
   name: string;
   shortName: string;
   category: string;
@@ -87,7 +89,7 @@ export interface SheetRow {
 
 export async function buildCatalogueWorkbook(): Promise<Buffer> {
   const [products, categories] = await Promise.all([
-    sql`SELECT id, sku, name, short_name, category_id, sub_category, price, mrp, description,
+    sql`SELECT id, sku, hsn, name, short_name, category_id, sub_category, price, mrp, description,
                speed, connectivity, duplex, duty_cycle, ideal_for, features, specs, badge,
                warranty, weight, dimensions, first_page_out, resolution, paper_capacity,
                mobile_printing, featured, status, sort_order
@@ -127,6 +129,7 @@ export async function buildCatalogueWorkbook(): Promise<Buffer> {
       description: r.description ?? "",
       speed: r.speed ?? "",
       connectivity: (r.connectivity as unknown as string[] | null)?.join(" | ") ?? "",
+      hsn: r.hsn ?? "",
       duplex: r.duplex ? "yes" : "no",
       dutyCycle: r.duty_cycle ?? "",
       idealFor: r.ideal_for ?? "",
@@ -222,6 +225,7 @@ export async function buildCatalogueWorkbook(): Promise<Buffer> {
     ["• Specs use Label: value, separated by pipes:   Print Speed: 22 ppm | Duplex: Automatic", false],
     ["• Yes/no columns accept yes, no, y, n, true, false, 1, 0.", false],
     ["• Category and Status have dropdowns. Anything else is rejected with a reason.", false],
+    ["• HSN is the tax code that prints on the invoice. Leave it blank rather than guessing — a wrong code is worse than none.", false],
     ["", false],
     ["Pictures", true],
     ["• Product images are NOT in this sheet, and cannot be changed from here.", false],
@@ -267,7 +271,7 @@ const asText = (v: unknown): string =>
  */
 export async function dryRunImport(buffer: Buffer): Promise<DryRun> {
   const [existingRows, categoryRows] = await Promise.all([
-    sql`SELECT id, sku, name, short_name, category_id, sub_category, price, mrp, description,
+    sql`SELECT id, sku, hsn, name, short_name, category_id, sub_category, price, mrp, description,
                speed, connectivity, duplex, duty_cycle, ideal_for, features, specs, badge,
                warranty, weight, dimensions, first_page_out, resolution, paper_capacity,
                mobile_printing, featured, status
@@ -389,6 +393,7 @@ export async function diffWorkbook(
       price,
       mrp,
       description: paragraph(get(row, "description")),
+      hsn: paragraph(get(row, "hsn")),
       speed: paragraph(get(row, "speed")),
       connectivity: list(get(row, "connectivity")),
       duplex: yesNo(get(row, "duplex"), Boolean(prior?.duplex)),
@@ -424,7 +429,7 @@ export async function diffWorkbook(
     // Field-by-field, so the preview says which cell changed rather than
     // "this product was edited".
     const dbValue: Record<Field, unknown> = {
-      sku: prior.sku, name: prior.name, shortName: prior.short_name,
+      sku: prior.sku, hsn: prior.hsn, name: prior.name, shortName: prior.short_name,
       category: prior.category_id, subCategory: prior.sub_category,
       price: Number(prior.price), mrp: Number(prior.mrp), description: prior.description,
       speed: prior.speed, connectivity: prior.connectivity, duplex: prior.duplex,
@@ -436,7 +441,7 @@ export async function diffWorkbook(
       mobilePrinting: prior.mobile_printing, featured: prior.featured, status: prior.status,
     };
     const newValue: Record<Field, unknown> = {
-      sku: parsed.sku, name: parsed.name, shortName: parsed.shortName,
+      sku: parsed.sku, hsn: parsed.hsn, name: parsed.name, shortName: parsed.shortName,
       category: parsed.category, subCategory: parsed.subCategory,
       price: parsed.price, mrp: parsed.mrp, description: parsed.description,
       speed: parsed.speed, connectivity: parsed.connectivity, duplex: parsed.duplex,
@@ -487,12 +492,12 @@ export async function applyRows(rows: SheetRow[], actorEmail: string): Promise<n
     const id = r.id ?? slugify(r.name);
     await sql`
       INSERT INTO products (
-        id, sku, name, short_name, category_id, sub_category, price, mrp, description,
+        id, sku, hsn, name, short_name, category_id, sub_category, price, mrp, description,
         speed, connectivity, duplex, duty_cycle, ideal_for, features, specs, badge,
         warranty, weight, dimensions, first_page_out, resolution, paper_capacity,
         mobile_printing, featured, status
       ) VALUES (
-        ${id}, ${r.sku}, ${r.name}, ${r.shortName}, ${r.category}, ${r.subCategory},
+        ${id}, ${r.sku}, ${r.hsn}, ${r.name}, ${r.shortName}, ${r.category}, ${r.subCategory},
         ${r.price}, ${r.mrp}, ${r.description}, ${r.speed},
         ${JSON.stringify(r.connectivity)}::jsonb, ${r.duplex}, ${r.dutyCycle}, ${r.idealFor},
         ${JSON.stringify(r.features)}::jsonb, ${JSON.stringify(r.specs)}::jsonb,
@@ -501,7 +506,7 @@ export async function applyRows(rows: SheetRow[], actorEmail: string): Promise<n
         ${JSON.stringify(r.mobilePrinting)}::jsonb, ${r.featured}, ${r.status}
       )
       ON CONFLICT (id) DO UPDATE SET
-        sku = excluded.sku, name = excluded.name, short_name = excluded.short_name,
+        sku = excluded.sku, hsn = excluded.hsn, name = excluded.name, short_name = excluded.short_name,
         category_id = excluded.category_id, sub_category = excluded.sub_category,
         price = excluded.price, mrp = excluded.mrp, description = excluded.description,
         speed = excluded.speed, connectivity = excluded.connectivity, duplex = excluded.duplex,

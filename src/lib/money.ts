@@ -80,6 +80,14 @@ export function splitGst(gstPaise: number, shipState: string): GstSplit {
 export interface OrderItem {
   productId: string | null;
   sku: string;
+  /**
+   * Snapshotted from the product at the sale, blank when none is set.
+   *
+   * Optional because the browser cart builds these lines for display without
+   * ever seeing an HSN — only the server-priced items, which is what an order
+   * is actually written from, carry one.
+   */
+  hsn?: string;
   name: string;
   image: string;
   qty: number;

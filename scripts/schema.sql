@@ -280,3 +280,13 @@ create table if not exists import_batches (
 
 create index if not exists import_batches_pending_idx
   on import_batches (created_at desc) where applied_at is null;
+
+-- HSN, the code that says what a thing IS for tax. Rule 46 requires it on a
+-- tax invoice, and the sales register needs it per line or the accountant
+-- cannot file the HSN summary in GSTR-1. It lives on the product, because
+-- that is where it is known once, and is snapshotted onto the order line at
+-- the sale alongside name/sku/price: how a thing was classified is a fact
+-- about the day it sold, and a later reclassification must not restate old
+-- invoices. Blank is a legitimate state — no code beats a wrong one.
+alter table products    add column if not exists hsn text not null default '';
+alter table order_items add column if not exists hsn text not null default '';

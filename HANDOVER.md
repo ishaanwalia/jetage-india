@@ -7,7 +7,7 @@ In the order it should be dealt with.
 
 ## What's left, in one place
 
-Updated 8 Sep 2026. Everything else in this file is background.
+Updated 9 Sep 2026. Everything else in this file is background.
 
 **Blocking a real sale — nothing.** Live Razorpay keys, the webhook and the
 GSTIN are all in. The next thing to happen is a test purchase.
@@ -15,7 +15,7 @@ GSTIN are all in. The next thing to happen is a test purchase.
 | # | What | Whose | Why it matters |
 | --- | --- | --- | --- |
 | 1 | **One real test order**, then refund it | Owner | Nothing has actually been paid for yet. Buy the ₹449 M10 mouse, confirm `/admin/orders` says **Paid** — not Pending — then refund from Razorpay. Only that proves the webhook fired. |
-| 2 | **HSN codes per product** | Accountant | The HSN column on every invoice and on the sales register is blank. An invoice without it is incomplete for a business buyer. |
+| 2 | **HSN codes per product** | Accountant | Nothing is blocked in the code any more — there is an HSN field on every product now, and whatever is in it prints on the invoice and fills the register. What is missing is the codes themselves. Until they are entered the column shows a dash, which is honest. |
 | 3 | **Confirm 18% across the catalogue** | Accountant | Everything is treated as 18%. Correct for printers, ink, toner and accessories — but he should say so. |
 | 4 | **Send him `docs/ACCOUNTANT.md`** | Owner | Explains the two invoice series and the Tally import. He does not need to raise web invoices by hand. |
 | 5 | **Product photography** | Owner | Data entry, not development. Upload in Products; bulk edit handles everything else. |
@@ -110,10 +110,20 @@ retail buyers never see it) and it appears on the invoice.
 
 ### HSN codes — needed from them
 
-The HSN column in the export is **empty on purpose**. A tax invoice needs the
-right HSN per product, and inventing one is worse than leaving it blank. Get
-the codes from the accountant or HP's price list, and they can go into each
-product in the CMS once there is a field for them.
+There is now an **HSN code** field on every product: in the CMS at
+`/admin/products`, and as its own column in the bulk sheet. Fill it once per
+product and it prints on the tax invoice and fills the HSN column of the sales
+register from then on.
+
+It is still **blank everywhere until someone types the codes in**, and that is
+deliberate — a tax invoice needs the right HSN, and inventing one is worse than
+leaving it out. Get them from the accountant or HP's price list.
+
+The code is snapshotted onto the order line at the sale, the same way the name,
+SKU and price are. So a reclassification later changes new invoices and leaves
+old ones exactly as they were issued — and orders already placed keep their
+blank column rather than retrospectively growing a code they were not sold
+under.
 
 ### GST rate
 
@@ -221,16 +231,17 @@ customers actually ask for it.
 It re-seeds the catalogue from `src/lib/data/products.ts` and would **overwrite
 anything edited in the CMS**. Products are managed at `/admin/products` now.
 
-Schema changes can be applied on their own; the file is idempotent, but the
-seed step is not something you want twice.
+For a schema change — a new column, an index — run `npm run db:schema`
+instead. Same file, stops after the schema half, never touches a row. That is
+what added the HSN columns.
 
 ---
 
 ## 7. Bulk editing the catalogue
 
 /admin/bulk. Download the whole catalogue as .xlsx, edit it in Excel, upload it
-back. All 26 fields are in the sheet with dropdowns for category and status,
-and a How-to-use tab.
+back. All 27 fields are in the sheet — including HSN — with dropdowns for
+category and status, and a How-to-use tab.
 
 **An upload never writes anything on its own.** It produces a diff — field by
 field, old value beside new — and a second, separate press applies it. That is
@@ -247,7 +258,8 @@ draft — deleting a row does nothing, because past orders reference it.
 
 ## 8. Still worth doing
 
-- **Product photography and HSN** — data entry, not development.
+- **Product photography and HSN codes** — data entry, not development. Both
+  have a field waiting for them.
 - **A test order end to end** once the live keys are in, including checking the
   confirmation email actually lands (and is not in spam).
 - **Refunds** — currently done in the Razorpay dashboard, then marked Refunded

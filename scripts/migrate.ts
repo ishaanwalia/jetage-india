@@ -52,6 +52,15 @@ async function main() {
     await sql.query(statement);
   }
 
+  // The schema half is idempotent; the seed half is not — it re-seeds the
+  // catalogue from products.ts and would overwrite anything edited in the CMS.
+  // A new column has to be added to a live database without touching the rows,
+  // so that is its own command: npm run db:schema.
+  if (process.argv.includes("--schema-only")) {
+    console.log("✓ schema applied, catalogue untouched");
+    return;
+  }
+
   console.log(`→ seeding ${categories.length} categories`);
   for (const [i, category] of categories.entries()) {
     await sql`

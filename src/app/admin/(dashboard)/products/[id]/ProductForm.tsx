@@ -87,6 +87,10 @@ export default function ProductForm({
             <Field label="SKU" name="sku" defaultValue={product?.sku} />
             <Field label="Badge" name="badge" defaultValue={product?.badge ?? ""} hint="e.g. Best Seller. Leave blank for none." />
           </div>
+          {/* Prints on the tax invoice and fills the HSN column of the sales
+              register. Blank is fine and stays blank — a guessed code on a real
+              invoice is worse than none. Ask the accountant or HP's price list. */}
+          <Field label="HSN code" name="hsn" defaultValue={product?.hsn ?? ""} hint="For the tax invoice. Leave blank until the accountant confirms it." />
           <TextareaField label="Description" name="description" rows={4} defaultValue={product?.description} assist="product-description" />
         </Fieldset>
 

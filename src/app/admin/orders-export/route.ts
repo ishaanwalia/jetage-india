@@ -13,10 +13,12 @@ import { getCurrentUser } from "@/lib/auth";
  * post to the wrong account. A CSV is something they can map once in Tally's
  * import wizard, or open and check by eye — which is what actually happens.
  *
- * `hsn` is intentionally emitted empty. HSN per product has to come from the
- * accountant or HP's price list; inventing 8443 for everything would put a
- * wrong code on a real tax invoice. It is a column so it can be filled in
- * without reshaping the file. Also flagged in HANDOVER notes.
+ * The HSN column carries whatever was snapshotted onto the order line at the
+ * sale. It is blank for anything sold before a code was set on the product, and
+ * blank now for any product that still has none — deliberately, because HSN has
+ * to come from the accountant or HP's price list, and inventing 8443 for
+ * everything would put a wrong code on a real tax invoice. Codes are set per
+ * product in the CMS, or in the HSN column of the bulk sheet.
  */
 
 const sql = neon(process.env.DATABASE_URL!);
@@ -42,7 +44,7 @@ export async function GET(req: Request) {
            o.ship_address, o.place_of_supply, o.buyer_gstin,
            o.subtotal_paise, o.gst_paise, o.cgst_paise, o.sgst_paise, o.igst_paise,
            o.total_paise, o.razorpay_payment_id,
-           i.sku, i.name AS item_name, i.qty, i.unit_price_paise, i.line_total_paise
+           i.sku, i.hsn, i.name AS item_name, i.qty, i.unit_price_paise, i.line_total_paise
     FROM orders o
     JOIN order_items i ON i.order_id = o.id
     WHERE o.status NOT IN ('pending', 'cancelled')
@@ -83,7 +85,7 @@ export async function GET(req: Request) {
       addr.city ?? "", addr.state ?? "", addr.pincode ?? "",
       r.place_of_supply,
       r.item_name, r.sku,
-      "", // HSN — see the note at the top of this file
+      r.hsn ?? "", // blank when the product carries no code — see the note above
       r.qty,
       rs(r.unit_price_paise),
       rs(lineTotal),

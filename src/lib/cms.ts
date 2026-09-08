@@ -36,6 +36,8 @@ export interface Product {
   price: number;
   mrp: number;
   sku: string;
+  /** HSN code for GST. Empty until the accountant supplies one. */
+  hsn: string;
   speed: string;
   connectivity: string[];
   duplex: boolean;
@@ -92,6 +94,7 @@ type ProductRow = {
   price: number;
   mrp: number;
   sku: string;
+  hsn: string;
   speed: string;
   connectivity: string[];
   duplex: boolean;
@@ -124,6 +127,7 @@ function toProduct(row: ProductRow): Product {
     price: row.price,
     mrp: row.mrp,
     sku: row.sku,
+    hsn: row.hsn ?? "",
     speed: row.speed,
     connectivity: row.connectivity ?? [],
     duplex: row.duplex,
@@ -337,6 +341,7 @@ export type ProductInput = {
   price: number;
   mrp: number;
   sku: string;
+  hsn: string;
   speed: string;
   connectivity: string[];
   duplex: boolean;
@@ -373,7 +378,7 @@ export async function saveProduct(existingId: string | null, input: ProductInput
       update products set
         name = ${input.name}, short_name = ${input.shortName}, category_id = ${input.category},
         sub_category = ${input.subCategory}, price = ${input.price}, mrp = ${input.mrp},
-        sku = ${input.sku}, speed = ${input.speed},
+        sku = ${input.sku}, hsn = ${input.hsn}, speed = ${input.speed},
         connectivity = ${json.connectivity}::jsonb, duplex = ${input.duplex},
         duty_cycle = ${input.dutyCycle}, ideal_for = ${input.idealFor},
         description = ${input.description}, features = ${json.features}::jsonb,
@@ -390,13 +395,13 @@ export async function saveProduct(existingId: string | null, input: ProductInput
 
   await sql`
     insert into products (
-      id, name, short_name, category_id, sub_category, price, mrp, sku, speed,
+      id, name, short_name, category_id, sub_category, price, mrp, sku, hsn, speed,
       connectivity, duplex, duty_cycle, ideal_for, description, features,
       image, images, badge, specs, warranty, weight, dimensions,
       first_page_out, resolution, paper_capacity, mobile_printing, featured, status
     ) values (
       ${input.id}, ${input.name}, ${input.shortName}, ${input.category}, ${input.subCategory},
-      ${input.price}, ${input.mrp}, ${input.sku}, ${input.speed},
+      ${input.price}, ${input.mrp}, ${input.sku}, ${input.hsn}, ${input.speed},
       ${json.connectivity}::jsonb, ${input.duplex}, ${input.dutyCycle}, ${input.idealFor},
       ${input.description}, ${json.features}::jsonb, ${input.image}, ${json.images}::jsonb,
       ${input.badge}, ${json.specs}::jsonb, ${input.warranty}, ${input.weight}, ${input.dimensions},

@@ -79,10 +79,10 @@ export async function priceCart(lines: CartLine[]): Promise<OrderItem[]> {
   if (ids.length === 0) return [];
 
   const rows = (await sql`
-    SELECT id, name, sku, price, image
+    SELECT id, name, sku, hsn, price, image
     FROM products
     WHERE id = ANY(${ids}) AND status = 'published'
-  `) as { id: string; name: string; sku: string; price: number; image: string }[];
+  `) as { id: string; name: string; sku: string; hsn: string; price: number; image: string }[];
 
   const byId = new Map(rows.map((r) => [r.id, r]));
   const items: OrderItem[] = [];
@@ -95,6 +95,7 @@ export async function priceCart(lines: CartLine[]): Promise<OrderItem[]> {
     items.push({
       productId: p.id,
       sku: p.sku,
+      hsn: p.hsn ?? "",
       name: p.name,
       image: p.image,
       qty,
@@ -166,6 +167,7 @@ export async function createOrder(input: {
     input.items.map((i) => ({
       product_id: i.productId,
       sku: i.sku,
+      hsn: i.hsn ?? "",
       name: i.name,
       image: i.image,
       qty: i.qty,
@@ -192,10 +194,10 @@ export async function createOrder(input: {
     ),
     new_items AS (
       INSERT INTO order_items
-        (order_id, product_id, sku, name, image, qty, unit_price_paise, line_total_paise)
-      SELECT o.id, x.product_id, x.sku, x.name, x.image, x.qty, x.unit_price_paise, x.line_total_paise
+        (order_id, product_id, sku, hsn, name, image, qty, unit_price_paise, line_total_paise)
+      SELECT o.id, x.product_id, x.sku, x.hsn, x.name, x.image, x.qty, x.unit_price_paise, x.line_total_paise
       FROM new_order o, jsonb_to_recordset(${itemsJson}::jsonb) AS x(
-        product_id text, sku text, name text, image text,
+        product_id text, sku text, hsn text, name text, image text,
         qty integer, unit_price_paise bigint, line_total_paise bigint
       )
     ),
@@ -304,11 +306,12 @@ const toOrder = (r: OrderRow, items: OrderItem[]): Order => ({
 
 async function itemsFor(orderId: number): Promise<OrderItem[]> {
   const rows = (await sql`
-    SELECT product_id, sku, name, image, qty, unit_price_paise, line_total_paise
+    SELECT product_id, sku, hsn, name, image, qty, unit_price_paise, line_total_paise
     FROM order_items WHERE order_id = ${orderId} ORDER BY id
   `) as {
     product_id: string | null;
     sku: string;
+    hsn: string;
     name: string;
     image: string;
     qty: number;
@@ -318,6 +321,7 @@ async function itemsFor(orderId: number): Promise<OrderItem[]> {
   return rows.map((r) => ({
     productId: r.product_id,
     sku: r.sku,
+    hsn: r.hsn ?? "",
     name: r.name,
     image: r.image,
     qty: r.qty,
