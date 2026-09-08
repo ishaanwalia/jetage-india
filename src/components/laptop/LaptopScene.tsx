@@ -67,11 +67,11 @@ const LAPTOP_OUT = (p: number) => ramp(p, [[0.63, 0], [0.7, 1], [0.8, 1], [0.86,
  */
 const CENTRE = (p: number) => ramp(p, [[0.36, 0], [0.54, 1]]);
 /** A full tumble as the lid shuts: passes through upside-down, lands upright. */
-const FLIP = (p: number) => ramp(p, [[0.84, 0], [0.93, 1]]);
+const FLIP = (p: number) => ramp(p, [[0.83, 0], [0.9, 1]]);
 /** Drives the closing colourway parade. */
 const SHOWCASE = (p: number) => ramp(p, [[0.9, 0], [1, 1]]);
 
-const AZIMUTH: Stop[] = [[0, -0.55], [0.26, -0.34], [0.54, 0], [0.86, 0], [1, 1.1]];
+const AZIMUTH: Stop[] = [[0, -0.55], [0.26, -0.34], [0.54, 0], [1, 0]];
 const RADIUS: Stop[] = [[0, 6.2], [0.26, 5.9], [0.54, 5.8], [0.86, 5.9], [1, 6.4]];
 const HEIGHT: Stop[] = [[0, 2.2], [0.26, 1.9], [0.54, 1.75], [0.86, 1.9], [1, 2.3]];
 const LOOK_Y: Stop[] = [[0, 0.78], [0.4, 0.88], [0.86, 0.85], [1, 0.75]];
@@ -84,7 +84,7 @@ const LOOK_Y: Stop[] = [[0, 0.78], [0.4, 0.88], [0.86, 0.85], [1, 0.75]];
  */
 function screenShift(aspect: number) {
   if (aspect < 1.1) return 0; // portrait: centre it, copy stacks above
-  return THREE.MathUtils.lerp(0.7, 2.3, THREE.MathUtils.clamp((aspect - 1.1) / 0.9, 0, 1));
+  return THREE.MathUtils.lerp(0.5, 1.65, THREE.MathUtils.clamp((aspect - 1.1) / 0.9, 0, 1));
 }
 
 /** Where the scene rests when motion is suppressed: open, three-quarter view. */
@@ -317,8 +317,10 @@ function Laptop({
       group.current.updateWorldMatrix(true, true);
     }
 
-    // Closing parade: every finish gets its own beat, and lands with a small
-    // settle that decays across the beat rather than cross-fading blandly.
+    // Closing parade. Each finish owns one beat: the colour changes at the top
+    // of it, the laptop turns a full 360 through the first two thirds, then
+    // holds still for the rest so the finish is actually looked at rather than
+    // glimpsed mid-spin. One swipe, one turn, one pause.
     if (!reducedMotion) {
       const show = SHOWCASE(p);
       const count = LAPTOP_VARIANTS.length;
@@ -329,8 +331,15 @@ function Laptop({
         applyLook(next);
         applied.current = next.id;
       }
-      if (group.current) {
-        group.current.scale.setScalar(1 + (show > 0 ? Math.exp(-(slot - index) * 5) * 0.06 : 0));
+      if (group.current && show > 0) {
+        const local = slot - index;
+        const t = Math.min(local / 0.66, 1);
+        const turns = index + t * t * (3 - 2 * t);
+        group.current.rotation.y = spin.current + turns * Math.PI * 2;
+        // A small settle as each finish lands, decaying across the beat.
+        group.current.scale.setScalar(1 + Math.exp(-local * 6) * 0.045);
+      } else if (group.current) {
+        group.current.scale.setScalar(1);
       }
     }
 
