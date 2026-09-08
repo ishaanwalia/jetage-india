@@ -28,53 +28,53 @@ function ramp(p: number, stops: Stop[]) {
     const [b, vb] = stops[i];
     if (p <= b) {
       const t = (p - a) / (b - a);
-      return va + (vb - va) * (t * t * (3 - 2 * t));
+      return va + (vb - va) * (t * t * t * (t * (t * 6 - 15) + 10));
     }
   }
   return stops[stops.length - 1][1];
 }
 
 // The whole story on one scrubbed clock, read from scroll position:
-//   0.00-0.06  settle, lid shut, held in the empty right-hand half
-//   0.06-0.22  lid opens — still clear of the headline column
-//   0.22-0.36  breathe: the reader gets to actually read the hero
-//   0.36-0.54  copy clears, laptop walks to centre and squares up
-//   0.52-0.62  the display grows to fill the frame; the panel staggers in
-//   0.62-0.70  the laptop dissolves, but only once the panel already covers
-//   0.70-0.80  HOLD — nothing moves, the advantages are readable
-//   0.80-0.86  pull back out; the laptop fades in again
-//   0.84-0.90  it tumbles through upside-down as the lid folds shut
-//   0.90-1.00  the closing parade: four finishes, a beat each
+//   0.00-0.05  settle, lid shut, held in the empty right-hand half
+//   0.05-0.20  lid opens — still clear of the headline column
+//   0.20-0.30  breathe: the reader gets to actually read the hero
+//   0.30-0.48  copy clears, laptop walks to centre and squares up
+//   0.44-0.54  the display grows to fill the frame; the panel staggers in
+//   0.55-0.61  the laptop dissolves, but only once the panel already covers
+//   0.61-0.72  HOLD — nothing moves, the advantages are readable
+//   0.72-0.80  pull back out; the laptop returns and tumbles, lid folding shut
+//   0.80-1.00  the closing parade: a fifth of the whole run, one beat each,
+//              because four full turns need watching rather than getting through
 /** Lid opens for the approach, then folds shut again during the flip. */
-const OPEN = (p: number) => ramp(p, [[0.06, 0], [0.22, 1], [0.84, 1], [0.9, 0]]);
-const SCREEN_ON = (p: number) => ramp(p, [[0.18, 0], [0.36, 1], [0.84, 1], [0.89, 0]]);
+const OPEN = (p: number) => ramp(p, [[0.05, 0], [0.2, 1], [0.72, 1], [0.8, 0]]);
+const SCREEN_ON = (p: number) => ramp(p, [[0.16, 0], [0.32, 1], [0.72, 1], [0.79, 0]]);
 /** How far the camera has abandoned the orbit for a head-on approach. */
-const ALIGN = (p: number) => ramp(p, [[0.38, 0], [0.56, 1], [0.8, 1], [0.86, 0]]);
+const ALIGN = (p: number) => ramp(p, [[0.3, 0], [0.48, 1], [0.66, 1], [0.74, 0]]);
 /** Distance in front of the display once aligned — this is the push-in. */
-const DOLLY = (p: number) => ramp(p, [[0.38, 4.6], [0.6, 0.95], [0.8, 0.95], [0.86, 3.4]]);
+const DOLLY = (p: number) => ramp(p, [[0.3, 4.6], [0.52, 0.95], [0.66, 0.95], [0.74, 3.4]]);
 /** The panel behind the glass fades up, holds through the pause, then goes. */
-const PANEL_IN = (p: number) => ramp(p, [[0.52, 0], [0.62, 1], [0.8, 1], [0.85, 0]]);
+const PANEL_IN = (p: number) => ramp(p, [[0.44, 0], [0.54, 1], [0.66, 1], [0.72, 0]]);
 /**
  * The laptop dissolves for the pause, then comes back for the flip. Starts
  * late on purpose: fading it while the panel is still smaller than the frame
  * leaves a half-transparent laptop washed out against the white page.
  */
-const LAPTOP_OUT = (p: number) => ramp(p, [[0.63, 0], [0.7, 1], [0.8, 1], [0.86, 0]]);
+const LAPTOP_OUT = (p: number) => ramp(p, [[0.55, 0], [0.61, 1], [0.66, 1], [0.73, 0]]);
 /**
  * Unwinds the hero's right-hand offset. Runs ahead of ALIGN so the laptop has
  * already walked back to centre by the time the panel is readable — the display
  * opens in the middle of the frame, not off to one side — and stays centred.
  */
-const CENTRE = (p: number) => ramp(p, [[0.36, 0], [0.54, 1]]);
+const CENTRE = (p: number) => ramp(p, [[0.3, 0], [0.48, 1]]);
 /** A full tumble as the lid shuts: passes through upside-down, lands upright. */
-const FLIP = (p: number) => ramp(p, [[0.83, 0], [0.9, 1]]);
+const FLIP = (p: number) => ramp(p, [[0.72, 0], [0.8, 1]]);
 /** Drives the closing colourway parade. */
-const SHOWCASE = (p: number) => ramp(p, [[0.9, 0], [1, 1]]);
+const SHOWCASE = (p: number) => ramp(p, [[0.8, 0], [1, 1]]);
 
-const AZIMUTH: Stop[] = [[0, -0.55], [0.26, -0.34], [0.54, 0], [1, 0]];
-const RADIUS: Stop[] = [[0, 6.2], [0.26, 5.9], [0.54, 5.8], [0.86, 5.6], [0.93, 4.4], [1, 4.4]];
-const HEIGHT: Stop[] = [[0, 2.2], [0.26, 1.9], [0.54, 1.75], [0.86, 1.9], [0.93, 2.1], [1, 2.1]];
-const LOOK_Y: Stop[] = [[0, 0.78], [0.4, 0.88], [0.86, 0.7], [0.93, 0.22], [1, 0.22]];
+const AZIMUTH: Stop[] = [[0, -0.55], [0.24, -0.34], [0.48, 0], [1, 0]];
+const RADIUS: Stop[] = [[0, 6.2], [0.24, 5.9], [0.48, 5.8], [0.76, 5.6], [0.84, 4.4], [1, 4.4]];
+const HEIGHT: Stop[] = [[0, 2.2], [0.24, 1.9], [0.48, 1.75], [0.76, 1.9], [0.84, 2.1], [1, 2.1]];
+const LOOK_Y: Stop[] = [[0, 0.78], [0.38, 0.88], [0.76, 0.7], [0.84, 0.22], [1, 0.22]];
 
 /**
  * Slide the subject into the right-hand half on landscape viewports so the
@@ -351,11 +351,15 @@ function Laptop({
       }
       if (group.current && show > 0) {
         const local = slot - index;
-        const t = Math.min(local / 0.66, 1);
-        const turns = index + t * t * (3 - 2 * t);
+        // Turn through the first 55% of the beat, then rest for the remaining
+        // 45%. Smootherstep so it eases out of stillness and back into it
+        // without ever snapping.
+        const t = Math.min(local / 0.55, 1);
+        const turns = index + t * t * t * (t * (t * 6 - 15) + 10);
         group.current.rotation.y = spin.current + turns * Math.PI * 2;
-        // A small settle as each finish lands, decaying across the beat.
-        group.current.scale.setScalar(1 + Math.exp(-local * 6) * 0.045);
+        // A slow swell across the beat rather than a snap on the change — the
+        // decaying pop this replaced was most of what read as aggressive.
+        group.current.scale.setScalar(1 + Math.sin(local * Math.PI) * 0.018);
       } else if (group.current) {
         group.current.scale.setScalar(1);
       }
@@ -394,7 +398,7 @@ function Laptop({
       lookTarget.lerp(centre, align);
     }
 
-    const k = 1 - Math.pow(0.0015, delta);
+    const k = 1 - Math.pow(0.012, delta);
     rig.current.lerp(orbit, k);
     look.current.lerp(lookTarget, k);
     camera.position.copy(rig.current);
@@ -439,13 +443,13 @@ function Laptop({
     // scroll cue goes as soon as the reader has taken the hint.
     const copy = copyRef.current;
     if (copy && !reducedMotion) {
-      const f = ramp(p, [[0.3, 0], [0.46, 1]]);
+      const f = ramp(p, [[0.26, 0], [0.42, 1]]);
       copy.style.opacity = String(1 - f);
       copy.style.transform = `translateY(${-46 * f}px)`;
       copy.style.pointerEvents = f > 0.6 ? "none" : "";
     }
     if (hintRef.current && !reducedMotion) {
-      hintRef.current.style.opacity = String(1 - ramp(p, [[0.02, 0], [0.12, 1]]));
+      hintRef.current.style.opacity = String(1 - ramp(p, [[0.02, 0], [0.1, 1]]));
     }
 
 
