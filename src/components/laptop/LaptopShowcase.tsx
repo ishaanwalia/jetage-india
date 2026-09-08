@@ -125,7 +125,7 @@ export function LaptopShowcase() {
         <div
           className={`${
             reducedMotion ? "relative" : "sticky top-0"
-          } flex h-screen w-full items-center overflow-hidden`}
+          } flex h-screen w-full items-center overflow-hidden pt-32 pb-12`}
         >
           {/* Ambient wash — cheap stand-in for a bloom pass, and it recolours
               with the variant so the whole frame shifts, not just the shell. */}
@@ -147,7 +147,7 @@ export function LaptopShowcase() {
 
           <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
             <div className="relative max-w-xl">
-              <div className="space-y-7">
+              <div className="space-y-5">
                 <div
                   onDoubleClick={() => router.push("/admin/")}
                   className="group inline-flex cursor-default items-center gap-2 rounded-full border border-jet-primary/20 bg-jet-primary/10 px-4 py-2 text-sm font-medium text-jet-primary transition-all hover:border-jet-primary/40"
@@ -156,7 +156,7 @@ export function LaptopShowcase() {
                   <span>Trusted Since 1989</span>
                 </div>
 
-                <h1 className="text-4xl font-bold leading-[0.95] tracking-tight text-jet-text sm:text-5xl lg:text-7xl xl:text-8xl">
+                <h1 className="text-4xl font-bold leading-[0.95] tracking-tight text-jet-text sm:text-5xl lg:text-7xl">
                   Premium HP
                   <span className="block text-gradient-gold glow-text">
                     <Typewriter
@@ -165,7 +165,7 @@ export function LaptopShowcase() {
                       pauseDuration={3000}
                     />
                   </span>
-                  <span className="mt-4 block text-2xl font-medium text-jet-text-dim sm:text-3xl lg:text-4xl xl:text-5xl">
+                  <span className="mt-4 block text-2xl font-medium text-jet-text-dim sm:text-3xl lg:text-4xl">
                     Delivered to You
                   </span>
                 </h1>

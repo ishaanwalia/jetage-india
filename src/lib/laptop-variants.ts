@@ -42,7 +42,7 @@ export type LaptopVariant = {
 export const LAPTOP_VARIANTS: LaptopVariant[] = [
   {
     id: "shadow",
-    name: "Shadow Black",
+    name: "Shadow",
     tagline: "OMEN · gaming, at full tilt",
     chassis: "#26292f",
     backlight: "#22d3ee",
@@ -56,7 +56,7 @@ export const LAPTOP_VARIANTS: LaptopVariant[] = [
   },
   {
     id: "cobalt",
-    name: "Performance Blue",
+    name: "Cobalt",
     tagline: "OMEN · built for long sessions",
     chassis: "#2f4270",
     backlight: "#60a5fa",
@@ -70,7 +70,7 @@ export const LAPTOP_VARIANTS: LaptopVariant[] = [
   },
   {
     id: "ceramic",
-    name: "Ceramic White",
+    name: "Ceramic",
     tagline: "OMEN · the quiet one",
     chassis: "#a9b1ba",
     backlight: "#e2e8f0",
@@ -84,7 +84,7 @@ export const LAPTOP_VARIANTS: LaptopVariant[] = [
   },
   {
     id: "mica",
-    name: "Mica Silver",
+    name: "Mica",
     tagline: "OMEN · desk-friendly finish",
     chassis: "#4c545f",
     backlight: "#38bdf8",
