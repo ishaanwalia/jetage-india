@@ -161,6 +161,7 @@ export function ContactDock() {
   const convoId = useRef<string>("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
 
   if (!convoId.current) convoId.current = newConversationId();
@@ -186,6 +187,48 @@ export function ContactDock() {
     body.style.overflow = "hidden";
     return () => {
       body.style.overflow = previous;
+    };
+  }, [open]);
+
+  // Pin the sheet to the *visible* area, not the layout viewport.
+  //
+  // h-dvh alone is not enough, and overflow:hidden on the body does not help
+  // either. Android Chrome shrinks the layout viewport when the keyboard opens,
+  // so dvh does the right thing there — but iOS Safari does not resize anything.
+  // It scrolls the visual viewport instead, which drags a position:fixed sheet
+  // up off the top of the screen and leaves the page underneath showing below
+  // its bottom edge. That is the gap you can see behind the keyboard.
+  //
+  // visualViewport is the only API that reports where the visible area actually
+  // is, so on phones the sheet takes its top and height from it and follows the
+  // keyboard. Desktop keeps the corner panel's own CSS box.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!open || !vv) return;
+    const fit = () => {
+      const el = sheetRef.current;
+      if (!el) return;
+      // inset-0 already sets bottom; top + height win over it, which is what
+      // lets one pair of values place the sheet in both orientations.
+      if (window.matchMedia("(min-width: 640px)").matches) {
+        el.style.removeProperty("top");
+        el.style.removeProperty("height");
+        return;
+      }
+      el.style.top = `${vv.offsetTop}px`;
+      el.style.height = `${vv.height}px`;
+    };
+    fit();
+    vv.addEventListener("resize", fit);
+    vv.addEventListener("scroll", fit);
+    // window resize as well as the viewport ones: crossing the sm breakpoint
+    // has to hand the box back to CSS, and a stale inline height left over from
+    // phone layout is the same bug this effect exists to prevent.
+    window.addEventListener("resize", fit);
+    return () => {
+      vv.removeEventListener("resize", fit);
+      vv.removeEventListener("scroll", fit);
+      window.removeEventListener("resize", fit);
     };
   }, [open]);
 
@@ -314,6 +357,7 @@ export function ContactDock() {
         {open && (
           <motion.div
             id="chat-panel"
+            ref={sheetRef}
             role="dialog"
             aria-label="Product assistant"
             // Rise only, no scale. As a full-bleed sheet a scaled entrance
@@ -322,11 +366,10 @@ export function ContactDock() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 24 }}
             transition={{ duration: reduce ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
-            // Phones get a full sheet, not a floating card. h-dvh is the whole
-            // trick: the dynamic viewport unit shrinks when the keyboard comes
-            // up, so the sheet resizes to the space above it instead of being
-            // shoved off-screen. On sm+ it goes back to the corner panel, where
-            // only the toggle sits below it.
+            // Phones get a full sheet, not a floating card. h-dvh is the
+            // starting point — the effect above then pins it to visualViewport,
+            // which is what actually tracks the keyboard on iOS. On sm+ it goes
+            // back to the corner panel, where only the toggle sits below it.
             className="fixed inset-0 z-[80] flex h-dvh w-full flex-col overflow-hidden bg-jet-bg-card shadow-2xl sm:inset-auto sm:bottom-[6.25rem] sm:right-4 sm:h-[min(620px,calc(100dvh-9rem))] sm:w-[min(400px,calc(100vw-2rem))] sm:rounded-2xl sm:border sm:border-jet-border md:right-6"
           >
             <header className="flex shrink-0 items-start justify-between gap-3 bg-gradient-to-br from-jet-primary to-jet-primary-dim px-5 py-4">
@@ -350,7 +393,9 @@ export function ContactDock() {
               </button>
             </header>
 
-            <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
+            {/* overscroll-contain so reaching the end of the conversation does
+                not hand the scroll to the page behind the sheet. */}
+            <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto overscroll-contain px-5 py-4">
               {messages.length === 0 ? (
                 <div>
                   <p className="text-sm leading-relaxed text-jet-text-dim">
