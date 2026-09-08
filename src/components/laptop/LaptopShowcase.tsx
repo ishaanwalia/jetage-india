@@ -92,7 +92,7 @@ export function LaptopShowcase() {
       aria-label="Explore HP laptops in 3D"
       className="relative bg-jet-bg"
     >
-      <div ref={wrap} className={reducedMotion ? "relative" : "relative h-[1000vh]"}>
+      <div ref={wrap} className={reducedMotion ? "relative" : "relative h-[1150vh]"}>
         <div
           className={`${
             reducedMotion ? "relative" : "sticky top-0"

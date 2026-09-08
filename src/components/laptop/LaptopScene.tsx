@@ -34,47 +34,68 @@ function ramp(p: number, stops: Stop[]) {
   return stops[stops.length - 1][1];
 }
 
-// The whole story on one scrubbed clock, read from scroll position:
-//   0.00-0.05  settle, lid shut, held in the empty right-hand half
-//   0.05-0.20  lid opens — still clear of the headline column
-//   0.20-0.30  breathe: the reader gets to actually read the hero
-//   0.30-0.48  copy clears, laptop walks to centre and squares up
-//   0.44-0.54  the display grows to fill the frame; the panel staggers in
-//   0.55-0.61  the laptop dissolves, but only once the panel already covers
-//   0.61-0.72  HOLD — nothing moves, the advantages are readable
-//   0.72-0.80  pull back out; the laptop returns and tumbles, lid folding shut
-//   0.80-1.00  the closing parade: a fifth of the whole run, one beat each,
-//              because four full turns need watching rather than getting through
+// The whole story on one scrubbed clock, read from scroll position. Fractions
+// of the 1150vh wrapper; the vh figures are what each beat is actually worth,
+// because that is what a reader feels, not the fraction:
+//   0.000-0.043   50vh  settle, lid shut, held in the empty right-hand half
+//   0.043-0.174  150vh  lid opens — still clear of the headline column
+//   0.174-0.261  100vh  breathe: the reader gets to actually read the hero
+//   0.261-0.452  220vh  copy clears, laptop walks to centre, camera squares up
+//   0.383-0.500  135vh  the display fills the frame, the panel arrives AND the
+//                       laptop dissolves through it — one event, not three
+//   0.500-0.609  125vh  HOLD — nothing moves, the advantages are readable
+//   0.609-0.757  170vh  back out, in the reverse order it came in: panel goes,
+//                       laptop returns through it, camera pulls back last
+//   0.757-0.826   80vh  only now the tumble, on a solid laptop, camera parked
+//   0.826-1.000  200vh  the closing parade, one beat per finish
+//
+// The two halves used to be 170vh in and 80vh out, with the tumble starting
+// before the laptop had finished coming back. Leaving at twice the speed you
+// arrived, through a laptop you can still see through, is what read as a snap.
 /** Lid opens for the approach, then folds shut again during the flip. */
-const OPEN = (p: number) => ramp(p, [[0.05, 0], [0.2, 1], [0.72, 1], [0.8, 0]]);
-const SCREEN_ON = (p: number) => ramp(p, [[0.16, 0], [0.32, 1], [0.72, 1], [0.79, 0]]);
+const OPEN = (p: number) => ramp(p, [[0.043, 0], [0.174, 1], [0.757, 1], [0.826, 0]]);
+const SCREEN_ON = (p: number) => ramp(p, [[0.14, 0], [0.28, 1], [0.757, 1], [0.817, 0]]);
 /** How far the camera has abandoned the orbit for a head-on approach. */
-const ALIGN = (p: number) => ramp(p, [[0.3, 0], [0.48, 1], [0.66, 1], [0.74, 0]]);
-/** Distance in front of the display once aligned — this is the push-in. */
-const DOLLY = (p: number) => ramp(p, [[0.3, 4.6], [0.52, 0.95], [0.66, 0.95], [0.74, 3.4]]);
-/** The panel behind the glass fades up, holds through the pause, then goes. */
-const PANEL_IN = (p: number) => ramp(p, [[0.44, 0], [0.54, 1], [0.66, 1], [0.72, 0]]);
+const ALIGN = (p: number) => ramp(p, [[0.261, 0], [0.452, 1], [0.609, 1], [0.757, 0]]);
 /**
- * The laptop dissolves for the pause, then comes back for the flip. Starts
- * late on purpose: fading it while the panel is still smaller than the frame
- * leaves a half-transparent laptop washed out against the white page.
+ * Distance in front of the display once aligned — this is the push-in, and the
+ * pull-out. The way back gets 170vh where it used to get 80: the same
+ * 0.95 -> 3.4 move at half the rate, so the frame opens back up rather than
+ * recoiling.
  */
-const LAPTOP_OUT = (p: number) => ramp(p, [[0.55, 0], [0.61, 1], [0.66, 1], [0.73, 0]]);
+const DOLLY = (p: number) => ramp(p, [[0.261, 4.6], [0.452, 0.95], [0.609, 0.95], [0.757, 3.4]]);
+/** The panel behind the glass fades up, holds through the pause, then goes. */
+const PANEL_IN = (p: number) => ramp(p, [[0.383, 0], [0.470, 1], [0.609, 1], [0.678, 0]]);
+/**
+ * The laptop dissolves as the panel arrives, and comes back as it leaves.
+ *
+ * It used to wait until the panel was already opaque, which made the arrival a
+ * white slab wiping over a solid laptop, and left the dissolve itself playing
+ * where nothing could see it. Overlapping the two is the whole difference
+ * between crossing a fade and going through the glass. It still starts late
+ * enough that the panel already covers the frame — fading the laptop while the
+ * display is smaller than the viewport leaves it washed out against the page.
+ */
+const LAPTOP_OUT = (p: number) => ramp(p, [[0.43, 0], [0.50, 1], [0.609, 1], [0.713, 0]]);
 /**
  * Unwinds the hero's right-hand offset. Runs ahead of ALIGN so the laptop has
  * already walked back to centre by the time the panel is readable — the display
  * opens in the middle of the frame, not off to one side — and stays centred.
  */
-const CENTRE = (p: number) => ramp(p, [[0.3, 0], [0.48, 1]]);
-/** A full tumble as the lid shuts: passes through upside-down, lands upright. */
-const FLIP = (p: number) => ramp(p, [[0.72, 0], [0.8, 1]]);
+const CENTRE = (p: number) => ramp(p, [[0.261, 0], [0.452, 1]]);
+/**
+ * A full tumble as the lid shuts: passes through upside-down, lands upright.
+ * Starts only once the laptop is solid again (0.713) and the camera has stopped
+ * moving (0.757), so the turn is the only thing happening while it happens.
+ */
+const FLIP = (p: number) => ramp(p, [[0.757, 0], [0.826, 1]]);
 /** Drives the closing colourway parade. */
-const SHOWCASE = (p: number) => ramp(p, [[0.8, 0], [1, 1]]);
+const SHOWCASE = (p: number) => ramp(p, [[0.826, 0], [1, 1]]);
 
-const AZIMUTH: Stop[] = [[0, -0.55], [0.24, -0.34], [0.48, 0], [1, 0]];
-const RADIUS: Stop[] = [[0, 6.2], [0.24, 5.9], [0.48, 5.8], [0.76, 5.6], [0.84, 4.4], [1, 4.4]];
-const HEIGHT: Stop[] = [[0, 2.2], [0.24, 1.9], [0.48, 1.75], [0.76, 1.9], [0.84, 2.1], [1, 2.1]];
-const LOOK_Y: Stop[] = [[0, 0.78], [0.38, 0.88], [0.76, 0.7], [0.84, 0.22], [1, 0.22]];
+const AZIMUTH: Stop[] = [[0, -0.55], [0.209, -0.34], [0.452, 0], [1, 0]];
+const RADIUS: Stop[] = [[0, 6.2], [0.209, 5.9], [0.452, 5.8], [0.757, 5.6], [0.826, 4.4], [1, 4.4]];
+const HEIGHT: Stop[] = [[0, 2.2], [0.209, 1.9], [0.452, 1.75], [0.757, 1.9], [0.826, 2.1], [1, 2.1]];
+const LOOK_Y: Stop[] = [[0, 0.78], [0.33, 0.88], [0.757, 0.7], [0.826, 0.22], [1, 0.22]];
 
 /**
  * Slide the subject into the right-hand half on landscape viewports so the
@@ -88,7 +109,7 @@ function screenShift(aspect: number) {
 }
 
 /** Where the scene rests when motion is suppressed: open, three-quarter view. */
-const STILL = { p: 0.4, open: 1 };
+const STILL = { p: 0.35, open: 1 };
 
 type SceneProps = {
   spin: RefObject<number>;
@@ -443,13 +464,13 @@ function Laptop({
     // scroll cue goes as soon as the reader has taken the hint.
     const copy = copyRef.current;
     if (copy && !reducedMotion) {
-      const f = ramp(p, [[0.26, 0], [0.42, 1]]);
+      const f = ramp(p, [[0.226, 0], [0.365, 1]]);
       copy.style.opacity = String(1 - f);
       copy.style.transform = `translateY(${-46 * f}px)`;
       copy.style.pointerEvents = f > 0.6 ? "none" : "";
     }
     if (hintRef.current && !reducedMotion) {
-      hintRef.current.style.opacity = String(1 - ramp(p, [[0.02, 0], [0.1, 1]]));
+      hintRef.current.style.opacity = String(1 - ramp(p, [[0.017, 0], [0.087, 1]]));
     }
 
 
