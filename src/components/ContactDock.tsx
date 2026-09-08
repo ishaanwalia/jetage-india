@@ -127,6 +127,9 @@ function DockAction({
     <motion.li
       initial={reduce ? false : { opacity: 0, y: 12, scale: 0.8 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
+      // Drops toward the toggle on the way out, so opening the chat reads as
+      // these folding back into it rather than blinking off.
+      exit={reduce ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.8 }}
       // Staggered, bottom-up. The set reads as one object arriving rather than
       // three things appearing at once.
       transition={{ delay: reduce ? 0 : delay, duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
@@ -234,24 +237,35 @@ export function ContactDock() {
     <>
       {/* One stack, one right edge, one z-index. */}
       <ul className="fixed bottom-6 right-4 z-[80] flex flex-col items-end gap-3 md:right-6">
-        <DockAction
-          label="Call the showroom"
-          href={`tel:${PHONE}`}
-          tone="phone"
-          delay={0.05}
-        >
-          <Phone className="h-5 w-5" aria-hidden />
-        </DockAction>
+        {/* Both step aside while the chat is open: the panel wants that column,
+            and a stack of call-to-actions competing with an open conversation
+            is just clutter. They come straight back on close. */}
+        <AnimatePresence>
+          {!open && (
+            <>
+              <DockAction
+                key="phone"
+                label="Call the showroom"
+                href={`tel:${PHONE}`}
+                tone="phone"
+                delay={0.05}
+              >
+                <Phone className="h-5 w-5" aria-hidden />
+              </DockAction>
 
-        <DockAction
-          label="Chat on WhatsApp"
-          href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hi Jetage, I'd like some help choosing a product.")}`}
-          tone="whatsapp"
-          delay={0.12}
-          external
-        >
-          <WhatsAppGlyph className="h-6 w-6" />
-        </DockAction>
+              <DockAction
+                key="whatsapp"
+                label="Chat on WhatsApp"
+                href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hi Jetage, I'd like some help choosing a product.")}`}
+                tone="whatsapp"
+                delay={0.12}
+                external
+              >
+                <WhatsAppGlyph className="h-6 w-6" />
+              </DockAction>
+            </>
+          )}
+        </AnimatePresence>
 
         <li className="flex justify-end">
           <motion.button
@@ -290,8 +304,10 @@ export function ContactDock() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.97 }}
             transition={{ duration: reduce ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
-            // Clears the whole dock (3 × 56px + gaps + bottom offset).
-            className="fixed bottom-[15.5rem] right-4 z-[80] flex h-[min(540px,calc(100dvh-18rem))] w-[min(400px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-jet-border bg-jet-bg-card shadow-2xl md:right-6"
+            // Only the toggle is left below it now (56px + gap + bottom
+            // offset), so the panel takes the column the other two vacated
+            // and gets that height back.
+            className="fixed bottom-[6.25rem] right-4 z-[80] flex h-[min(620px,calc(100dvh-9rem))] w-[min(400px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-jet-border bg-jet-bg-card shadow-2xl md:right-6"
           >
             <header className="shrink-0 bg-gradient-to-br from-jet-primary to-jet-primary-dim px-5 py-4">
               <h2 className="flex items-center gap-2 font-bold text-white">
