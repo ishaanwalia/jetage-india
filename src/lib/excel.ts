@@ -480,12 +480,32 @@ export async function diffWorkbook(
  * Images are never touched: a create gets an empty image and someone adds it
  * in the CMS, and an update leaves whatever picture is already there.
  *
+ * Each row's audit entry carries the field-by-field diff the operator
+ * approved, in the same `{field: {from, to}}` shape the single-product editor
+ * writes — so a bulk edit reads like any other edit on /admin/audit instead of
+ * the bare "excel-import" marker it used to leave. The diff comes in from the
+ * preview rather than being recomputed here: what gets recorded should be what
+ * somebody actually read and pressed Apply on.
+ *
  * ponytail: applied row by row rather than in one transaction, because the
  * HTTP driver has no interactive transaction and 47 upserts inside a single
  * CTE is worse to read than it is to re-run. A half-applied batch is visible
  * in the audit log and safe to re-apply, since every write is an upsert.
  */
-export async function applyRows(rows: SheetRow[], actorEmail: string): Promise<number> {
+export async function applyRows(
+  rows: SheetRow[],
+  actorEmail: string,
+  changes: Change[],
+): Promise<number> {
+  // The preview's flat list, folded into one diff per product.
+  const diffByProduct = new Map<string, Record<string, { from: string; to: string }>>();
+  for (const c of changes) {
+    if (c.kind !== "update" || !c.productId || !c.field) continue;
+    const fields = diffByProduct.get(c.productId) ?? {};
+    fields[c.field] = { from: c.before ?? "", to: c.after ?? "" };
+    diffByProduct.set(c.productId, fields);
+  }
+
   let written = 0;
 
   for (const r of rows) {
@@ -518,10 +538,14 @@ export async function applyRows(rows: SheetRow[], actorEmail: string): Promise<n
         featured = excluded.featured, status = excluded.status, updated_at = now()
     `;
 
+    // A create has no "before" worth recording — the row is the whole story.
+    // An update carries the diff, and null rather than {} so the audit page's
+    // "did anything change" check reads the same as it does for a CMS edit.
+    const fields = diffByProduct.get(id);
     await sql`
       INSERT INTO audit_log (actor_email, action, resource, record_id, record_label, changes)
       VALUES (${actorEmail}, ${r.id ? "update" : "create"}, 'product', ${id}, ${r.name},
-              ${JSON.stringify({ source: "excel-import" })}::jsonb)
+              ${fields && Object.keys(fields).length ? JSON.stringify(fields) : null}::jsonb)
     `;
     written++;
   }

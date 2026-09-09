@@ -41,9 +41,12 @@ export async function previewImport(_prev: PreviewState, formData: FormData): Pr
       return { ok: false, error: "Nothing in that sheet is different from what is already live." };
     }
 
+    // The diff is stored, not just returned to the screen: it is what the
+    // audit log records on apply, and it has to be the one that was approved.
     const [batch] = (await sql`
-      INSERT INTO import_batches (actor_email, rows, summary)
-      VALUES (${user.email}, ${JSON.stringify(rows)}::jsonb, ${JSON.stringify(summary)}::jsonb)
+      INSERT INTO import_batches (actor_email, rows, summary, changes)
+      VALUES (${user.email}, ${JSON.stringify(rows)}::jsonb, ${JSON.stringify(summary)}::jsonb,
+              ${JSON.stringify(changes)}::jsonb)
       RETURNING id
     `) as { id: number }[];
 
@@ -66,14 +69,19 @@ export async function applyImport(formData: FormData) {
   if (!Number.isInteger(batchId)) redirect("/admin/bulk?error=1");
 
   const [batch] = (await sql`
-    SELECT id, rows, applied_at FROM import_batches WHERE id = ${batchId}
-  `) as { id: number; rows: SheetRow[]; applied_at: string | null }[];
+    SELECT id, rows, changes, applied_at FROM import_batches WHERE id = ${batchId}
+  `) as {
+    id: number;
+    rows: SheetRow[];
+    changes: Change[];
+    applied_at: string | null;
+  }[];
 
   if (!batch) redirect("/admin/bulk?error=1");
   // Re-pressing Apply, or a double submit, must not write the batch twice.
   if (batch.applied_at) redirect(`/admin/bulk?already=1`);
 
-  const written = await applyRows(batch.rows, user.email);
+  const written = await applyRows(batch.rows, user.email, batch.changes ?? []);
 
   await sql`
     UPDATE import_batches SET applied_at = now(), applied_by = ${user.email}
