@@ -50,7 +50,14 @@ const ADVANTAGES = [
  * of cards two thirds of the way down. Authored at viewport size so the scene
  * can put it on the glass with one uniform scale.
  */
-export function ScreenPanel({ inFlow = false }: { inFlow?: boolean }) {
+export function ScreenPanel({
+  inFlow = false,
+  className = "flex",
+}: {
+  inFlow?: boolean;
+  /** Lets the caller decide which viewports this is shown on, in CSS. */
+  className?: string;
+}) {
   return (
     // pt-32 clears the fixed navbar: at full-screen this panel IS the viewport,
     // so anything at the top would sit under the header. As an ordinary section
@@ -60,7 +67,7 @@ export function ScreenPanel({ inFlow = false }: { inFlow?: boolean }) {
     // fallback has been rendering: the section that exists so those readers can
     // read the advantages, showing them nothing.
     <div
-      className={`flex h-full w-full flex-col items-center justify-center gap-7 bg-jet-bg px-8 ${
+      className={`${className} h-full w-full flex-col items-center justify-center gap-7 bg-jet-bg px-8 ${
         inFlow ? "py-4" : "pb-10 pt-32"
       }`}
       style={inFlow ? ({ "--panel-in": 1 } as React.CSSProperties) : undefined}

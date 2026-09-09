@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -60,7 +60,6 @@ const HOME_SECTIONS = [
 
 // NEW 3D COMPONENTS
 import { LaptopShowcase } from "@/components/laptop/LaptopShowcase";
-import { ScreenPanel } from "@/components/laptop/ScreenPanel";
 import { Stats3D } from "@/components/Stats3D";
 import { CategoryGrid3D } from "@/components/CategoryGrid3D";
 import { Marquee3D } from "@/components/Marquee3D";
@@ -77,22 +76,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function HomeClient() {
   const horizontalRef = useRef<HTMLDivElement>(null);
-  const [phone, setPhone] = useState(false);
 
   const { products } = useCompare();
   const featuredProducts = products.filter((p) => p.featured).slice(0, 6);
-
-  // Matches the sm: breakpoint the rest of the page uses. Starts false, so the
-  // server renders the desktop arrangement and the advantages are in the HTML
-  // either way — they are the copy that has to be findable. A phone swaps on
-  // mount, before either half of the swap is anywhere near the viewport.
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)");
-    const sync = () => setPhone(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -135,20 +121,16 @@ export function HomeClient() {
 
       {/* ==================== 3D HERO SECTION ==================== */}
       {/* Owns its own #hero anchor — it spans three screens of pinned scroll. */}
-      <LaptopShowcase phone={phone} />
+      <LaptopShowcase />
 
       {/* ==================== 3D STATS SECTION ==================== */}
-      {/* The two trade places on a phone: the display carries the counters,
-          which read at that size, and the advantages take the counters' slot
-          where they get the full width instead of a portrait screen. One
-          media query decides both ends of the swap. */}
-      {phone ? (
-        <section className="py-10">
-          <ScreenPanel inFlow />
-        </section>
-      ) : (
+      {/* Desktop only. On a phone these same four counters are what the
+          laptop's display carries, and running them here as well would be the
+          same numbers twice on one page. Hidden in CSS rather than dropped in
+          React so the decision matches the one the display makes. */}
+      <div className="hidden sm:block">
         <Stats3D />
-      )}
+      </div>
 
       {/* ==================== 3D CATEGORIES SECTION ==================== */}
       <div id="categories">

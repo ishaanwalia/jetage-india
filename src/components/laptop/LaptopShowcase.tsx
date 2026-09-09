@@ -24,13 +24,7 @@ const LaptopScene = dynamic(() => import("./LaptopScene").then((m) => m.LaptopSc
   ),
 });
 
-/**
- * @param phone  Swaps what the display carries. On a phone it is the counters,
- *               and the advantages move to a section below the hero — see
- *               StatsPanel. Decided by the page, which has to make the matching
- *               swap underneath, so one media query drives both halves.
- */
-export function LaptopShowcase({ phone = false }: { phone?: boolean }) {
+export function LaptopShowcase() {
   const router = useRouter();
   const wrap = useRef<HTMLDivElement>(null);
   const spin = useRef(0);
@@ -124,8 +118,7 @@ export function LaptopShowcase({ phone = false }: { phone?: boolean }) {
               portalRef={portalRef}
               copyRef={copyRef}
               hintRef={hintRef}
-              // Desktop never asks, so the Canvas is never re-rendered by it.
-              onPanelArrive={phone ? setArrived : undefined}
+              onPanelArrive={setArrived}
             />
           </div>
 
@@ -202,7 +195,20 @@ export function LaptopShowcase({ phone = false }: { phone?: boolean }) {
               ref={portalRef}
               className="pointer-events-none absolute inset-0 z-20 opacity-0 will-change-transform"
             >
-              {phone ? <StatsPanel active={arrived} /> : <ScreenPanel />}
+              {/*
+                Which of these the viewer gets is decided in CSS, not in React.
+                It used to be a matchMedia in the page, and on a real phone that
+                state never became true — so the display kept the desktop panel
+                and showed six advantage cards cropped into a portrait screen
+                with no way to scroll them. A media query in a stylesheet cannot
+                fail to apply the way one behind hydration can.
+
+                Both are in the markup on both viewports. That is deliberate:
+                the advantage copy stays in the HTML for crawlers even where it
+                is not drawn, which a conditional render would have removed.
+              */}
+              <ScreenPanel className="hidden sm:flex" />
+              <StatsPanel className="flex sm:hidden" active={arrived} />
             </div>
           )}
 
@@ -219,7 +225,7 @@ export function LaptopShowcase({ phone = false }: { phone?: boolean }) {
           advantages simply sit on the page. Not on a phone: there the page is
           already putting them below the hero, and rendering them here as well
           would print the whole section twice. */}
-      {reducedMotion && !phone && (
+      {reducedMotion && (
         <div className="py-16">
           <ScreenPanel inFlow />
         </div>
