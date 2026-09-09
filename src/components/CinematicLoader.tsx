@@ -7,6 +7,29 @@ import { useProgress } from "@react-three/drei";
 const MIN_DISPLAY_MS = 2800;
 const SESSION_KEY = "jetage-intro-shown";
 
+/**
+ * Fired the moment the page can scroll again.
+ *
+ * While the curtain is up, `documentElement` is `overflow: hidden` — so the
+ * document's scrollable height is zero, and anything that measures the page in
+ * that window measures a page with nowhere to go. ScrollTrigger is exactly that
+ * sort of thing: every trigger registered during the intro resolves its start
+ * against maxScroll 0, and the correction afterwards costs a full re-measure of
+ * the whole DOM in one synchronous task.
+ *
+ * So the release is announced rather than left to be noticed. Both paths lead
+ * here — the full intro finishing, and the skip for a returning visitor or for
+ * reduced motion — and the dataset flag covers the case where a listener is
+ * attached after the event has already gone out.
+ */
+export const INTRO_DONE = "jetage:intro-done";
+
+function releaseIntro() {
+  document.documentElement.style.overflow = "";
+  document.documentElement.dataset.intro = "done";
+  window.dispatchEvent(new Event(INTRO_DONE));
+}
+
 const letters = "JETAGE".split("");
 
 export function CinematicLoader() {
@@ -24,6 +47,9 @@ export function CinematicLoader() {
     if (reducedMotion || alreadyShown) {
       setSkipped(true);
       setVisible(false);
+      // Nothing was ever locked on this path, but the page is scrollable and
+      // whatever is waiting to measure it should be told so.
+      releaseIntro();
       return;
     }
     document.documentElement.style.overflow = "hidden";
@@ -54,7 +80,7 @@ export function CinematicLoader() {
     sessionStorage.setItem(SESSION_KEY, "1");
     const timer = setTimeout(() => {
       setVisible(false);
-      document.documentElement.style.overflow = "";
+      releaseIntro();
     }, 350);
     return () => clearTimeout(timer);
   }, [done]);

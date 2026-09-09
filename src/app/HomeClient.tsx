@@ -72,6 +72,9 @@ const CinematicLoader = dynamic(() =>
   import("@/components/CinematicLoader").then((m) => m.CinematicLoader)
 );
 
+/** Kept in step with CinematicLoader without pulling it out of its lazy chunk. */
+const INTRO_DONE = "jetage:intro-done";
+
 gsap.registerPlugin(ScrollTrigger);
 
 export function HomeClient() {
@@ -81,7 +84,24 @@ export function HomeClient() {
   const featuredProducts = products.filter((p) => p.featured).slice(0, 6);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    let ctx: gsap.Context | undefined;
+
+    /**
+     * Built after the intro curtain lifts, not on mount.
+     *
+     * This is the pinned trigger, and pinning is the expensive kind: on every
+     * refresh it measures and re-lays-out its spacer, and invalidateOnRefresh
+     * re-runs the two functions below, each of which reads scrollWidth and
+     * forces synchronous layout. Registering it while the document was locked
+     * meant doing all of that against a page of zero scrollable height, and
+     * then doing the whole thing again for real once the curtain lifted.
+     *
+     * Waiting costs nothing visible — this section is most of a page further
+     * down than anyone has scrolled by the time the intro ends.
+     */
+    const build = () => {
+      if (ctx) return;
+      ctx = gsap.context(() => {
       const horizontalSection = horizontalRef.current;
       if (horizontalSection) {
         const scrollContainer = horizontalSection.querySelector(".horizontal-scroll-container");
@@ -107,9 +127,33 @@ export function HomeClient() {
           });
         }
       }
-    });
+      });
 
-    return () => ctx.revert();
+      // Everything that is not this trigger — the Reveals, the article and
+      // product page fades — did register during the intro, against maxScroll
+      // 0. One refresh here re-measures them against the real page. It is the
+      // same work that used to happen anyway; the difference is that it happens
+      // once, at a known moment, rather than being provoked mid-scroll.
+      ScrollTrigger.refresh();
+    };
+
+    if (document.documentElement.dataset.intro === "done") {
+      build();
+    } else {
+      window.addEventListener(INTRO_DONE, build, { once: true });
+    }
+
+    // The loader is a lazy chunk, and if it ever fails to arrive the event
+    // never fires. Waiting forever would cost the horizontal row its pin, which
+    // is a visible thing to lose over an invisible optimisation — so this backs
+    // it up. build() is idempotent, so whichever gets there first wins.
+    const fallback = window.setTimeout(build, 8000);
+
+    return () => {
+      window.clearTimeout(fallback);
+      window.removeEventListener(INTRO_DONE, build);
+      ctx?.revert();
+    };
   }, []);
 
   return (
