@@ -514,6 +514,55 @@ function Laptop({
   );
 }
 
+/**
+ * Stop rendering when the hero is not on screen, and when the tab is not.
+ *
+ * The canvas runs `frameloop="always"`, which is correct while it is being
+ * looked at — the scene is scrubbed by scroll and has an idle bob, so
+ * "demand" would freeze both. But it kept rendering for the whole page: past
+ * the hero there are ten more screens of catalogue, and the GPU was drawing a
+ * laptop nobody could see the entire way down. That is most of what kept the
+ * page from ever going quiet, and it is why phones got warm on the product
+ * grid.
+ *
+ * Invisible by construction: the only time it stops is when there is nothing
+ * to see. Coming back resumes from the same state, because nothing is torn
+ * down — only the loop is parked.
+ */
+function FrameGate() {
+  const setFrameloop = useThree((s) => s.setFrameloop);
+  const canvas = useThree((s) => s.gl.domElement);
+
+  useEffect(() => {
+    // Both conditions have to hold, and each listener knows only its own half,
+    // so the other half is remembered here.
+    const onScreen = { current: true };
+
+    const apply = () => setFrameloop(onScreen.current && !document.hidden ? "always" : "never");
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        onScreen.current = entry.isIntersecting;
+        apply();
+      },
+      // Any sliver counts. The hero is sticky for eleven screens, so this only
+      // fires at the two ends of it.
+      { threshold: 0 },
+    );
+    io.observe(canvas);
+
+    document.addEventListener("visibilitychange", apply);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", apply);
+      // Never leave it parked for whatever mounts next.
+      setFrameloop("always");
+    };
+  }, [setFrameloop, canvas]);
+
+  return null;
+}
+
 export function LaptopScene(props: SceneProps) {
   return (
     <Canvas
@@ -528,6 +577,8 @@ export function LaptopScene(props: SceneProps) {
       style={{ background: "transparent" }}
       aria-hidden="true"
     >
+      <FrameGate />
+
       <Suspense fallback={null}>
         {/* Key / fill / rim — the rim picks up the variant accent along the lid edge. */}
         <directionalLight position={[4, 6, 4]} intensity={2.4} />

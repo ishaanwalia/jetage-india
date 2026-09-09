@@ -6,6 +6,20 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * Global, set once, and the cheapest performance line in the codebase.
+ *
+ * On a phone the URL bar sliding away is a resize, and every resize makes
+ * ScrollTrigger re-measure every trigger on the page — which on this site means
+ * re-measuring two pinned sections and a 1,246-element DOM, several times, in
+ * the middle of the first scroll. `ignoreMobileResize` tells it that a height
+ * change with an unchanged width is the browser chrome, not a new layout.
+ *
+ * It changes nothing about how anything animates. The triggers keep the
+ * measurements they already took, which are the correct ones.
+ */
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 interface RevealProps {
   children: ReactNode;
   className?: string;
