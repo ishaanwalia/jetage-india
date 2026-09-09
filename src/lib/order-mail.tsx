@@ -67,6 +67,7 @@ export async function notifyOrderPlaced(orderId: number) {
   await sendMail({
     to: order.email,
     subject: `Your Jetage order ${order.orderNo}`,
+    template: "order-placed-buyer",
     text: plain(order, "Thanks — we have your order."),
     html: await render(
       <OrderEmail
@@ -82,6 +83,7 @@ export async function notifyOrderPlaced(orderId: number) {
     to: INTERNAL_RECIPIENTS,
     replyTo: order.email,
     subject: `New order ${order.orderNo} — ${formatPaise(order.totalPaise)} (awaiting payment)`,
+    template: "order-placed-internal",
     text: plain(order, `New order from ${order.customerName} (${order.email}, ${order.phone})`),
     html: await render(
       <OrderEmail
@@ -102,6 +104,7 @@ export async function notifyOrderPaid(orderId: number) {
   await sendMail({
     to: order.email,
     subject: `Payment received — Jetage order ${order.orderNo}`,
+    template: "order-paid-buyer",
     text: plain(order, "Payment received. Your order is confirmed.", true),
     html: await render(
       <OrderEmail
@@ -118,6 +121,7 @@ export async function notifyOrderPaid(orderId: number) {
     to: INTERNAL_RECIPIENTS,
     replyTo: order.email,
     subject: `PAID ${order.orderNo} — ${formatPaise(order.totalPaise)}`,
+    template: "order-paid-internal",
     text: plain(order, `Payment captured for ${order.customerName}`, true),
     html: await render(
       <OrderEmail
@@ -164,6 +168,7 @@ export async function emailOrderLinks(email: string): Promise<void> {
   await sendMail({
     to: email,
     subject: "Your Jetage orders",
+    template: "order-links",
     text: rows.map((o) => `${o.orderNo} — ${formatPaise(o.totalPaise)} — ${o.url}`).join("\n"),
     html: await render(<OrderLinksEmail orders={rows} />),
   });

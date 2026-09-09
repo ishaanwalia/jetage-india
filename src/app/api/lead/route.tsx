@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { render } from "@react-email/render";
-import nodemailer from "nodemailer";
 import { LeadNotification } from "@/emails/LeadNotification";
-
-const HOSTINGER_MAILBOX = "info@jetageindia.in";
-const PERSONAL_EMAIL_TO = "ishaan.walia.148@gmail.com";
+// One owner for outbound mail. This route used to build its own transport
+// against the same mailbox, which meant a second connection, a second copy of
+// the port/TLS pairing to get wrong, and — once sends started being recorded —
+// the one message type that never appeared in the log.
+import { MAILBOX as HOSTINGER_MAILBOX, INTERNAL_RECIPIENTS, sendMail } from "@/lib/mail";
 
 interface LeadPayload {
   name: string;
@@ -68,22 +69,19 @@ Consent given: "${consentGiven}"` : null,
     <LeadNotification name={name} phone={phone} interest={interest} message={message} source={source} time={time} />
   );
 
-  try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      port: 465,
-      secure: true,
-      auth: { user: HOSTINGER_MAILBOX, pass: mailboxPassword },
-    });
-    await transporter.sendMail({
-      from: `Jetage Leads <${HOSTINGER_MAILBOX}>`,
-      to: [HOSTINGER_MAILBOX, PERSONAL_EMAIL_TO],
-      subject: `New lead — ${name} (${source})`,
-      text,
-      html,
-    });
-  } catch (err) {
-    console.error("Lead capture: Hostinger SMTP send failed", err);
+  const sent = await sendMail({
+    from: `Jetage Leads <${HOSTINGER_MAILBOX}>`,
+    to: INTERNAL_RECIPIENTS,
+    subject: `New lead — ${name} (${source})`,
+    text,
+    html,
+    template: "lead",
+  });
+
+  // sendMail reports rather than throws, so the 502 is raised here. The form
+  // needs to know: an enquiry that was neither delivered nor stored anywhere
+  // is a customer who thinks they have been in touch and has not.
+  if (!sent) {
     return NextResponse.json({ ok: false, error: "Failed to send" }, { status: 502 });
   }
 
