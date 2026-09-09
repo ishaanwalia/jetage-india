@@ -39,7 +39,17 @@ export function Footer() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="space-y-6">
             <div className="flex items-center gap-3">
-              <img src="/LogoJ.webp" alt="Jetage India" loading="lazy" className="h-12 w-auto rounded-xl object-contain" />
+              <img
+                src="/LogoJ.webp"
+                alt="Jetage India"
+                loading="lazy"
+                // Intrinsic size of the file. CSS still decides what is drawn
+                // (h-12 w-auto, so 88x48); these only let the browser reserve
+                // that box before the bytes arrive instead of reflowing round it.
+                width={1408}
+                height={768}
+                className="h-12 w-auto rounded-xl object-contain"
+              />
               <div className="flex flex-col">
                 <span className="text-lg font-bold text-jet-text leading-tight">Jetage</span>
                 <span className="text-[10px] text-jet-text-muted tracking-[0.2em] uppercase font-medium">India</span>
@@ -62,9 +72,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-6 text-jet-text">
+            <h3 className="font-bold text-lg mb-6 text-jet-text">
               <ScrambleText text="Quick Links" triggerOnHover />
-            </h4>
+            </h3>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.label}>
@@ -77,7 +87,7 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-            <h4 className="font-bold text-lg mt-8 mb-4 text-jet-text">HP Resources</h4>
+            <h3 className="font-bold text-lg mt-8 mb-4 text-jet-text">HP Resources</h3>
             <ul className="space-y-3">
               {externalLinks.map((link) => (
                 <li key={link.label}>
@@ -96,9 +106,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-6 text-jet-text">
+            <h3 className="font-bold text-lg mb-6 text-jet-text">
               <ScrambleText text="Support" triggerOnHover />
-            </h4>
+            </h3>
             <ul className="space-y-3">
               {supportLinks.map((link) => (
                 <li key={link.label}>
@@ -114,9 +124,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-6 text-jet-text">
+            <h3 className="font-bold text-lg mb-6 text-jet-text">
               <ScrambleText text="Contact Us" triggerOnHover />
-            </h4>
+            </h3>
             <div className="space-y-4">
               <a href="tel:+919814958295" className="flex items-center gap-3 text-jet-text-dim hover:text-jet-text transition-colors group">
                 <div className="w-10 h-10 bg-jet-bg-card rounded-lg flex items-center justify-center border border-jet-border group-hover:border-jet-primary/40 transition-all">

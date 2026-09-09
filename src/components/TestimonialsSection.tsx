@@ -123,7 +123,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
               {testimonial.name.split(" ").map((n) => n[0]).join("")}
             </div>
             <div>
-              <h4 className="font-bold text-jet-text text-sm">{testimonial.name}</h4>
+              <h3 className="font-bold text-jet-text text-sm">{testimonial.name}</h3>
               <div className="flex items-center gap-2 mt-0.5">
                 <StarRating rating={testimonial.rating} />
                 <span className="text-xs text-jet-text-muted">{testimonial.rating}.0</span>
