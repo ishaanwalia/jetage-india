@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, ExternalLink, Printer } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { getOrderById, adminGetEvents, adminSetStatus, formatPaise } from "@/lib/orders";
+import { formatDateTime } from "@/lib/dates";
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +39,7 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
         <div>
           <h1 className="text-3xl font-bold text-jet-text">{order.orderNo}</h1>
           <p className="mt-1 text-jet-text-muted capitalize">
-            {order.status} · {new Date(order.createdAt).toLocaleString("en-IN")}
+            {order.status} · {formatDateTime(order.createdAt)}
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -91,7 +92,7 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
           <p className="mt-3 break-all text-xs text-jet-text-muted">
             Razorpay order: {order.razorpayOrderId ?? "—"}<br />
             Payment: {order.razorpayPaymentId ?? "—"}<br />
-            Paid at: {order.paidAt ? new Date(order.paidAt).toLocaleString("en-IN") : "—"}
+            Paid at: {order.paidAt ? formatDateTime(order.paidAt) : "—"}
           </p>
         </section>
       </div>
@@ -141,7 +142,7 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
                 {e.note ?? e.type}
                 {!e.is_public && <span className="ml-2 rounded bg-jet-bg-elevated px-1.5 py-0.5 text-xs text-jet-text-muted">internal</span>}
               </p>
-              <p className="text-xs text-jet-text-muted">{new Date(e.created_at).toLocaleString("en-IN")}</p>
+              <p className="text-xs text-jet-text-muted">{formatDateTime(e.created_at)}</p>
             </li>
           ))}
         </ol>

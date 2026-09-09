@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Download, Search } from "lucide-react";
 import { adminListOrders, formatPaise } from "@/lib/orders";
+import { formatDate } from "@/lib/dates";
 
 const FILTERS = ["", "pending", "paid", "packed", "shipped", "delivered", "cancelled"] as const;
 
@@ -129,7 +130,7 @@ export default async function AdminOrdersPage({
                     {formatPaise(o.totalPaise)}
                   </td>
                   <td className="px-4 py-3 text-jet-text-muted whitespace-nowrap">
-                    {new Date(o.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                    {formatDate(o.createdAt)}
                   </td>
                 </tr>
               ))}

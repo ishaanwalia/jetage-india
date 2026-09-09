@@ -1,4 +1,5 @@
 import { getAuditLog } from "@/lib/cms";
+import { formatDateTime } from "@/lib/dates";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +47,7 @@ export default async function AuditPage() {
               </div>
 
               <p className="mt-1 text-xs text-jet-text-muted">
-                {log.actor_email} · {new Date(log.created_at).toLocaleString("en-IN")}
+                {log.actor_email} · {formatDateTime(log.created_at)}
               </p>
 
               {log.changes && Object.keys(log.changes).length > 0 && (

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle2, Clock, Package, Truck, Home, XCircle, FileText } from "lucide-react";
 import { getOrderByToken, getPublicEvents, formatPaise } from "@/lib/orders";
+import { formatDate, formatDateTime } from "@/lib/dates";
 
 /**
  * A buyer's view of one order.
@@ -72,9 +73,7 @@ export default async function OrderPage({
       </h1>
       <p className="text-jet-text-dim mb-10">
         Placed{" "}
-        {new Date(order.createdAt).toLocaleDateString("en-IN", {
-          day: "numeric", month: "long", year: "numeric",
-        })}
+        {formatDate(order.createdAt, { day: "numeric", month: "long", year: "numeric" })}
         {order.status === "pending" && " · awaiting payment"}
       </p>
 
@@ -186,7 +185,7 @@ export default async function OrderPage({
                 <li key={i} className="text-sm">
                   <p className="text-jet-text">{e.note ?? e.type}</p>
                   <p className="text-xs text-jet-text-muted">
-                    {new Date(e.created_at).toLocaleString("en-IN", {
+                    {formatDateTime(e.created_at, {
                       day: "numeric", month: "short", hour: "numeric", minute: "2-digit",
                     })}
                   </p>

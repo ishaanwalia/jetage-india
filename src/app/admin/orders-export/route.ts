@@ -1,5 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import { getCurrentUser } from "@/lib/auth";
+import { formatTaxDate } from "@/lib/dates";
 
 /**
  * Sales register as CSV, for the accountant's Tally import and GST filing.
@@ -78,8 +79,8 @@ export async function GET(req: Request) {
     return [
       r.invoice_no ?? "",
       r.order_no,
-      new Date(r.created_at).toLocaleDateString("en-GB"),
-      r.paid_at ? new Date(r.paid_at).toLocaleDateString("en-GB") : "",
+      formatTaxDate(r.created_at),
+      r.paid_at ? formatTaxDate(r.paid_at) : "",
       r.status,
       r.customer_name, r.buyer_gstin ?? "", r.email, r.phone,
       addr.city ?? "", addr.state ?? "", addr.pincode ?? "",

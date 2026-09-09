@@ -1,4 +1,5 @@
 import { adminListCustomers, formatPaise } from "@/lib/orders";
+import { formatDate } from "@/lib/dates";
 
 export const dynamic = "force-dynamic";
 
@@ -67,7 +68,7 @@ export default async function AdminCustomersPage() {
                     {formatPaise(c.lifetimePaise)}
                   </td>
                   <td className="px-4 py-3 text-jet-text-muted whitespace-nowrap">
-                    {new Date(c.lastOrderAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                    {formatDate(c.lastOrderAt)}
                   </td>
                 </tr>
               ))}

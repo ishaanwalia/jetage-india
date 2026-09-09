@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getOrderByToken, formatPaiseExact } from "@/lib/orders";
 import { SELLER, sellerIsInvoiceReady } from "@/lib/business";
 import { PrintButton } from "./PrintButton";
+import { formatTaxDate } from "@/lib/dates";
 
 /**
  * The tax invoice, as a printable page.
@@ -89,7 +90,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ token:
             <p className="text-[12px] text-neutral-600"><strong>Order:</strong> {order.orderNo}</p>
             <p className="text-[12px]">
               <strong>Date:</strong>{" "}
-              {new Date(order.paidAt ?? order.createdAt).toLocaleDateString("en-GB")}
+              {formatTaxDate(order.paidAt ?? order.createdAt)}
             </p>
             {order.razorpayPaymentId && (
               <p className="text-[12px]"><strong>Payment:</strong> {order.razorpayPaymentId}</p>
