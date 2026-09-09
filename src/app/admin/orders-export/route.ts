@@ -1,6 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import { getCurrentUser } from "@/lib/auth";
 import { formatTaxDate } from "@/lib/dates";
+import { apportionGst } from "@/lib/money";
 
 /**
  * Sales register as CSV, for the accountant's Tally import and GST filing.
@@ -62,19 +63,56 @@ export async function GET(req: Request) {
     "CGST", "SGST/UTGST", "IGST", "Order Total", "Payment Ref",
   ];
 
+  /**
+   * Fold the flat join back into orders, so every line takes its share of the
+   * tax from the same helper the invoice uses.
+   *
+   * This used to round each line independently against its share of the order
+   * total, which the comment here claimed summed back exactly and did not —
+   * roundings are under no obligation to add up. A register that is a paise
+   * off the payments it is meant to explain is a morning of somebody's life,
+   * and the invoice for the same sale would have shown different figures.
+   * apportionGst gives the last line the residual, so both documents reconcile
+   * to the order by construction and to each other by using one function.
+   */
+  const lineTaxOf = new Map<
+    (typeof rows)[number],
+    { taxable: number; gst: number; cgst: number; sgst: number; igst: number }
+  >();
+
+  const byOrder = new Map<string, (typeof rows)[number][]>();
+  for (const r of rows) {
+    const lines = byOrder.get(r.order_no) ?? [];
+    lines.push(r);
+    byOrder.set(r.order_no, lines);
+  }
+
+  for (const lines of byOrder.values()) {
+    const totals = lines.map((r) => Number(r.line_total_paise));
+    // Every head is apportioned the same way. Two of the three are always zero
+    // — a sale is either intra-state or inter-state, never both.
+    const gst = apportionGst(totals, Number(lines[0].gst_paise));
+    const cgst = apportionGst(totals, Number(lines[0].cgst_paise));
+    const sgst = apportionGst(totals, Number(lines[0].sgst_paise));
+    const igst = apportionGst(totals, Number(lines[0].igst_paise));
+    lines.forEach((r, i) =>
+      lineTaxOf.set(r, {
+        taxable: gst[i].taxablePaise,
+        gst: gst[i].gstPaise,
+        cgst: cgst[i].gstPaise,
+        sgst: sgst[i].gstPaise,
+        igst: igst[i].gstPaise,
+      }),
+    );
+  }
+
   const body = rows.map((r) => {
     const addr = (r.ship_address ?? {}) as unknown as {
       city?: string; state?: string; pincode?: string;
     };
 
-    // The order's tax is apportioned across its lines by value, so the line
-    // figures sum back to the order's stored CGST/SGST/IGST exactly. Deriving
-    // each line independently would drift by a paise or two per order and the
-    // register would not tie out to the payments.
     const lineTotal = Number(r.line_total_paise);
-    const orderTotal = Number(r.total_paise) || 1;
-    const share = lineTotal / orderTotal;
-    const lineGst = Math.round(Number(r.gst_paise) * share);
+    const tax = lineTaxOf.get(r)!;
 
     return [
       r.invoice_no ?? "",
@@ -90,11 +128,11 @@ export async function GET(req: Request) {
       r.qty,
       rs(r.unit_price_paise),
       rs(lineTotal),
-      rs(lineTotal - lineGst),
+      rs(tax.taxable),
       "18%",
-      rs(Math.round(Number(r.cgst_paise) * share)),
-      rs(Math.round(Number(r.sgst_paise) * share)),
-      rs(Math.round(Number(r.igst_paise) * share)),
+      rs(tax.cgst),
+      rs(tax.sgst),
+      rs(tax.igst),
       rs(r.total_paise),
       r.razorpay_payment_id ?? "",
     ].map(cell).join(",");

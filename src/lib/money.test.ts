@@ -16,6 +16,8 @@ import {
   rupeesToPaise,
   totalsFor,
   splitGst,
+  apportionGst,
+  amountInWords,
   GST_RATE,
   type OrderItem,
 } from "./money";
@@ -124,4 +126,42 @@ test("invoice amounts always carry two decimals", () => {
 
   // The shop formatter is deliberately left alone: whole rupees stay clean.
   assert.equal(formatPaise(2522700), "₹25,227");
+});
+
+test("per-line GST always adds back up to the order's GST", () => {
+  // Three awkward lines: the by-value roundings do not sum to the total on
+  // their own, which is the whole reason the last line takes the residual.
+  const lines = [96800, 96800, 1197400];
+  const gst = gstContainedIn(lines.reduce((a, b) => a + b, 0));
+  const split = apportionGst(lines, gst);
+
+  assert.equal(split.reduce((sum, l) => sum + l.gstPaise, 0), gst);
+  // And the taxable column reconciles to the total the invoice prints.
+  const total = lines.reduce((a, b) => a + b, 0);
+  assert.equal(split.reduce((sum, l) => sum + l.taxablePaise, 0), total - gst);
+});
+
+test("a single line takes the whole of the order's GST", () => {
+  const gst = gstContainedIn(2522700);
+  const [only] = apportionGst([2522700], gst);
+  assert.equal(only.gstPaise, gst);
+  assert.equal(only.taxablePaise, 2522700 - gst);
+});
+
+test("an empty cart apportions to nothing rather than dividing by zero", () => {
+  assert.deepEqual(apportionGst([], 0), []);
+  assert.deepEqual(apportionGst([0], 0), [{ taxablePaise: 0, gstPaise: 0 }]);
+});
+
+test("the total is spelled out in lakh and crore, not millions", () => {
+  assert.equal(amountInWords(2522700), "Rupees Twenty Five Thousand Two Hundred Twenty Seven Only");
+  assert.equal(amountInWords(44900), "Rupees Four Hundred Forty Nine Only");
+  // Indian grouping: 12,34,567 is twelve lakh, not 1.2 million.
+  assert.equal(
+    amountInWords(123456700),
+    "Rupees Twelve Lakh Thirty Four Thousand Five Hundred Sixty Seven Only",
+  );
+  assert.equal(amountInWords(0), "Rupees Zero Only");
+  // Paise are spelled too, because an invoice that carries them has to.
+  assert.equal(amountInWords(192410), "Rupees One Thousand Nine Hundred Twenty Four and Ten Paise Only");
 });

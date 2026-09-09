@@ -319,3 +319,14 @@ create table if not exists mail_log (
 );
 
 create index if not exists mail_log_recent_idx on mail_log (created_at desc);
+
+-- Who moved the order, not just that it moved.
+--
+-- order_events recorded what happened and when, and no name. Marking an
+-- order Refunded or Cancelled is a decision about money that one member of
+-- staff makes and the business has to be able to account for later — and
+-- audit_log could not hold it, being CHECK-constrained to product|blog.
+-- Nullable because the events that matter most are the ones nobody chose:
+-- 'placed' and 'paid' are written by the checkout and the Razorpay webhook,
+-- and inventing an actor for those would be worse than leaving it empty.
+alter table order_events add column if not exists actor_email text;

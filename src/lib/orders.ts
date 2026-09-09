@@ -5,7 +5,7 @@ import { rupeesToPaise, splitGst, type OrderItem, type OrderTotals } from "./mon
 import { financialYear } from "./fy";
 
 // Re-exported so server callers have one import for orders + money.
-export { GST_RATE, gstContainedIn, rupeesToPaise, formatPaise, formatPaiseExact, totalsFor, splitGst, SUPPLY_STATE } from "./money";
+export { GST_RATE, gstContainedIn, rupeesToPaise, formatPaise, formatPaiseExact, totalsFor, splitGst, SUPPLY_STATE, apportionGst, amountInWords } from "./money";
 export type { OrderItem, OrderTotals } from "./money";
 export { financialYear } from "./fy";
 
@@ -228,14 +228,22 @@ export async function recentOrderCount(email: string, minutes = 60): Promise<num
   return row.n;
 }
 
+/**
+ * @param opts.actorEmail  The staff member who caused this, when a person did.
+ *   Left null for anything the system decided on its own — an order being
+ *   placed, or the webhook marking it paid — because attributing those to
+ *   whoever happened to be logged in would be a lie in the one record that
+ *   exists to be trusted.
+ */
 export async function addOrderEvent(
   orderId: number,
   type: string,
-  opts: { note?: string; isPublic?: boolean } = {},
+  opts: { note?: string; isPublic?: boolean; actorEmail?: string } = {},
 ) {
   await sql`
-    INSERT INTO order_events (order_id, type, note, is_public)
-    VALUES (${orderId}, ${type}, ${opts.note ?? null}, ${opts.isPublic ?? true})
+    INSERT INTO order_events (order_id, type, note, is_public, actor_email)
+    VALUES (${orderId}, ${type}, ${opts.note ?? null}, ${opts.isPublic ?? true},
+            ${opts.actorEmail ?? null})
   `;
 }
 
@@ -434,19 +442,42 @@ export async function adminListOrders(status = "", search = ""): Promise<AdminOr
 /** Every event on an order, internal notes included. Admin only. */
 export async function adminGetEvents(orderId: number) {
   return (await sql`
-    SELECT type, note, is_public, created_at FROM order_events
+    SELECT type, note, is_public, actor_email, created_at FROM order_events
     WHERE order_id = ${orderId} ORDER BY created_at
-  `) as { type: string; note: string | null; is_public: boolean; created_at: string }[];
+  `) as {
+    type: string;
+    note: string | null;
+    is_public: boolean;
+    actor_email: string | null;
+    created_at: string;
+  }[];
 }
 
-export async function adminSetStatus(orderId: number, status: string, note?: string) {
+/**
+ * Move an order along, and record who moved it.
+ *
+ * `actorEmail` is required rather than optional on purpose. Refunded and
+ * Cancelled are decisions about money, and the whole point of the trail is that
+ * it cannot be skipped by a caller that did not think about it — an optional
+ * parameter is a trail that goes missing the first time someone adds a second
+ * caller in a hurry.
+ */
+export async function adminSetStatus(
+  orderId: number,
+  status: string,
+  note: string | undefined,
+  actorEmail: string,
+) {
   // Whitelist rather than trusting the posted value — this reaches a CHECK
   // constraint either way, but a 500 is a worse answer than doing nothing.
   const allowed = ["pending", "paid", "packed", "shipped", "delivered", "cancelled", "refunded"];
   if (!allowed.includes(status)) return;
 
   await sql`UPDATE orders SET status = ${status}, updated_at = now() WHERE id = ${orderId}`;
-  await addOrderEvent(orderId, status, { note: note?.trim() || `Marked ${status}` });
+  await addOrderEvent(orderId, status, {
+    note: note?.trim() || `Marked ${status}`,
+    actorEmail,
+  });
 }
 
 export type CustomerRow = {

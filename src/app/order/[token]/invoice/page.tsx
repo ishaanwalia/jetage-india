@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getOrderByToken, formatPaiseExact } from "@/lib/orders";
+import { getOrderByToken, formatPaiseExact, apportionGst, amountInWords, GST_RATE } from "@/lib/orders";
 import { SELLER, sellerIsInvoiceReady } from "@/lib/business";
 import { PrintButton } from "./PrintButton";
 import { formatTaxDate } from "@/lib/dates";
@@ -58,6 +58,15 @@ export default async function InvoicePage({ params }: { params: Promise<{ token:
 
   const taxable = order.totalPaise - order.gstPaise;
   const intraState = order.igstPaise === 0;
+
+  // Rule 46 wants the taxable value and the tax per item, not only a summary
+  // at the foot. Apportioned from the order's stored GST so the item column
+  // adds up to the total printed below it — see apportionGst.
+  const lineTax = apportionGst(order.items.map((i) => i.lineTotalPaise), order.gstPaise);
+
+  // A tax invoice needs an HSN against every line. Staff are told here rather
+  // than left to notice a row of dashes after it has gone to the buyer.
+  const missingHsn = order.items.some((i) => !i.hsn);
   const a = order.shipAddress;
 
   return (
@@ -124,6 +133,14 @@ export default async function InvoicePage({ params }: { params: Promise<{ token:
           </div>
         </section>
 
+        {missingHsn && (
+          <p className="mb-3 border border-neutral-400 bg-neutral-100 px-3 py-2 text-[11px] print:hidden">
+            <strong>Not yet complete.</strong> One or more items have no HSN code, which a tax
+            invoice requires. Set them per product in the CMS before sending this to a business
+            buyer — an invented code is worse than a missing one.
+          </p>
+        )}
+
         <table className="w-full border-collapse text-left">
           <thead>
             <tr className="border-y border-black text-[11px] uppercase tracking-wider">
@@ -131,6 +148,8 @@ export default async function InvoicePage({ params }: { params: Promise<{ token:
               <th scope="col" className="py-2 px-2 font-bold">HSN</th>
               <th scope="col" className="py-2 px-2 text-right font-bold">Qty</th>
               <th scope="col" className="py-2 px-2 text-right font-bold">Rate</th>
+              <th scope="col" className="py-2 px-2 text-right font-bold">Taxable</th>
+              <th scope="col" className="py-2 px-2 text-right font-bold">GST</th>
               <th scope="col" className="py-2 pl-2 text-right font-bold">Amount</th>
             </tr>
           </thead>
@@ -148,6 +167,13 @@ export default async function InvoicePage({ params }: { params: Promise<{ token:
                 </td>
                 <td className="py-2 px-2 text-right">{i.qty}</td>
                 <td className="py-2 px-2 text-right">{formatPaiseExact(i.unitPricePaise)}</td>
+                <td className="py-2 px-2 text-right">
+                  {formatPaiseExact(lineTax[idx].taxablePaise)}
+                </td>
+                <td className="py-2 px-2 text-right">
+                  {formatPaiseExact(lineTax[idx].gstPaise)}
+                  <span className="block text-[10px] text-neutral-500">@ {GST_RATE}%</span>
+                </td>
                 <td className="py-2 pl-2 text-right">{formatPaiseExact(i.lineTotalPaise)}</td>
               </tr>
             ))}
@@ -181,6 +207,12 @@ export default async function InvoicePage({ params }: { params: Promise<{ token:
             </div>
           </dl>
         </section>
+
+        {/* Spelled out, because that is what makes the figure above hard to
+            alter after the fact. Every Indian invoice carries it. */}
+        <p className="mt-3 border-t border-neutral-300 pt-3 text-[12px]">
+          <strong>Amount in words:</strong> {amountInWords(order.totalPaise)}
+        </p>
 
         <footer className="mt-8 border-t border-neutral-300 pt-4 text-[11px] text-neutral-600">
           <p>

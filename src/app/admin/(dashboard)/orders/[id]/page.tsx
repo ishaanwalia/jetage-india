@@ -23,9 +23,16 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
   async function updateStatus(formData: FormData) {
     "use server";
     // The layout guard protects the UI; a server action is reachable without
-    // it, so the session is re-checked here.
-    if (!(await getCurrentUser())) redirect("/admin/login");
-    await adminSetStatus(orderId, String(formData.get("status") ?? ""), String(formData.get("note") ?? ""));
+    // it, so the session is re-checked here. The user it returns is also the
+    // name that goes on the event — this is the only place that knows it.
+    const user = await getCurrentUser();
+    if (!user) redirect("/admin/login");
+    await adminSetStatus(
+      orderId,
+      String(formData.get("status") ?? ""),
+      String(formData.get("note") ?? ""),
+      user.email,
+    );
     redirect(`/admin/orders/${orderId}?updated=1`);
   }
 
@@ -142,7 +149,12 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
                 {e.note ?? e.type}
                 {!e.is_public && <span className="ml-2 rounded bg-jet-bg-elevated px-1.5 py-0.5 text-xs text-jet-text-muted">internal</span>}
               </p>
-              <p className="text-xs text-jet-text-muted">{formatDateTime(e.created_at)}</p>
+                  {/* Staff-only: getPublicEvents does not select this column,
+                      so the buyer's tracking page cannot show a staff address. */}
+              <p className="text-xs text-jet-text-muted">
+                {formatDateTime(e.created_at)}
+                {e.actor_email ? ` · by ${e.actor_email}` : " · automatic"}
+              </p>
             </li>
           ))}
         </ol>

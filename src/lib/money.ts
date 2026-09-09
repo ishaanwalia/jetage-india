@@ -119,3 +119,92 @@ export function totalsFor(items: OrderItem[]): OrderTotals {
     totalPaise: total,
   };
 }
+
+/* ------------------------------------------------------ per-line reporting -- */
+
+export interface LineTax {
+  /** GST-exclusive value of the line. */
+  taxablePaise: number;
+  /** The line's share of the order's GST. */
+  gstPaise: number;
+}
+
+/**
+ * Split an order's GST across its own lines.
+ *
+ * Rule 46 wants the taxable value, the rate and the amount of tax *per item*,
+ * not just an order-level summary — and the sales register needs the same
+ * numbers so the two documents can be read side by side without disagreeing.
+ *
+ * Apportioned from the order's stored GST rather than recomputed line by line.
+ * Recomputing rounds each line independently and the roundings do not have to
+ * add back up: an invoice whose tax column sums to a paise more than its own
+ * total is the kind of thing that gets a set of books questioned. So every line
+ * but the last is rounded by value, and the last takes whatever remains — the
+ * column reconciles to the order exactly, by construction.
+ *
+ * The residual lands on the last line because it is the only choice that needs
+ * no explanation: it is at most a paise or two, and it is where the eye stops.
+ */
+export function apportionGst(lineTotalsPaise: number[], gstPaise: number): LineTax[] {
+  const subtotal = lineTotalsPaise.reduce((sum, n) => sum + n, 0);
+  if (subtotal <= 0) {
+    return lineTotalsPaise.map(() => ({ taxablePaise: 0, gstPaise: 0 }));
+  }
+
+  let allocated = 0;
+  return lineTotalsPaise.map((lineTotal, i) => {
+    const last = i === lineTotalsPaise.length - 1;
+    const gst = last
+      ? gstPaise - allocated
+      : Math.round((gstPaise * lineTotal) / subtotal);
+    allocated += gst;
+    return { taxablePaise: lineTotal - gst, gstPaise: gst };
+  });
+}
+
+/* --------------------------------------------------------- amount in words -- */
+
+const ONES = [
+  "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+  "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+  "Seventeen", "Eighteen", "Nineteen",
+];
+const TENS = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+function under1000(n: number): string {
+  if (n === 0) return "";
+  if (n < 20) return ONES[n];
+  if (n < 100) return TENS[Math.floor(n / 10)] + (n % 10 ? ` ${ONES[n % 10]}` : "");
+  return `${ONES[Math.floor(n / 100)]} Hundred` + (n % 100 ? ` ${under1000(n % 100)}` : "");
+}
+
+/**
+ * The total, spelled out, as every Indian invoice carries it.
+ *
+ * Lakh and crore, not millions — groups after the first three digits are two
+ * wide, which is why this cannot be the usual thousands recursion. It is there
+ * so that a figure cannot be altered by a pen stroke after the fact, which is
+ * also why it belongs on the document even though nothing reads it.
+ */
+export function amountInWords(paise: number): string {
+  const negative = paise < 0;
+  const abs = Math.abs(Math.round(paise));
+  const rupees = Math.floor(abs / 100);
+  const paisa = abs % 100;
+
+  const parts: string[] = [];
+  const crore = Math.floor(rupees / 10_000_000);
+  const lakh = Math.floor((rupees % 10_000_000) / 100_000);
+  const thousand = Math.floor((rupees % 100_000) / 1000);
+  const rest = rupees % 1000;
+
+  if (crore) parts.push(`${under1000(crore)} Crore`);
+  if (lakh) parts.push(`${under1000(lakh)} Lakh`);
+  if (thousand) parts.push(`${under1000(thousand)} Thousand`);
+  if (rest) parts.push(under1000(rest));
+
+  const whole = parts.length ? parts.join(" ") : "Zero";
+  const tail = paisa ? ` and ${under1000(paisa)} Paise` : "";
+  return `${negative ? "Minus " : ""}Rupees ${whole}${tail} Only`;
+}
