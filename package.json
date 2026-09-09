@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "perf": "tsx scripts/perf-budget.ts",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:schema": "tsx scripts/migrate.ts --schema-only",
     "check:dpdp": "node scripts/check-dpdp.mjs",
