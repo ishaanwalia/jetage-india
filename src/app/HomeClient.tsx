@@ -137,10 +137,24 @@ export function HomeClient() {
       ScrollTrigger.refresh();
     };
 
+    /**
+     * After the browser has painted, not in the same tick as the signal.
+     *
+     * Building this forces a synchronous layout of a 24,000px document with a
+     * pinned section in it, and the intro lifting is the exact moment the hero
+     * is due to paint. Running one on top of the other put a multi-second task
+     * in front of Largest Contentful Paint and cost about three seconds of it.
+     * Two frames of daylight is enough for the paint to land first; the
+     * horizontal row is most of a page below anything that can be scrolled to
+     * in that time.
+     */
+    const buildAfterPaint = () =>
+      requestAnimationFrame(() => requestAnimationFrame(build));
+
     if (document.documentElement.dataset.intro === "done") {
-      build();
+      buildAfterPaint();
     } else {
-      window.addEventListener(INTRO_DONE, build, { once: true });
+      window.addEventListener(INTRO_DONE, buildAfterPaint, { once: true });
     }
 
     // The loader is a lazy chunk, and if it ever fails to arrive the event
@@ -151,7 +165,7 @@ export function HomeClient() {
 
     return () => {
       window.clearTimeout(fallback);
-      window.removeEventListener(INTRO_DONE, build);
+      window.removeEventListener(INTRO_DONE, buildAfterPaint);
       ctx?.revert();
     };
   }, []);
