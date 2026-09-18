@@ -88,7 +88,13 @@ export async function POST(req: Request) {
     );
   }
 
+  // This endpoint has three places it can be slow — the catalogue query, the
+  // upstream handshake, and however long Gemini thinks before its first word —
+  // and from outside they are indistinguishable. Timing each one costs a log
+  // line and is the difference between fixing it and guessing at it.
+  const t0 = Date.now();
   const context = await buildChatContext();
+  const msContext = Date.now() - t0;
 
   // The whole exchange as a transcript. `Visitor:` / `Assistant:` labels keep
   // the roles legible to the model without a separate turns array.
@@ -98,6 +104,7 @@ export async function POST(req: Request) {
       .join("\n\n") + "\n\nAssistant:";
 
   let upstream: Response;
+  const tUpstream = Date.now();
   try {
     upstream = await fetch(ENDPOINT, {
       method: "POST",
@@ -138,6 +145,9 @@ export async function POST(req: Request) {
   // Re-emit as plain text chunks. The browser only needs the words, and
   // forwarding Gemini's event envelope would leak its internals — including
   // thought summaries, which are not for the visitor.
+  const msHeaders = Date.now() - tUpstream;
+  let msFirstText = -1;
+
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   let buffer = "";
@@ -169,6 +179,7 @@ export async function POST(req: Request) {
               // Only the model's actual words. `thought_summary` deltas are
               // the model reasoning aloud and would confuse a shopper.
               if (evt.event_type === "step.delta" && evt.delta?.type === "text" && evt.delta.text) {
+                if (msFirstText < 0) msFirstText = Date.now() - tUpstream;
                 controller.enqueue(encoder.encode(evt.delta.text));
               }
             } catch {
@@ -186,7 +197,13 @@ export async function POST(req: Request) {
     },
   });
 
-  after(() => console.log(`[chat] answered a question (${messages.length} turns)`));
+  // after() fires once the response has finished, so msFirstText is settled.
+  after(() =>
+    console.log(
+      `[chat] answered a question (${messages.length} turns) ` +
+        `context=${msContext}ms headers=${msHeaders}ms first-text=${msFirstText}ms`,
+    ),
+  );
 
   return new Response(stream, {
     headers: {
