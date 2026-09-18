@@ -79,7 +79,16 @@ export async function POST(req: Request) {
       { status: 429 },
     );
   }
-  const dailyCap = Number(process.env.GEMINI_DAILY_CAP ?? 500);
+  // 500 was a guess, and it was 25x the real ceiling: the free tier allows 20
+  // requests per day for this model, so this limiter never once fired and the
+  // quota was always spent by Gemini rather than guarded by us. The difference
+  // matters to a visitor — tripping this returns the counter's phone number,
+  // where running into Google's limit returned an apology for a failure we had
+  // not noticed.
+  //
+  // Note the CMS's "Draft with AI" spends from the same 20, on the same key and
+  // model, so a busy afternoon in /admin can close the chat for the day.
+  const dailyCap = Number(process.env.GEMINI_DAILY_CAP ?? 20);
   if (!(await allow("chat:global", 1440, dailyCap))) {
     console.warn("[chat] daily cap reached");
     return Response.json(
@@ -120,13 +129,12 @@ export async function POST(req: Request) {
         // Low temperature on purpose: this quotes prices. Invention is the
         // failure mode that costs money, not dullness.
         //
-        // `thinking_level` defaults to "high" on Gemini 3 Flash, and that is
-        // what made the widget look dead: the model reasons before it emits a
-        // single text delta, thought_summary deltas are filtered out on the way
-        // through, so the visitor watches an empty bubble for tens of seconds
-        // on "hi". Nothing here needs deep reasoning — the whole catalogue is
-        // already in the context window, so answering is retrieval and
-        // paraphrase, not deduction. Drop to "minimal" if it is still slow.
+        // `thinking_level` defaults to "high" on Gemini 3 Flash. This was not
+        // what made the widget look dead — that was an unhandled rate-limit
+        // event, and setting this changed nothing measurable. It stays on its
+        // own merits: the whole catalogue is already in the context window, so
+        // answering is retrieval and paraphrase rather than deduction, and deep
+        // reasoning is latency bought for nothing.
         generation_config: { temperature: 0.3, thinking_level: "low" },
       }),
     });
