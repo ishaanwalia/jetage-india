@@ -170,6 +170,7 @@ export async function POST(req: Request) {
           const frames = buffer.split("\n\n");
           buffer = frames.pop() ?? "";
 
+          let failed = false;
           for (const frame of frames) {
             const dataLine = frame.split("\n").find((l) => l.startsWith("data:"));
             if (!dataLine) continue;
@@ -186,6 +187,25 @@ export async function POST(req: Request) {
                 const k = `${evt.event_type ?? "?"}/${evt.delta?.type ?? "-"}`;
                 seen.set(k, (seen.get(k) ?? 0) + 1);
               }
+
+              // Gemini reports mid-stream failures as an event, not as a bad
+              // status — the handshake has already succeeded by then. Ignoring
+              // it is what produced an empty 200 for the visitor and, when the
+              // socket was left open, a function that ran to the 300s ceiling.
+              // The payload is logged and never forwarded: it can name the
+              // model, the project, or why a key was rejected.
+              if (evt.event_type === "error") {
+                console.error("[chat] Gemini error event", payload.slice(0, 500));
+                if (msFirstText < 0) {
+                  controller.enqueue(
+                    encoder.encode(
+                      "Sorry — I could not reach the assistant just then. Please try again, or call +91 98149 58295.",
+                    ),
+                  );
+                }
+                failed = true;
+                break;
+              }
               // Only the model's actual words. `thought_summary` deltas are
               // the model reasoning aloud and would confuse a shopper.
               if (evt.event_type === "step.delta" && evt.delta?.type === "text" && evt.delta.text) {
@@ -197,6 +217,7 @@ export async function POST(req: Request) {
               // completes it.
             }
           }
+          if (failed) break;
         }
       } catch (err) {
         console.error("[chat] stream broke", err);
