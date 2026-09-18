@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
@@ -33,7 +34,15 @@ export function LaptopShowcase() {
   const hintRef = useRef<HTMLDivElement>(null);
   const [variant, setVariant] = useState<LaptopVariant>(LAPTOP_VARIANTS[0]);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [noWebGL, setNoWebGL] = useState(false);
   const [arrived, setArrived] = useState(false);
+
+  /**
+   * Everything below that used to ask "is motion suppressed?" is really asking
+   * "is there a scroll story to tell?", and there is not one without a laptop
+   * to tell it with. Two very different reasons, one layout.
+   */
+  const still = reducedMotion || noWebGL;
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -41,6 +50,25 @@ export function LaptopShowcase() {
     sync();
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  /**
+   * No WebGL, no scene — and without this, no sign of it either.
+   *
+   * When the context cannot be created, three throws inside r3f's layout
+   * effect, so `configure()` never runs and the <canvas> is left at its default
+   * 300x150 with no width or height. Nothing is drawn and nothing is logged
+   * where a visitor would see it: the hero's right-hand half is simply empty,
+   * and the eleven screens of scroll it owns still scroll, past a story that is
+   * never going to play. Cheaper to ask first and lay the page out honestly.
+   */
+  useEffect(() => {
+    const probe = document.createElement("canvas");
+    const gl =
+      probe.getContext("webgl2") ?? probe.getContext("webgl");
+    if (!gl) setNoWebGL(true);
+    // Contexts are a scarce per-page resource; give this one straight back.
+    else gl.getExtension("WEBGL_lose_context")?.loseContext();
   }, []);
 
   // No ScrollTrigger here on purpose. The scene already runs a frame loop, so
@@ -59,6 +87,24 @@ export function LaptopShowcase() {
       });
     }
   };
+
+  /**
+   * The scene's opening frame, rendered out of the same GLB and baked to a
+   * transparent WebP. Not decoration: without it the hero is a column of copy
+   * against half a screen of nothing, which is what "the 3D is broken" looked
+   * like in the first place. Lid closed, because that is where the story
+   * starts and it is the honest still of a thing that does not move here.
+   */
+  const poster = (
+    <Image
+      src="/hero/laptop-closed.webp"
+      alt="HP OMEN laptop in the Shadow finish, lid closed"
+      width={1200}
+      height={426}
+      priority
+      className="h-auto w-full"
+    />
+  );
 
   const picker = (
     <div className="flex flex-wrap items-center gap-2">
@@ -94,10 +140,10 @@ export function LaptopShowcase() {
       aria-label="Explore HP laptops in 3D"
       className="relative bg-jet-bg"
     >
-      <div ref={wrap} className={reducedMotion ? "relative" : "relative h-[1150vh]"}>
+      <div ref={wrap} className={still ? "relative" : "relative h-[1150vh]"}>
         <div
           className={`${
-            reducedMotion ? "relative" : "sticky top-0"
+            still ? "relative" : "sticky top-0"
           } flex h-screen w-full items-center overflow-hidden pt-24 pb-10`}
         >
           {/* Ambient wash — cheap stand-in for a bloom pass, and it recolours
@@ -109,18 +155,26 @@ export function LaptopShowcase() {
             }}
           />
 
-          <div className="absolute inset-0">
-            <LaptopScene
-              spin={spin}
-              variant={variant}
-              reducedMotion={reducedMotion}
-              wrapRef={wrap}
-              portalRef={portalRef}
-              copyRef={copyRef}
-              hintRef={hintRef}
-              onPanelArrive={setArrived}
-            />
-          </div>
+          {noWebGL && (
+            <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] items-center pr-6 lg:flex xl:pr-10">
+              {poster}
+            </div>
+          )}
+
+          {!noWebGL && (
+            <div className="absolute inset-0">
+              <LaptopScene
+                spin={spin}
+                variant={variant}
+                reducedMotion={reducedMotion}
+                wrapRef={wrap}
+                portalRef={portalRef}
+                copyRef={copyRef}
+                hintRef={hintRef}
+                onPanelArrive={setArrived}
+              />
+            </div>
+          )}
 
           <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
             <div className="relative max-w-xl">
@@ -147,9 +201,13 @@ export function LaptopShowcase() {
                   </span>
                 </h1>
 
+                {/* The 3D sentence is a promise, so it is only made when the
+                    page can keep it. */}
                 <p className="max-w-lg text-lg leading-relaxed text-jet-text-dim lg:text-xl">
-                  Authorized HP World Partner with {YEARS_TRADING}+ years of expertise. Explore our
-                  featured laptop in interactive 3D, right here on the homepage.
+                  Authorized HP World Partner with {YEARS_TRADING}+ years of expertise.{" "}
+                  {noWebGL
+                    ? "Genuine HP laptops, desktops, printers and accessories, delivered across India."
+                    : "Explore our featured laptop in interactive 3D, right here on the homepage."}
                 </p>
 
                 <div className="flex flex-wrap gap-4">
@@ -175,7 +233,9 @@ export function LaptopShowcase() {
                   </MagneticButton>
                 </div>
 
-                <div className="pt-1">{picker}</div>
+                {!noWebGL && <div className="pt-1">{picker}</div>}
+
+                {noWebGL && <div className="pt-4 lg:hidden">{poster}</div>}
               </div>
             </div>
           </div>
@@ -190,7 +250,7 @@ export function LaptopShowcase() {
               for search, not decoration. Reduced motion gets it in plain flow
               below instead — the animation must never be the only way to read
               the business. */}
-          {!reducedMotion && (
+          {!still && (
             <div
               ref={portalRef}
               className="pointer-events-none absolute inset-0 z-20 opacity-0 will-change-transform"
@@ -212,7 +272,7 @@ export function LaptopShowcase() {
             </div>
           )}
 
-          {!reducedMotion && (
+          {!still && (
             <div ref={hintRef} className="jet-scroll-hint pointer-events-none absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full border border-jet-border bg-jet-bg-card/80 px-5 py-2.5 text-sm font-medium text-jet-text-dim backdrop-blur-md">
               <MousePointer2 className="h-4 w-4" />
               Scroll to open
@@ -225,7 +285,7 @@ export function LaptopShowcase() {
           advantages simply sit on the page. Not on a phone: there the page is
           already putting them below the hero, and rendering them here as well
           would print the whole section twice. */}
-      {reducedMotion && (
+      {still && (
         <div className="py-16">
           <ScreenPanel inFlow />
         </div>
