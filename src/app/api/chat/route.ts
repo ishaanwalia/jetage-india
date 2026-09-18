@@ -112,7 +112,15 @@ export async function POST(req: Request) {
         stream: true,
         // Low temperature on purpose: this quotes prices. Invention is the
         // failure mode that costs money, not dullness.
-        generation_config: { temperature: 0.3 },
+        //
+        // `thinking_level` defaults to "high" on Gemini 3 Flash, and that is
+        // what made the widget look dead: the model reasons before it emits a
+        // single text delta, thought_summary deltas are filtered out on the way
+        // through, so the visitor watches an empty bubble for tens of seconds
+        // on "hi". Nothing here needs deep reasoning — the whole catalogue is
+        // already in the context window, so answering is retrieval and
+        // paraphrase, not deduction. Drop to "minimal" if it is still slow.
+        generation_config: { temperature: 0.3, thinking_level: "low" },
       }),
     });
   } catch (err) {
