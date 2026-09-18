@@ -147,6 +147,11 @@ export async function POST(req: Request) {
   // thought summaries, which are not for the visitor.
   const msHeaders = Date.now() - tUpstream;
   let msFirstText = -1;
+  // Two minutes pass between the headers and the first word. Either Gemini is
+  // streaming something we drop on the floor the whole time, or it is sending
+  // nothing at all — and those want opposite fixes, so count what arrives.
+  let msFirstFrame = -1;
+  const seen = new Map<string, number>();
 
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
@@ -170,12 +175,17 @@ export async function POST(req: Request) {
             if (!dataLine) continue;
             const payload = dataLine.slice(5).trim();
             if (!payload || payload === "[DONE]") continue;
+            if (msFirstFrame < 0) msFirstFrame = Date.now() - tUpstream;
 
             try {
               const evt = JSON.parse(payload) as {
                 event_type?: string;
                 delta?: { type?: string; text?: string };
               };
+              if (msFirstText < 0) {
+                const k = `${evt.event_type ?? "?"}/${evt.delta?.type ?? "-"}`;
+                seen.set(k, (seen.get(k) ?? 0) + 1);
+              }
               // Only the model's actual words. `thought_summary` deltas are
               // the model reasoning aloud and would confuse a shopper.
               if (evt.event_type === "step.delta" && evt.delta?.type === "text" && evt.delta.text) {
@@ -201,7 +211,9 @@ export async function POST(req: Request) {
   after(() =>
     console.log(
       `[chat] answered a question (${messages.length} turns) ` +
-        `context=${msContext}ms headers=${msHeaders}ms first-text=${msFirstText}ms`,
+        `context=${msContext}ms headers=${msHeaders}ms ` +
+        `first-frame=${msFirstFrame}ms first-text=${msFirstText}ms ` +
+        `before-text=${JSON.stringify(Object.fromEntries(seen))}`,
     ),
   );
 
