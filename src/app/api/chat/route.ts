@@ -22,7 +22,20 @@ import { allow } from "@/lib/rate-limit";
 // the rest of the site uses.
 export const runtime = "nodejs";
 
-const MODEL = process.env.GEMINI_MODEL ?? "gemini-3.8-flash";
+/**
+ * Flash-Lite, on its own env var.
+ *
+ * The visitor chat and the CMS's "Draft with AI" both used to read
+ * GEMINI_MODEL, which meant one 20-a-day quota between them: an afternoon of
+ * writing product copy closed the shop floor. Splitting the name splits the
+ * quota, because the free tier counts per model.
+ *
+ * Lite is the right shape for this job anyway. The whole catalogue is already
+ * in the context window, so answering is retrieval and paraphrase, and Lite is
+ * built for exactly that at low latency. Drafting keeps the bigger model, where
+ * the writing quality is the point and one person is waiting on it.
+ */
+const MODEL = process.env.GEMINI_CHAT_MODEL ?? "gemini-3.5-flash-lite";
 const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/interactions?alt=sse";
 
 /** Long enough for a real question, short enough that nobody pastes a novel. */
@@ -79,16 +92,17 @@ export async function POST(req: Request) {
       { status: 429 },
     );
   }
-  // 500 was a guess, and it was 25x the real ceiling: the free tier allows 20
-  // requests per day for this model, so this limiter never once fired and the
-  // quota was always spent by Gemini rather than guarded by us. The difference
-  // matters to a visitor — tripping this returns the counter's phone number,
-  // where running into Google's limit returned an apology for a failure we had
-  // not noticed.
+  // This is an abuse guard, not a mirror of the tier. The old default of 500
+  // pretended to be both and was neither — it never fired, so a scripted client
+  // could have spent the day's quota unopposed, and hitting Google's real limit
+  // was left to surface as a failure instead of as an answer.
   //
-  // Note the CMS's "Draft with AI" spends from the same 20, on the same key and
-  // model, so a busy afternoon in /admin can close the chat for the day.
-  const dailyCap = Number(process.env.GEMINI_DAILY_CAP ?? 20);
+  // Google publishes per-model daily limits only inside AI Studio now, so the
+  // honest thing is to set GEMINI_DAILY_CAP to whatever Lite's number actually
+  // is and let this default just stop a runaway. Overshooting is safe in a way
+  // undershooting is not: a real rate limit is handled below and tells the
+  // visitor something useful, where this one only ever throttles early.
+  const dailyCap = Number(process.env.GEMINI_DAILY_CAP ?? 200);
   if (!(await allow("chat:global", 1440, dailyCap))) {
     console.warn("[chat] daily cap reached");
     return Response.json(
@@ -129,13 +143,10 @@ export async function POST(req: Request) {
         // Low temperature on purpose: this quotes prices. Invention is the
         // failure mode that costs money, not dullness.
         //
-        // `thinking_level` defaults to "high" on Gemini 3 Flash. This was not
-        // what made the widget look dead — that was an unhandled rate-limit
-        // event, and setting this changed nothing measurable. It stays on its
-        // own merits: the whole catalogue is already in the context window, so
-        // answering is retrieval and paraphrase rather than deduction, and deep
-        // reasoning is latency bought for nothing.
-        generation_config: { temperature: 0.3, thinking_level: "low" },
+        // No thinking_level here: it defaults to "minimal" on Flash-Lite,
+        // which is what this wants. Setting it was a guess at the slowness that
+        // the measurements disproved, and it has no business outliving that.
+        generation_config: { temperature: 0.3 },
       }),
     });
   } catch (err) {
